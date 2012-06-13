@@ -1,4 +1,10 @@
+import gui.UserInterface;
+
 import javax.swing.JApplet;
+
+import controler.GameControler;
+
+import model.GameModel;
 
 /**
  * 
@@ -16,8 +22,10 @@ public class Game extends JApplet {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		GameModel model = new GameModel();
+		GameControler controler = new GameControler(model);
+		UserInterface gui = new UserInterface(controler);
+		model.addObserver(gui);
 	}
 
 }
