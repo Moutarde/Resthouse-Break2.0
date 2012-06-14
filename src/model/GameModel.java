@@ -14,7 +14,6 @@ public class GameModel extends Observable {
 
 	public GameModel() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -34,5 +33,5 @@ public class GameModel extends Observable {
 		// TODO Auto-generated method stub
 		super.notifyObservers();
 	}
-
+	
 }
