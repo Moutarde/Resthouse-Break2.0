@@ -44,12 +44,21 @@ public class UserInterface extends JFrame implements Observer {
         this.setVisible(true);
 	}
 
+	public static ResourceBundle getLang() {
+		return lang;
+	}
+
+	public static void setLang(Locale l) {
+		lang = ResourceBundle.getBundle("resources/lang/Text", l);
+	}
+
 	private void initComponents() {
         container = new JPanel();
         
         container.setLayout(new BorderLayout());
 
-	    container.add(new HomePanel(), BorderLayout.NORTH);
+        HomePanel home = new HomePanel(this);
+	    container.add(home, BorderLayout.NORTH);
         
         this.setContentPane(container);
 	}
@@ -60,12 +69,15 @@ public class UserInterface extends JFrame implements Observer {
 		
 	}
 
-	public static ResourceBundle getLang() {
-		return lang;
+	public void newGame() {
+		container.removeAll();
+		GamePanel gp = new GamePanel();
+		container.add(gp, BorderLayout.CENTER);
+		container.revalidate();
 	}
 
-	public static void setLang(Locale l) {
-		lang = ResourceBundle.getBundle("resources/lang/Text", l);
+	public void quit() {
+		System.exit(0);
 	}
 
 }
