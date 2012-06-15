@@ -9,12 +9,13 @@ import javax.swing.ImageIcon;
  * @author Nicolas
  *
  */
-public enum Resources {
-	HOME	("src/resources/other/RHB.jpg");
+public enum Resource {
+	HOME		("src/resources/other/RHB.jpg"),
+	R_GINETTE	("src/resources/room/ginetteRoom.jpg");
 	
 	private final String path;
 
-	private Resources(String path) {
+	private Resource(String path) {
 		this.path = path;
 	}
 

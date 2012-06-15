@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import model.Resource;
 import controler.GameControler;
 
 /**
@@ -21,27 +22,27 @@ import controler.GameControler;
 public class UserInterface extends JFrame implements Observer {
 
 	private static final long serialVersionUID = -1180186872270103912L;
-	
+
 	private static ResourceBundle lang;
-	
+
 	private GameControler controler;
-	
+
 	private JPanel container;
-	
+
 	public UserInterface(GameControler controler) {
 		setLang(Locale.getDefault());
-		
+
 		this.controler = controler;
 
-		this.setSize(270, 270);
-        this.setTitle("Resthouse Break");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        
-        initComponents();
-        
-        this.setVisible(true);
+		this.setTitle("Resthouse Break");
+		this.setSize(HomePanel.SIZE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		this.setResizable(false);
+
+		initComponents();
+
+		this.setVisible(true);
 	}
 
 	public static ResourceBundle getLang() {
@@ -53,27 +54,30 @@ public class UserInterface extends JFrame implements Observer {
 	}
 
 	private void initComponents() {
-        container = new JPanel();
-        
-        container.setLayout(new BorderLayout());
+		this.container = new JPanel();
 
-        HomePanel home = new HomePanel(this);
-	    container.add(home, BorderLayout.NORTH);
-        
-        this.setContentPane(container);
+		this.container.setLayout(new BorderLayout());
+
+		HomePanel home = new HomePanel(this);
+		this.container.add(home, BorderLayout.NORTH);
+
+		this.setContentPane(this.container);
 	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void newGame() {
-		container.removeAll();
-		GamePanel gp = new GamePanel();
-		container.add(gp, BorderLayout.CENTER);
-		container.revalidate();
+		Resource startRoom = this.controler.newGame();
+		
+		this.setSize(GamePanel.SIZE);
+		this.container.removeAll();
+		GamePanel gp = new GamePanel(startRoom);
+		this.container.add(gp, BorderLayout.CENTER);
+		this.container.revalidate();
 	}
 
 	public void quit() {
