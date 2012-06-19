@@ -3,7 +3,6 @@
  */
 package model;
 
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -48,8 +47,8 @@ public class GameModel extends Observable {
 		
 	}
 
-	public Resource getCurrentRoom() {
-		return this.currentRoom.getRes();
+	public Room getCurrentRoom() {
+		return currentRoom;
 	}
 	
 }

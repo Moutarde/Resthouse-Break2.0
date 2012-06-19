@@ -1,7 +1,7 @@
 /**
  * 
  */
-package controler;
+package controller;
 
 import model.GameModel;
 import model.Resource;
@@ -10,23 +10,23 @@ import model.Resource;
  * @author Nicolas
  *
  */
-public class GameControler {
+public class GameController {
 	private GameModel model;
 
-	public GameControler(GameModel model) {
+	public GameController(GameModel model) {
 		this.model = model;
 	}
 
 	public Resource newGame() {
-		this.model.init();
+		model.init();
 		
-		return this.model.getCurrentRoom();
+		return model.getCurrentRoom().getRes();
 	}
 
 	public Resource loadGame(String saveFile) {
-		this.model.load(saveFile);
+		model.load(saveFile);
 		
-		return this.model.getCurrentRoom();
+		return model.getCurrentRoom().getRes();
 	}
 	
 }

@@ -2,7 +2,7 @@ import gui.UserInterface;
 
 import javax.swing.JApplet;
 
-import controler.GameControler;
+import controller.GameController;
 
 import model.GameModel;
 
@@ -23,8 +23,8 @@ public class Game extends JApplet {
 	 */
 	public static void main(String[] args) {
 		GameModel model = new GameModel();
-		GameControler controler = new GameControler(model);
-		UserInterface gui = new UserInterface(controler);
+		GameController controller = new GameController(model);
+		UserInterface gui = new UserInterface(controller);
 		model.addObserver(gui);
 	}
 

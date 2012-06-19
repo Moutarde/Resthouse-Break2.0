@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import model.Resource;
-import controler.GameControler;
+import controller.GameController;
 
 /**
  * @author Nicolas
@@ -25,14 +25,14 @@ public class UserInterface extends JFrame implements Observer {
 
 	private static ResourceBundle lang;
 
-	private GameControler controler;
+	private GameController controller;
 
 	private JPanel container;
 
-	public UserInterface(GameControler controler) {
+	public UserInterface(GameController controller) {
 		setLang(Locale.getDefault());
 
-		this.controler = controler;
+		this.controller = controller;
 
 		this.setTitle("Resthouse Break");
 		this.setSize(HomePanel.SIZE);
@@ -71,11 +71,9 @@ public class UserInterface extends JFrame implements Observer {
 	}
 
 	public void newGame() {
-		Resource startRoom = this.controler.newGame();
-		
 		this.setSize(GamePanel.SIZE);
 		this.container.removeAll();
-		GamePanel gp = new GamePanel(startRoom);
+		GamePanel gp = new GamePanel();
 		this.container.add(gp, BorderLayout.CENTER);
 		this.container.revalidate();
 	}
