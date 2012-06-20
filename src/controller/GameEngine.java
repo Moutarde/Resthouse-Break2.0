@@ -3,11 +3,11 @@
  */
 package controller;
 
-import gui.GamePanel;
 import gui.GameRenderer;
 import gui.Renderer;
 
 import java.awt.Event;
+import java.awt.Graphics;
 
 import model.GameModel;
 
@@ -61,7 +61,7 @@ public class GameEngine {
 	}
 
 	/** this will render the whole world **/
-	public void render(GamePanel gp) {
-		renderer.render(gp);
+	public void render(Graphics g) {
+		renderer.render(g);
 	}
 }

@@ -3,6 +3,8 @@
  */
 package gui;
 
+import java.awt.Graphics;
+
 
 /**
  * @author Nicolas
@@ -14,5 +16,5 @@ package gui;
  *
  */
 public interface Renderer {
-	public void render(GamePanel gp);
+	public void render(Graphics g);
 }

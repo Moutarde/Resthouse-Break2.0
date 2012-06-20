@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controller.GameEngine;
@@ -36,53 +35,41 @@ public class GamePanel extends JPanel implements Runnable {
 
 	private GameEngine engine;
 	private JPanel screen;
-	private JLabel background;
 	private ImageIcon currentRoom;
 	private ArrayList<CharacLabel> characters;
 	private CharacLabel player;
 
 	public GamePanel() {
+		super();
+		
 		engine = new GameEngine();
 
-		setSize(SIZE);
+		setPreferredSize(SIZE);
 
 		setLayout(new BorderLayout());
 
 		initComponents();
 
 		add(screen, BorderLayout.CENTER);
-
-		new Thread(this).start();
 	}
 
 	private void initComponents() {
-		this.screen = new JPanel();
+		screen = new JPanel();
 
-		this.screen.setBackground(Color.black);
-		this.screen.setSize(SIZE);
-		this.screen.setLayout(new BorderLayout());
-
-		this.background = new JLabel(this.currentRoom);
-
-		this.screen.add(this.background, BorderLayout.CENTER);
+		screen.setBackground(Color.black);
+		screen.setPreferredSize(SIZE);
 	}
 
 	public JPanel getScreen() {
 		return screen;
 	}
 
-	public JLabel getBackgroundLabel() {
-		return background;
-	}
-
 	@Override
 	public void run() {
-		setSize(SIZE); // For AppletViewer, remove later.
-
 		// Set up the graphics stuff, double-buffering.
-		BufferedImage screen = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_RGB);
-		Graphics g = screen.getGraphics();
-		Graphics appletGraphics = getGraphics();
+		BufferedImage image = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_RGB);
+		Graphics g = image.getGraphics();
+		Graphics appletGraphics = screen.getGraphics();
 
 		long delta = 0l;
 
@@ -96,10 +83,10 @@ public class GamePanel extends JPanel implements Runnable {
 			// Update the state (convert to seconds)
 			engine.update((float)(delta / 1000000000.0));
 			// Render the world
-			engine.render(this);
+			engine.render(g);
 
 			// Draw the entire results on the screen.
-			appletGraphics.drawImage(screen, 0, 0, null);
+			appletGraphics.drawImage(image, 0, 0, null);
 
 			// Lock the frame rate
 			delta = System.nanoTime() - lastTime;

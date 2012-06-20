@@ -22,7 +22,7 @@ public class HomePanel extends JPanel {
 
 	private static final long serialVersionUID = -59115957354504598L;
 	
-	public static final Dimension SIZE = new Dimension(270, 270);
+	public static final Dimension SIZE = new Dimension(270, 240);
 
 	private UserInterface gui;
 	private JButton newgame;
@@ -33,19 +33,19 @@ public class HomePanel extends JPanel {
 		
 		this.gui = gui;
 
-		this.setSize(SIZE);
+		setPreferredSize(SIZE);
 
-		this.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 
 		JLabel img = new JLabel(Resource.HOME.getImageIcon());
 
 		JPanel buttons = new JPanel();
-		this.newgame = new JButton(UserInterface.getLang().getString("newgame"));
-		this.newgame.addActionListener(new ButtonListener());
-		this.quit = new JButton(UserInterface.getLang().getString("quit"));
-		this.quit.addActionListener(new ButtonListener());
-		buttons.add(this.newgame);
-		buttons.add(this.quit);
+		newgame = new JButton(UserInterface.getLang().getString("newgame"));
+		newgame.addActionListener(new ButtonListener());
+		quit = new JButton(UserInterface.getLang().getString("quit"));
+		quit.addActionListener(new ButtonListener());
+		buttons.add(newgame);
+		buttons.add(quit);
 
 		this.add(img, BorderLayout.NORTH);
 		this.add(buttons, BorderLayout.SOUTH);

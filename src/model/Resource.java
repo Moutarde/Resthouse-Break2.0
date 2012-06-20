@@ -3,6 +3,11 @@
  */
 package model;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 /**
@@ -25,5 +30,14 @@ public enum Resource {
 	
 	public ImageIcon getImageIcon() {
 		return new ImageIcon(this.path);
+	}
+	
+	public BufferedImage getBufferedImage() {
+		try {
+			return ImageIO.read(new File(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

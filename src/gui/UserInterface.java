@@ -34,15 +34,15 @@ public class UserInterface extends JFrame implements Observer {
 
 		this.controller = controller;
 
-		this.setTitle("Resthouse Break");
-		this.setSize(HomePanel.SIZE);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
-		this.setResizable(false);
+		setTitle("Resthouse Break");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 
 		initComponents();
 
-		this.setVisible(true);
+		pack();
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
 	public static ResourceBundle getLang() {
@@ -54,14 +54,14 @@ public class UserInterface extends JFrame implements Observer {
 	}
 
 	private void initComponents() {
-		this.container = new JPanel();
+		container = new JPanel();
 
-		this.container.setLayout(new BorderLayout());
+		container.setLayout(new BorderLayout());
 
 		HomePanel home = new HomePanel(this);
-		this.container.add(home, BorderLayout.NORTH);
+		container.add(home, BorderLayout.NORTH);
 
-		this.setContentPane(this.container);
+		setContentPane(container);
 	}
 
 	@Override
@@ -71,11 +71,14 @@ public class UserInterface extends JFrame implements Observer {
 	}
 
 	public void newGame() {
-		this.setSize(GamePanel.SIZE);
-		this.container.removeAll();
+		container.removeAll();
 		GamePanel gp = new GamePanel();
-		this.container.add(gp, BorderLayout.CENTER);
-		this.container.revalidate();
+		container.add(gp, BorderLayout.NORTH);
+		container.revalidate();
+		pack();
+		setLocationRelativeTo(null);
+
+		new Thread(gp).start();
 	}
 
 	public void quit() {

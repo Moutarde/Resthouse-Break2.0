@@ -9,6 +9,8 @@ public enum Matrix {
 		{1,1,1,0,1,1},
 		{1,1,0,0,1,0}
 	});
+	
+	public static final int CASE_SIZE = 25;
 
 	private int[][] squares;
 	private int height;
