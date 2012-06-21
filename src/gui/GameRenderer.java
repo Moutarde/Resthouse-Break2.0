@@ -8,6 +8,7 @@ import gui.sprite.Sprite;
 import java.awt.Graphics;
 
 import model.GameModel;
+import model.Player;
 import model.rooms.Matrix;
 
 /**
@@ -38,9 +39,10 @@ public class GameRenderer implements Renderer {
 		g.drawImage(model.getCurrentRoom().getRes().getBufferedImage(), x, y, null);
 		
 		// Render the player
-		int px = x + model.getPlayer().getCoord().getX() * Matrix.CASE_SIZE - 3;
-		int py = y + model.getPlayer().getCoord().getY() * Matrix.CASE_SIZE - 5;
-		g.drawImage(playerSprite.getObject(model.getPlayer().getPosture()), px, py, null);
+		Player player = model.getPlayer();
+		int px = x + player.getCoord().getX() * Matrix.CASE_SIZE + player.getMove().getDistMove().getX() - 3;
+		int py = y + player.getCoord().getY() * Matrix.CASE_SIZE + player.getMove().getDistMove().getY() - 5;
+		g.drawImage(playerSprite.getObject(player.getPosture()), px, py, null);
 	}
 
 }

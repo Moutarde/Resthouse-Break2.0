@@ -6,8 +6,9 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
@@ -34,8 +35,17 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public GamePanel() {
 		super();
+
+		addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent arg0)
+			{
+				requestFocus();
+			}
+		});
 		
 		engine = new GameEngine();
+		addKeyListener(engine);
 
 		setPreferredSize(SIZE);
 
@@ -91,9 +101,5 @@ public class GamePanel extends JPanel implements Runnable {
 				}
 			}
 		}
-	}
-	
-	public boolean handleEvent(Event e) {
-		return engine.handleEvent(e);
 	}
 }

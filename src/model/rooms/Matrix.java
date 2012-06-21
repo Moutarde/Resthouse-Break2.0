@@ -1,5 +1,7 @@
 package model.rooms;
 
+import model.Coord;
+
 public enum Matrix {
 	R_GINETTE	(new int[][] {
 		{0,0,0,0,0,0},
@@ -32,5 +34,12 @@ public enum Matrix {
 
 	public int getWidth() {
 		return width;
+	}
+	
+	public int getSquareValue(Coord c) {
+		if(c.getX() < 0 || c.getY() < 0 || c.getX() >= getWidth() || c.getY() >= getHeight()) {
+			return 0;
+		}
+		return squares[c.getY()][c.getX()];
 	}
 }

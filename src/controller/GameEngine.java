@@ -7,8 +7,9 @@ import gui.GameRenderer;
 import gui.Renderer;
 import gui.sprite.Posture;
 
-import java.awt.Event;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import model.Coord;
 import model.GameModel;
@@ -23,52 +24,59 @@ import model.Player;
  * Link:	http://obviam.net/index.php/the-mvc-pattern-tutorial-building-games/
  *
  */
-public class GameEngine {
+public class GameEngine implements KeyListener {
 	private Player player;
 	private GameModel model;
 	private Renderer renderer;
-	
+	private GameController controller;
+
 	public GameEngine() {
-		player = new Player(new Coord(3,3), Posture.SHOW_DOWN);
-		
+		player = new Player(new Coord(3,3), Posture.LOOK_DOWN);
+
 		model = new GameModel(player);
 		model.init();
-		
+
 		renderer = new GameRenderer(model);
-	}
-	
-	public boolean handleEvent(Event e) {
-		switch (e.id) {
-		case Event.KEY_PRESS:
-		case Event.KEY_ACTION:
-			// key pressed
-			break;
-		case Event.KEY_RELEASE:
-			// key released
-			break;
-		case Event.MOUSE_DOWN:
-			// mouse button pressed
-			break;
-		case Event.MOUSE_UP:
-			// mouse button released
-			break;
-		case Event.MOUSE_MOVE:
-			// mouse is being moved
-			break;
-		case Event.MOUSE_DRAG:
-			// mouse is being dragged (button pressed)
-			break;
-		}
-		return false;
+		controller = new GameController(model);
 	}
 
 	/** the update method with the deltaTime in seconds **/
 	public void update(float deltaTime) {
-		// empty
+		controller.update(deltaTime);
 	}
 
 	/** this will render the whole world **/
 	public void render(Graphics g) {
 		renderer.render(g);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		switch(e.getKeyCode()) {
+		case KeyEvent.VK_UP :
+			controller.onKeyPressed(Direction.UP);
+			break;
+		case KeyEvent.VK_DOWN :
+			controller.onKeyPressed(Direction.DOWN);
+			break;
+		case KeyEvent.VK_LEFT :
+			controller.onKeyPressed(Direction.LEFT);
+			break;
+		case KeyEvent.VK_RIGHT :
+			controller.onKeyPressed(Direction.RIGHT);
+			break;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
 	}
 }
