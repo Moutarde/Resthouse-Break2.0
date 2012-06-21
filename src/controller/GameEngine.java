@@ -5,11 +5,14 @@ package controller;
 
 import gui.GameRenderer;
 import gui.Renderer;
+import gui.sprite.Posture;
 
 import java.awt.Event;
 import java.awt.Graphics;
 
+import model.Coord;
 import model.GameModel;
+import model.Player;
 
 /**
  * @author Nicolas
@@ -21,12 +24,16 @@ import model.GameModel;
  *
  */
 public class GameEngine {
+	private Player player;
 	private GameModel model;
 	private Renderer renderer;
 	
 	public GameEngine() {
-		model = new GameModel();
+		player = new Player(new Coord(3,3), Posture.SHOW_DOWN);
+		
+		model = new GameModel(player);
 		model.init();
+		
 		renderer = new GameRenderer(model);
 	}
 	

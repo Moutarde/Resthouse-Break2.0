@@ -12,9 +12,6 @@ import java.util.ResourceBundle;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import model.Resource;
-import controller.GameController;
-
 /**
  * @author Nicolas
  *
@@ -25,14 +22,10 @@ public class UserInterface extends JFrame implements Observer {
 
 	private static ResourceBundle lang;
 
-	private GameController controller;
-
 	private JPanel container;
 
-	public UserInterface(GameController controller) {
+	public UserInterface() {
 		setLang(Locale.getDefault());
-
-		this.controller = controller;
 
 		setTitle("Resthouse Break");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,6 +54,8 @@ public class UserInterface extends JFrame implements Observer {
 		HomePanel home = new HomePanel(this);
 		container.add(home, BorderLayout.NORTH);
 
+		container.setPreferredSize(HomePanel.SIZE);
+
 		setContentPane(container);
 	}
 
@@ -75,6 +70,9 @@ public class UserInterface extends JFrame implements Observer {
 		GamePanel gp = new GamePanel();
 		container.add(gp, BorderLayout.NORTH);
 		container.revalidate();
+
+		container.setPreferredSize(GamePanel.SIZE);
+		
 		pack();
 		setLocationRelativeTo(null);
 

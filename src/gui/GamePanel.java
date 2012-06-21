@@ -3,17 +3,13 @@
  */
 package gui;
 
-import gui.characters.CharacLabel;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import controller.GameEngine;
@@ -35,9 +31,6 @@ public class GamePanel extends JPanel implements Runnable {
 
 	private GameEngine engine;
 	private JPanel screen;
-	private ImageIcon currentRoom;
-	private ArrayList<CharacLabel> characters;
-	private CharacLabel player;
 
 	public GamePanel() {
 		super();

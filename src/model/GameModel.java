@@ -3,6 +3,8 @@
  */
 package model;
 
+import gui.sprite.SpriteSheet;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,9 +17,13 @@ import model.rooms.Room;
 public class GameModel extends Observable {
 	
 	private Room currentRoom;
+    private SpriteSheet charactersSpriteSheet;
+    private Player player;
 
-	public GameModel() {
+	public GameModel(Player player) {
 		super();
+		
+		this.player = player;
 	}
 
 	@Override
@@ -39,7 +45,8 @@ public class GameModel extends Observable {
 	}
 
 	public void init() {
-		this.currentRoom = Room.createRooms();
+		currentRoom = Room.createRooms();
+		charactersSpriteSheet = new SpriteSheet(Resource.SPRITE_SHEET, 32*3, 32*4);
 	}
 
 	public void load(String saveFile) {
@@ -49,6 +56,17 @@ public class GameModel extends Observable {
 
 	public Room getCurrentRoom() {
 		return currentRoom;
+	}
+
+	public SpriteSheet getCharactersSpriteSheet() {
+		return charactersSpriteSheet;
+	}
+
+	/**
+	 * @return the player
+	 */
+	public Player getPlayer() {
+		return player;
 	}
 	
 }

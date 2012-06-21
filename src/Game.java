@@ -2,10 +2,6 @@ import gui.UserInterface;
 
 import javax.swing.JApplet;
 
-import controller.GameController;
-
-import model.GameModel;
-
 /**
  * 
  */
@@ -22,10 +18,7 @@ public class Game extends JApplet {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		GameModel model = new GameModel();
-		GameController controller = new GameController(model);
-		UserInterface gui = new UserInterface(controller);
-		model.addObserver(gui);
+		new UserInterface();
 	}
 
 }
