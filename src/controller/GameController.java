@@ -3,13 +3,10 @@
  */
 package controller;
 
-import java.util.TreeMap;
+import java.util.HashMap;
 
-import gui.sprite.Posture;
-import model.Coord;
 import model.GameModel;
 import model.Move;
-import model.Player;
 
 /**
  * @author Nicolas
@@ -20,28 +17,27 @@ public class GameController {
 
 	private boolean moving = false;
 	private int timer = 0;
-	private final TreeMap<Direction, Boolean> stopMovingAsked;
+	private final HashMap<Direction, Boolean> stopMovingAsked;
+	
+	private static final int TIMER_SPEED = 2;
 
 	public GameController(GameModel model) {
 		this.model = model;
-		this.stopMovingAsked = new TreeMap<Direction, Boolean>();
+		this.stopMovingAsked = new HashMap<Direction, Boolean>();
 	}
 
 	public void update(float delta) {
 		if (moving) {
 			timer++;
-			if(timer > 2) {
-				Player player = model.getPlayer();
-				Move move = player.getMove();
-				Direction dir = move.getDir();
+			if(timer > TIMER_SPEED) {
+				boolean moveIsFinished = model.evolveMove();
 
-				move.nextStep();
-				player.setPosture(Posture.getPosture(dir, move.getStep()));
-
-				if(move.isMoveFinished()) {
-					player.moveSquare(dir);
-					move.setStep(0);
-					move.setDistMove(new Coord(0,0));
+				if(moveIsFinished) {
+					Move move = model.getPlayer().getMove();
+					if(move.isLeavingRoom()) {
+						
+					}
+					Direction dir = move.getDir();
 					if(stopMovingAsked.get(dir) || !model.isMovementPossible(dir)) {
 						moving = false;
 					}
@@ -54,13 +50,10 @@ public class GameController {
 
 	public void onStartMovingAsked(Direction d) {
 		if(!moving) {
-			if (model.isMovementPossible(d)) {
-				model.getPlayer().getMove().setDir(d);
+			boolean movementPossible = model.setMovementIFP(d);
+			if (movementPossible) {
 				this.stopMovingAsked.put(d, false);
 				moving = true;
-			}
-			else {
-				model.getPlayer().setPosture(Posture.getPosture(d, 0));
 			}
 		}
 	}

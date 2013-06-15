@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = -8860204251354754377L;
 
-	public static final Dimension SIZE = new Dimension(300, 300);
+	public static final Dimension SIZE = new Dimension(725, 527);
 
 	private GameEngine engine;
 	private JPanel screen;

@@ -16,11 +16,13 @@ public class Move {
 	private Direction dir;
 	private int step;
 	private Coord distMove;
+	private boolean isLeavingRoom;
 	
 	public Move(Direction dir) {
 		this.dir = dir;
 		step = 0;
 		distMove = new Coord(0,0);
+		isLeavingRoom = false;
 	}
 
 	public int getStep() {
@@ -76,5 +78,13 @@ public class Move {
 	
 	public boolean isMoveFinished() {
 		return step == NB_STEPS;
+	}
+
+	public boolean isLeavingRoom() {
+		return isLeavingRoom;
+	}
+
+	public void setIsLeavingRoom(boolean isLeavingRoom) {
+		this.isLeavingRoom = isLeavingRoom;
 	}
 }

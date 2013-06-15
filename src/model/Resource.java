@@ -17,7 +17,8 @@ import javax.swing.ImageIcon;
 public enum Resource {
 	HOME			("src/resources/other/RHB.jpg"),
 	SPRITE_SHEET	("src/resources/other/spriteSheet.png"),
-	R_GINETTE		("src/resources/room/ginetteRoom.jpg");
+	R_GINETTE		("src/resources/room/ginetteRoom.jpg"),
+	R_PARK			("src/resources/room/parc.jpg");
 	
 	private final String path;
 

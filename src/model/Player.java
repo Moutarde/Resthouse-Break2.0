@@ -42,23 +42,34 @@ public class Player {
 	}
 
 	public void moveSquare(Direction dir) {
-		switch(dir) {
+		coord = getNextSquare(dir);
+	}
+	
+	public Coord getNextSquare(Direction d) {
+		int xMove = 0;
+		int yMove = 0;
+
+		switch(d) {
 		case UP:
-			coord = new Coord(coord.getX(), coord.getY() - 1);
+			yMove = -1;
 			break;
 		case DOWN:
-			coord = new Coord(coord.getX(), coord.getY() + 1);
+			yMove = 1;
 			break;
 		case LEFT:
-			coord = new Coord(coord.getX() - 1, coord.getY());
+			xMove = -1;
 			break;
 		case RIGHT:
-			coord = new Coord(coord.getX() + 1, coord.getY());
+			xMove = 1;
 			break;
 		default:
 			assert false;
 			break;
 		}
+
+		int xp = coord.getX();
+		int yp = coord.getY();
+
+		return new Coord(xp + xMove, yp + yMove);
 	}
-	
 }
