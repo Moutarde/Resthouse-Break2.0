@@ -11,6 +11,8 @@ import controller.Direction;
  *
  */
 public class Move {
+	public static final int NB_STEPS = 4;
+	
 	private Direction dir;
 	private int step;
 	private Coord distMove;
@@ -50,16 +52,19 @@ public class Move {
 	public void update() {
 		switch(dir) {
 		case UP:
-			distMove.setY(- step * (Matrix.CASE_SIZE / 4));
+			distMove.setY(- step * (Matrix.CASE_SIZE / NB_STEPS));
 			break;
 		case DOWN:
-			distMove.setY(step * (Matrix.CASE_SIZE / 4));
+			distMove.setY(step * (Matrix.CASE_SIZE / NB_STEPS));
 			break;
 		case LEFT:
-			distMove.setX(- step * (Matrix.CASE_SIZE / 4));
+			distMove.setX(- step * (Matrix.CASE_SIZE / NB_STEPS));
 			break;
 		case RIGHT:
-			distMove.setX(step * (Matrix.CASE_SIZE / 4));
+			distMove.setX(step * (Matrix.CASE_SIZE / NB_STEPS));
+			break;
+		default:
+			assert false;
 			break;
 		}
 	}
@@ -67,5 +72,9 @@ public class Move {
 	public void nextStep() {
 		step++;
 		update();
+	}
+	
+	public boolean isMoveFinished() {
+		return step == NB_STEPS;
 	}
 }

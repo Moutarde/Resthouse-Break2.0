@@ -55,6 +55,9 @@ public class Player {
 		case RIGHT:
 			coord = new Coord(coord.getX() + 1, coord.getY());
 			break;
+		default:
+			assert false;
+			break;
 		}
 	}
 	

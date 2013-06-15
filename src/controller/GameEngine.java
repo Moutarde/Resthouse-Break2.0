@@ -9,7 +9,6 @@ import gui.sprite.Posture;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import model.Coord;
 import model.GameModel;
@@ -24,11 +23,12 @@ import model.Player;
  * Link:	http://obviam.net/index.php/the-mvc-pattern-tutorial-building-games/
  *
  */
-public class GameEngine implements KeyListener {
+public class GameEngine {
 	private Player player;
 	private GameModel model;
 	private Renderer renderer;
 	private GameController controller;
+	private Keyboard keyboard;
 
 	public GameEngine() {
 		player = new Player(new Coord(3,3), Posture.LOOK_DOWN);
@@ -38,10 +38,13 @@ public class GameEngine implements KeyListener {
 
 		renderer = new GameRenderer(model);
 		controller = new GameController(model);
+		
+		keyboard = new Keyboard();
 	}
 
 	/** the update method with the deltaTime in seconds **/
 	public void update(float deltaTime) {
+		handleEvents();
 		controller.update(deltaTime);
 	}
 
@@ -50,33 +53,40 @@ public class GameEngine implements KeyListener {
 		renderer.render(g);
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		switch(e.getKeyCode()) {
-		case KeyEvent.VK_UP :
-			controller.onKeyPressed(Direction.UP);
-			break;
-		case KeyEvent.VK_DOWN :
-			controller.onKeyPressed(Direction.DOWN);
-			break;
-		case KeyEvent.VK_LEFT :
-			controller.onKeyPressed(Direction.LEFT);
-			break;
-		case KeyEvent.VK_RIGHT :
-			controller.onKeyPressed(Direction.RIGHT);
-			break;
-		}
+	/**
+	 * @return the keyboard
+	 */
+	public Keyboard getKeyboard() {
+		return keyboard;
 	}
 
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
+	private void handleEvents() {
+	    if (keyboard.isPressed(KeyEvent.VK_LEFT)) {
+	    	controller.onStartMovingAsked(Direction.LEFT);
+	    }
+	    else {
+	    	controller.onStopMovingAsked(Direction.LEFT);
+	    }
+	    
+	    if (keyboard.isPressed(KeyEvent.VK_RIGHT)) {
+	    	controller.onStartMovingAsked(Direction.RIGHT);
+	    }
+	    else {
+	    	controller.onStopMovingAsked(Direction.RIGHT);
+	    }
+	    
+	    if (keyboard.isPressed(KeyEvent.VK_UP)) {
+	    	controller.onStartMovingAsked(Direction.UP);
+	    }
+	    else {
+	    	controller.onStopMovingAsked(Direction.UP);
+	    }
+	    
+	    if (keyboard.isPressed(KeyEvent.VK_DOWN)) {
+	    	controller.onStartMovingAsked(Direction.DOWN);
+	    }
+	    else {
+	    	controller.onStopMovingAsked(Direction.DOWN);
+	    }
 	}
 }

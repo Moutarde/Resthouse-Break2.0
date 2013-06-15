@@ -3,6 +3,8 @@
  */
 package controller;
 
+import java.util.TreeMap;
+
 import gui.sprite.Posture;
 import model.Coord;
 import model.GameModel;
@@ -18,25 +20,31 @@ public class GameController {
 
 	private boolean moving = false;
 	private int timer = 0;
+	private final TreeMap<Direction, Boolean> stopMovingAsked;
 
 	public GameController(GameModel model) {
 		this.model = model;
+		this.stopMovingAsked = new TreeMap<Direction, Boolean>();
 	}
 
 	public void update(float delta) {
-		Player player = model.getPlayer();
 		if (moving) {
 			timer++;
-			if(timer > 6) {
+			if(timer > 2) {
+				Player player = model.getPlayer();
 				Move move = player.getMove();
-				move.nextStep();
-				player.setPosture(Posture.getPosture(move.getDir(), move.getStep()));
+				Direction dir = move.getDir();
 
-				if(move.getStep() == 4) {
-					player.moveSquare(move.getDir());
+				move.nextStep();
+				player.setPosture(Posture.getPosture(dir, move.getStep()));
+
+				if(move.isMoveFinished()) {
+					player.moveSquare(dir);
 					move.setStep(0);
 					move.setDistMove(new Coord(0,0));
-					moving = false;
+					if(stopMovingAsked.get(dir) || !model.isMovementPossible(dir)) {
+						moving = false;
+					}
 				}
 
 				timer = 0;
@@ -44,39 +52,21 @@ public class GameController {
 		}
 	}
 
-	public void onKeyPressed(Direction d) {
+	public void onStartMovingAsked(Direction d) {
 		if(!moving) {
-			int xMove = 0;
-			int yMove = 0;
-
-			switch(d) {
-			case UP:
-				yMove = -1;
-				break;
-			case DOWN:
-				yMove = 1;
-				break;
-			case LEFT:
-				xMove = -1;
-				break;
-			case RIGHT:
-				xMove = 1;
-				break;
-			}
-
-			int xp = model.getPlayer().getCoord().getX();
-			int yp = model.getPlayer().getCoord().getY();
-
-			Coord c = new Coord(xp + xMove, yp + yMove);
-
-			if (model.getCurrentRoom().getMat().getSquareValue(c) == 1) {
+			if (model.isMovementPossible(d)) {
 				model.getPlayer().getMove().setDir(d);
+				this.stopMovingAsked.put(d, false);
 				moving = true;
 			}
 			else {
 				model.getPlayer().setPosture(Posture.getPosture(d, 0));
 			}
 		}
+	}
+
+	public void onStopMovingAsked(Direction d) {
+		this.stopMovingAsked.put(d, true);
 	}
 
 }

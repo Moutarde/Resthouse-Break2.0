@@ -5,6 +5,7 @@ package model.rooms;
 
 import java.util.ArrayList;
 
+import model.Coord;
 import model.Resource;
 
 /**
@@ -32,6 +33,21 @@ public class Room {
 
 	public Matrix getMat() {
 		return mat;
+	}
+	
+	public boolean canWalkOnSquare(Coord c) {
+		int squareValue = mat.getSquareValue(c);
+		
+		if(squareValue == 0) {
+			return false;
+		}
+		else if(squareValue == 1) {
+			return true;
+		}
+		else {
+			assert false;
+			return false;
+		}
 	}
 
 	public static Room createRooms() {

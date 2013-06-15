@@ -8,6 +8,8 @@ import gui.sprite.SpriteSheet;
 import java.util.Observable;
 import java.util.Observer;
 
+import controller.Direction;
+
 import model.rooms.Room;
 
 /**
@@ -67,6 +69,36 @@ public class GameModel extends Observable {
 	 */
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public boolean isMovementPossible(Direction d) {
+		int xMove = 0;
+		int yMove = 0;
+
+		switch(d) {
+		case UP:
+			yMove = -1;
+			break;
+		case DOWN:
+			yMove = 1;
+			break;
+		case LEFT:
+			xMove = -1;
+			break;
+		case RIGHT:
+			xMove = 1;
+			break;
+		default:
+			assert false;
+			break;
+		}
+
+		int xp = player.getCoord().getX();
+		int yp = player.getCoord().getY();
+
+		Coord c = new Coord(xp + xMove, yp + yMove);
+		
+		return currentRoom.canWalkOnSquare(c);
 	}
 	
 }

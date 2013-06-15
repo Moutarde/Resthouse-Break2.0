@@ -45,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
 		});
 		
 		engine = new GameEngine();
-		addKeyListener(engine);
+		addKeyListener(engine.getKeyboard());
 
 		setPreferredSize(SIZE);
 
@@ -73,6 +73,8 @@ public class GamePanel extends JPanel implements Runnable {
 		BufferedImage image = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_RGB);
 		Graphics g = image.getGraphics();
 		Graphics appletGraphics = screen.getGraphics();
+		
+		requestFocus();
 
 		long delta = 0l;
 
