@@ -23,6 +23,7 @@ public class GameModel extends Observable {
 	private Room currentRoom;
     private SpriteSheet charactersSpriteSheet;
     private Player player;
+    private Message currentMessage;
 
 	public GameModel(Player player) {
 		super();
@@ -30,32 +31,10 @@ public class GameModel extends Observable {
 		this.player = player;
 	}
 
-	@Override
-	public synchronized void addObserver(Observer o) {
-		// TODO Auto-generated method stub
-		super.addObserver(o);
-	}
-
-	@Override
-	public synchronized void deleteObservers() {
-		// TODO Auto-generated method stub
-		super.deleteObservers();
-	}
-
-	@Override
-	public void notifyObservers() {
-		// TODO Auto-generated method stub
-		super.notifyObservers();
-	}
-
 	public void init() {
 		currentRoom = Room.createRooms();
 		charactersSpriteSheet = new SpriteSheet(Resource.SPRITE_SHEET, 32*3, 32*4);
-	}
-
-	public void load(String saveFile) {
-		// TODO Auto-generated method stub
-		
+		currentMessage = new Message();
 	}
 
 	public Room getCurrentRoom() {
@@ -66,9 +45,6 @@ public class GameModel extends Observable {
 		return charactersSpriteSheet;
 	}
 
-	/**
-	 * @return the player
-	 */
 	public Player getPlayer() {
 		return player;
 	}
@@ -147,6 +123,41 @@ public class GameModel extends Observable {
 		}
 		
 		currentRoom = nextRoom;
-		player.setCoord(newCoord);		
-	}	
+		player.setCoord(newCoord);
+	}
+
+	public Message getCurrentMessage() {
+		return currentMessage;
+	}
+
+	public void setNewMessage(String str) {
+		currentMessage.setString(str);
+	}
+
+	public void hideMessage() {
+		currentMessage.setString("");
+	}
+
+	@Override
+	public synchronized void addObserver(Observer o) {
+		// TODO Auto-generated method stub
+		super.addObserver(o);
+	}
+
+	@Override
+	public synchronized void deleteObservers() {
+		// TODO Auto-generated method stub
+		super.deleteObservers();
+	}
+
+	@Override
+	public void notifyObservers() {
+		// TODO Auto-generated method stub
+		super.notifyObservers();
+	}
+
+	public void load(String saveFile) {
+		// TODO Auto-generated method stub
+		
+	}
 }

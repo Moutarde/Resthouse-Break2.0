@@ -9,13 +9,14 @@ import model.GameModel;
 import model.Move;
 
 /**
- * @author Nicolas
+ * @author Nicolas Kniebihler
  *
  */
 public class GameController {
 	private GameModel model;
 
 	private boolean moving = false;
+	private boolean isMessageDisplayed = false;
 	private int timer = 0;
 	private final HashMap<Direction, Boolean> stopMovingAsked;
 	
@@ -24,19 +25,19 @@ public class GameController {
 	public GameController(GameModel model) {
 		this.model = model;
 		this.stopMovingAsked = new HashMap<Direction, Boolean>();
+		
+		model.setNewMessage("Good morning Granny Ginette !");
+		isMessageDisplayed = true;
 	}
 
 	public void update(float delta) {
-		if (moving) {
+		if (moving && !isMessageDisplayed) {
 			timer++;
 			if(timer > TIMER_SPEED) {
 				boolean moveIsFinished = model.evolveMove();
 
 				if(moveIsFinished) {
 					Move move = model.getPlayer().getMove();
-					if(move.isLeavingRoom()) {
-						
-					}
 					Direction dir = move.getDir();
 					if(stopMovingAsked.get(dir) || !model.isMovementPossible(dir)) {
 						moving = false;
@@ -49,7 +50,7 @@ public class GameController {
 	}
 
 	public void onStartMovingAsked(Direction d) {
-		if(!moving) {
+		if(!moving && !isMessageDisplayed) {
 			boolean movementPossible = model.setMovementIFP(d);
 			if (movementPossible) {
 				this.stopMovingAsked.put(d, false);
@@ -60,6 +61,11 @@ public class GameController {
 
 	public void onStopMovingAsked(Direction d) {
 		this.stopMovingAsked.put(d, true);
+	}
+
+	public void onValidate() {
+		model.hideMessage();
+		isMessageDisplayed = false;
 	}
 
 }

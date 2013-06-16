@@ -1,6 +1,3 @@
-/**
- * 
- */
 package controller;
 
 import gui.GameRenderer;
@@ -87,6 +84,10 @@ public class GameEngine {
 	    }
 	    else {
 	    	controller.onStopMovingAsked(Direction.DOWN);
+	    }
+	    
+	    if (keyboard.isPressedOnce(KeyEvent.VK_ENTER)) {
+	    	controller.onValidate();
 	    }
 	}
 }

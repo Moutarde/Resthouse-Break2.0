@@ -29,6 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
 	private static final long serialVersionUID = -8860204251354754377L;
 
 	public static final Dimension SIZE = new Dimension(725, 527);
+	public static final int TEXT_ZONE_HEIGHT = 70;
 
 	private GameEngine engine;
 	private JPanel screen;

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gui;
 
 import gui.sprite.Sprite;
@@ -8,11 +5,12 @@ import gui.sprite.Sprite;
 import java.awt.Graphics;
 
 import model.GameModel;
+import model.Message;
 import model.Player;
 import model.rooms.Matrix;
 
 /**
- * @author Nicolas
+ * @author Nicolas Kniebihler
  * 
  * Inspired from Building Games Using the MVC Pattern - Tutorial and Introduction
  * Author:	impaler@obviam.net
@@ -42,7 +40,13 @@ public class GameRenderer implements Renderer {
 		Player player = model.getPlayer();
 		int px = x + player.getCoord().getX() * Matrix.CASE_SIZE + player.getMove().getDistMove().getX() - 3;
 		int py = y + player.getCoord().getY() * Matrix.CASE_SIZE + player.getMove().getDistMove().getY() - 5;
-		g.drawImage(playerSprite.getObject(player.getPosture()), px, py, null);
+		playerSprite.draw(g, px, py, player.getPosture());
+		
+		// Render the text
+		Message message = model.getCurrentMessage();
+		if(message != null && !message.isEmpty()) {
+			message.draw(g);
+		}
 	}
 
 }
