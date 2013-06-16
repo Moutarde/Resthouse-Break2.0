@@ -3,8 +3,13 @@
  */
 package model.rooms;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import model.Coord;
 import model.Resource;
@@ -19,7 +24,8 @@ public class Room {
 	private HashMap<Integer, Room> neighbors;
 	private HashMap<Integer, Integer> neighborsDoorsIds;
 	
-	private static ArrayList<Room> roomList;
+	private static String roomsDescriptorFilePath = "src/resources/room/Rooms.txt";
+	private static HashMap<String, Room> roomList;
 
 	private Room(Resource res, Matrix mat) {
 		this.res = res;
@@ -64,16 +70,16 @@ public class Room {
 	public SquareType getSquareType(Coord c) {
 		int squareValue = mat.getSquareValue(c);
 		
-		if(squareValue == -1) {
+		if (squareValue == -1) {
 			return SquareType.OUTSIDE;
 		}
-		else if(squareValue == 0) {
+		else if (squareValue == 0) {
 			return SquareType.OBSTACLE;
 		}
-		else if(squareValue == 1) {
+		else if (squareValue == 1) {
 			return SquareType.FREESQUARE;
 		}
-		else if(squareValue >= 10 && squareValue < 20) {
+		else if (squareValue >= 10 && squareValue < 20) {
 			return SquareType.DOOR;
 		}
 		else {
@@ -93,7 +99,7 @@ public class Room {
 
 	public Coord getStartingCoordFromDoor(int doorId) {
 		Room neighbor = neighbors.get(doorId);
-		if(neighbor == null) {
+		if (neighbor == null) {
 			System.out.println("No neighbor room found from door " + doorId);
 			return null;
 		}
@@ -102,18 +108,101 @@ public class Room {
 		return neighbor.getMat().getCoordFromValue(neighborDoorId);
 	}
 	
-	public static Room createRooms() {
-		roomList = new ArrayList<Room>();
+	public static Room createRooms() throws IOException {
+		roomList = new HashMap<String, Room>();
+		Room startRoom = null;
 		
-		Room ginetteRoom = new Room(Resource.R_GINETTE, Matrix.R_GINETTE);
-		Room park = new Room(Resource.R_PARK, Matrix.R_PARK);
+		BufferedReader reader = new BufferedReader(new FileReader(roomsDescriptorFilePath));
 		
-		roomList.add(ginetteRoom);
-		roomList.add(park);
-
-		setLinkedRooms(ginetteRoom, 11, park, 12);
+		StringTokenizer splitter;
+		String line = null;
+		String currentRoomName = null;
+		String currentRoomRes = null;
+		int currentRoomNbCols = 0;
+		int currentRoomNbLines = 0;
+		List<String> values = new ArrayList<String>();
 		
-		return ginetteRoom;
+		while ((line = reader.readLine()) != null) {
+			// NAME
+			if (line.startsWith("R_")) {
+				currentRoomName = line;
+			}
+			// RESOURCE
+			else if (line.startsWith("image=")) {
+				String[] tokens = line.split("=");
+				currentRoomRes = tokens[1];
+			}
+			// SIZE
+			else if (line.startsWith("size=")) {
+				String[] tokens = line.split("=");
+				String[] size = tokens[1].split("x");
+				currentRoomNbCols = Integer.parseInt(size[0]);
+				currentRoomNbLines = Integer.parseInt(size[1]);
+			}
+			// MATRIX LINE
+			else if (line.startsWith("{") && line.endsWith("}")) {
+				values.add(line.substring(1, line.length() - 1).replace(" ", ""));
+			}
+			// END LINE -> construct room
+			else if (line.equals("END"))
+			{
+				// MATRIX
+				int[][] matrix = new int[currentRoomNbLines][currentRoomNbCols];
+				
+				assert values.size() == currentRoomNbLines;
+				int lineId = 0;
+				for (String matrixLine : values) {
+					splitter = new StringTokenizer(matrixLine, ",");
+					int colId = 0;
+					while (splitter.hasMoreTokens()) {
+						matrix[lineId][colId] = Integer.parseInt((String)splitter.nextElement());
+						++colId;
+					}
+					assert colId == currentRoomNbCols;
+					++lineId;
+				}
+				assert lineId == currentRoomNbLines;
+				Matrix mat = new Matrix(matrix);
+				
+				// RESOURCE
+				Resource res = new Resource(currentRoomRes);
+				
+				// ROOM
+				Room room = new Room(res, mat);
+				roomList.put(currentRoomName, room);
+				
+				currentRoomName = null;
+				currentRoomRes = null;
+				currentRoomNbCols = 0;
+				currentRoomNbLines = 0;
+				values.clear();
+			}
+			// NEIGHBOR
+			else if (line.startsWith("NEIGHBOR:")) {
+				String[] tokens = line.split(":");
+				String[] relationship = tokens[1].split(";");
+				
+				Room room1 = roomList.get(relationship[0]);
+				int doorId1 = Integer.parseInt(relationship[1]);
+				Room room2 = roomList.get(relationship[2]);
+				int doorId2 = Integer.parseInt(relationship[3]);
+				
+				setLinkedRooms(room1, doorId1, room2, doorId2);
+			}
+			// START ROOM
+			else if (line.startsWith("START_ROOM:")) {
+				assert startRoom == null;
+				String[] tokens = line.split(":");
+				startRoom = roomList.get(tokens[1]);
+				assert startRoom != null;
+			}
+		}
+		
+		assert startRoom != null;
+		
+		reader.close();
+		
+		return startRoom;
 	}
 
 	private static void setLinkedRooms(Room room1, int doorId1, Room room2, int doorId2) {

@@ -11,18 +11,16 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 /**
- * @author Nicolas
+ * @author Nicolas Kniebihler
  *
  */
-public enum Resource {
-	HOME			("src/resources/other/RHB.jpg"),
-	SPRITE_SHEET	("src/resources/other/spriteSheet.png"),
-	R_GINETTE		("src/resources/room/ginetteRoom.jpg"),
-	R_PARK			("src/resources/room/parc.jpg");
+public class Resource {
+	public static final Resource HOME = new Resource("src/resources/other/RHB.jpg");
+	public static final Resource SPRITE_SHEET = new Resource("src/resources/other/spriteSheet.png");
 	
 	private final String path;
 
-	private Resource(String path) {
+	public Resource(String path) {
 		this.path = path;
 	}
 

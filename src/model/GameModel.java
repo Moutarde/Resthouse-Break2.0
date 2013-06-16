@@ -6,6 +6,7 @@ package model;
 import gui.sprite.Posture;
 import gui.sprite.SpriteSheet;
 
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -32,7 +33,11 @@ public class GameModel extends Observable {
 	}
 
 	public void init() {
-		currentRoom = Room.createRooms();
+		try {
+			currentRoom = Room.createRooms();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		charactersSpriteSheet = new SpriteSheet(Resource.SPRITE_SHEET, 32*3, 32*4);
 		currentMessage = new Message();
 	}
