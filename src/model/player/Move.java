@@ -1,8 +1,9 @@
 /**
  * 
  */
-package model;
+package model.player;
 
+import model.Coord;
 import model.rooms.Matrix;
 import controller.Direction;
 

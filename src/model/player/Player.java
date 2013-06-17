@@ -1,9 +1,10 @@
 /**
  * 
  */
-package model;
+package model.player;
 
 import gui.sprite.Posture;
+import model.Coord;
 import controller.Direction;
 
 /**
@@ -13,12 +14,11 @@ import controller.Direction;
 public class Player {
 	private Coord coord;
 	private Posture posture;
-	private Move move;
+	private Move move = new Move(Direction.NONE);
 	
 	public Player(Coord coord, Posture posture) {
 		this.coord = coord;
 		this.posture = posture;
-		move = new Move(Direction.NONE);
 	}
 
 	public Coord getCoord() {
@@ -43,6 +43,10 @@ public class Player {
 
 	public void moveSquare(Direction dir) {
 		coord = getNextSquare(dir);
+	}
+
+	public Coord getFrontSquare() {
+		return getNextSquare(Posture.getLookingDirection(posture));
 	}
 	
 	public Coord getNextSquare(Direction d) {

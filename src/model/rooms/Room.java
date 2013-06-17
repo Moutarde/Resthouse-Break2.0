@@ -13,25 +13,29 @@ import java.util.StringTokenizer;
 
 import model.Coord;
 import model.Resource;
+import model.chests.Chest;
+import model.chests.Item;
 
 /**
  * @author Nicolas
  *
  */
 public class Room {
+	private static String roomsDescriptorFilePath = "src/resources/room/Rooms.txt";
+	private static HashMap<String, Room> roomList;
+	
 	private Resource res;
 	private Matrix mat;
 	private HashMap<Integer, Room> neighbors;
 	private HashMap<Integer, Integer> neighborsDoorsIds;
-	
-	private static String roomsDescriptorFilePath = "src/resources/room/Rooms.txt";
-	private static HashMap<String, Room> roomList;
+	private HashMap<Integer, Chest> chests;
 
 	private Room(Resource res, Matrix mat) {
 		this.res = res;
 		this.mat = mat;
 		this.neighbors = new HashMap<Integer, Room>();
 		this.neighborsDoorsIds = new HashMap<Integer, Integer>();
+		this.chests = new HashMap<Integer, Chest>();
 	}
 
 	public Resource getRes() {
@@ -47,24 +51,23 @@ public class Room {
 	}
 	
 	public boolean canWalkOnSquare(Coord c) {
-		boolean returnValue = false;
 		SquareType type = getSquareType(c);
-		
-		switch (type) {
-		case OUTSIDE:
-		case OBSTACLE:
-			returnValue = false;
-			break;
-		case FREESQUARE:
-		case DOOR:
-			returnValue = true;
-			break;
-		default:
-			assert false;
-			break;
+
+		if (type == SquareType.FREESQUARE || type == SquareType.DOOR) {
+			return true;
 		}
 		
-		return returnValue;
+		return false;
+	}
+
+	public boolean isChest(Coord c) {
+		SquareType type = getSquareType(c);
+		
+		if (type == SquareType.CHEST) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public SquareType getSquareType(Coord c) {
@@ -82,8 +85,11 @@ public class Room {
 		else if (squareValue >= 10 && squareValue < 20) {
 			return SquareType.DOOR;
 		}
+		else if (squareValue >= 30 && squareValue < 40) {
+			return SquareType.CHEST;
+		}
 		else {
-			assert false;
+			assert false : "Square type unknown : " + squareValue;
 			return null;
 		}
 	}
@@ -107,6 +113,10 @@ public class Room {
 		int neighborDoorId = neighborsDoorsIds.get(doorId);
 		return neighbor.getMat().getCoordFromValue(neighborDoorId);
 	}
+
+	public Chest getChest(int chestId) {
+		return chests.get(chestId);
+	}
 	
 	public static Room createRooms() throws IOException {
 		roomList = new HashMap<String, Room>();
@@ -121,6 +131,7 @@ public class Room {
 		int currentRoomNbCols = 0;
 		int currentRoomNbLines = 0;
 		List<String> values = new ArrayList<String>();
+		HashMap<Integer, Chest> currentRoomChestList = new HashMap<Integer, Chest>();
 		
 		while ((line = reader.readLine()) != null) {
 			// NAME
@@ -169,6 +180,7 @@ public class Room {
 				
 				// ROOM
 				Room room = new Room(res, mat);
+				room.chests.putAll(currentRoomChestList);
 				roomList.put(currentRoomName, room);
 				
 				currentRoomName = null;
@@ -176,6 +188,23 @@ public class Room {
 				currentRoomNbCols = 0;
 				currentRoomNbLines = 0;
 				values.clear();
+				currentRoomChestList.clear();
+			}
+			// CHEST
+			else if (line.startsWith("CHEST:")) {
+				String[] tokens = line.split(":");
+				String[] infos = tokens[1].split(";");
+				
+				Chest chest = new Chest();
+				int chestId1 = Integer.parseInt(infos[0]);
+				
+				String item = infos[1];
+				if (!item.equals("null")) {
+					assert item.startsWith("O_");
+					chest.setItem(Item.getItem(item));
+				}
+				
+				currentRoomChestList.put(chestId1, chest);
 			}
 			// NEIGHBOR
 			else if (line.startsWith("NEIGHBOR:")) {

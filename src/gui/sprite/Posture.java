@@ -90,4 +90,27 @@ public enum Posture {
 
 		return null;
 	}
+
+	public static Direction getLookingDirection(Posture p) {
+		switch(p) {
+		case LOOK_UP:
+		case GO_UP1:
+		case GO_UP2:
+			return Direction.UP;
+		case LOOK_DOWN:
+		case GO_DOWN1:
+		case GO_DOWN2:
+			return Direction.DOWN;
+		case LOOK_LEFT:
+		case GO_LEFT1:
+		case GO_LEFT2:
+			return Direction.LEFT;
+		case LOOK_RIGHT:
+		case GO_RIGHT1:
+		case GO_RIGHT2:
+			return Direction.RIGHT;
+		}
+
+		return null;
+	}
 }

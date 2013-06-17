@@ -3,13 +3,6 @@ package model.rooms;
 import model.Coord;
 
 public class Matrix {
-	/**
-	 * -1		: outside the room
-	 * 0		: you can't walk here
-	 * 1		: you can walk here
-	 * 10-19	: door
-	 */
-	
 	public static final int CASE_SIZE = 25;
 
 	private int[][] squares;

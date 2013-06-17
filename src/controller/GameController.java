@@ -6,7 +6,7 @@ package controller;
 import java.util.HashMap;
 
 import model.GameModel;
-import model.Move;
+import model.player.Move;
 
 /**
  * @author Nicolas Kniebihler
@@ -17,6 +17,7 @@ public class GameController {
 
 	private boolean moving = false;
 	private boolean isMessageDisplayed = false;
+	private boolean isMenuDisplayed = false;
 	private int timer = 0;
 	private final HashMap<Direction, Boolean> stopMovingAsked;
 	
@@ -31,7 +32,7 @@ public class GameController {
 	}
 
 	public void update(float delta) {
-		if (moving && !isMessageDisplayed) {
+		if (moving && !isMessageDisplayed && !isMenuDisplayed) {
 			timer++;
 			if(timer > TIMER_SPEED) {
 				boolean moveIsFinished = model.evolveMove();
@@ -50,7 +51,7 @@ public class GameController {
 	}
 
 	public void onStartMovingAsked(Direction d) {
-		if(!moving && !isMessageDisplayed) {
+		if(!moving && !isMessageDisplayed && !isMenuDisplayed) {
 			boolean movementPossible = model.setMovementIFP(d);
 			if (movementPossible) {
 				this.stopMovingAsked.put(d, false);
@@ -64,8 +65,25 @@ public class GameController {
 	}
 
 	public void onValidate() {
-		model.hideMessage();
-		isMessageDisplayed = false;
+		if (isMessageDisplayed) {
+			model.hideMessage();
+			isMessageDisplayed = false;
+		}
+		else if (!moving && !isMenuDisplayed && model.isInFrontOfAChest()) {
+			model.pickChestContentIFP();
+			isMessageDisplayed = true;
+		}
+	}
+
+	public void onOpenBag() {
+		if (isMenuDisplayed) {
+			model.hideMenu();
+			isMenuDisplayed = false;
+		}
+		else if (!isMessageDisplayed) {
+			model.showBag();
+			isMenuDisplayed = true;
+		}
 	}
 
 }

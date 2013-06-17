@@ -3,17 +3,24 @@
  */
 package model;
 
+import gui.ContextMenu;
+import gui.UserInterface;
 import gui.sprite.Posture;
 import gui.sprite.SpriteSheet;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
-import controller.Direction;
-
+import model.chests.Chest;
+import model.chests.Item;
+import model.player.Bag;
+import model.player.Move;
+import model.player.Player;
 import model.rooms.Room;
 import model.rooms.SquareType;
+import controller.Direction;
 
 /**
  * @author Nicolas
@@ -25,6 +32,8 @@ public class GameModel extends Observable {
     private SpriteSheet charactersSpriteSheet;
     private Player player;
     private Message currentMessage;
+    private ContextMenu menu;
+	private Bag bag;
 
 	public GameModel(Player player) {
 		super();
@@ -34,12 +43,15 @@ public class GameModel extends Observable {
 
 	public void init() {
 		try {
+			Item.createItems();
 			currentRoom = Room.createRooms();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		charactersSpriteSheet = new SpriteSheet(Resource.SPRITE_SHEET, 32*3, 32*4);
+		bag = new Bag();
 		currentMessage = new Message();
+		menu = new ContextMenu();
 	}
 
 	public Room getCurrentRoom() {
@@ -141,6 +153,47 @@ public class GameModel extends Observable {
 
 	public void hideMessage() {
 		currentMessage.setString("");
+	}
+
+	public ContextMenu getMenu() {
+		return menu;
+	}
+	
+	public void showBag() {
+		String content = "Bag :\n";
+		HashMap<Item, Integer> bagContent = bag.getContent();
+		for (Item item : bagContent.keySet()) {
+			content += "  " + bagContent.get(item) + "x " + item.getName() + "\n";
+		}
+		menu.setContent(content);
+	}
+	
+	public void hideMenu() {
+		menu.setContent("");
+	}
+	
+	public boolean isInFrontOfAChest() {
+		return currentRoom.isChest(player.getFrontSquare());
+	}
+
+	/**
+	 * @return true if an item was picked
+	 */
+	public boolean pickChestContentIFP() {
+		int chestId = currentRoom.getMat().getSquareValue(player.getFrontSquare());
+		Chest chest = currentRoom.getChest(chestId);
+		Item item = chest.getItem();
+
+		if (item == null) {
+			setNewMessage(UserInterface.getLang().getString("nothingHere"));
+			return false;
+		}
+		else {
+			bag.addItem(item);
+			chest.empty();
+			setNewMessage(UserInterface.getLang().getString("itemFound") + item.getName());
+			return true;
+		}
 	}
 
 	@Override

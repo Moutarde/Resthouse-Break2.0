@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 
 import model.Coord;
 import model.GameModel;
-import model.Player;
+import model.player.Player;
 
 /**
  * @author Nicolas
@@ -58,36 +58,46 @@ public class GameEngine {
 	}
 
 	private void handleEvents() {
-	    if (keyboard.isPressed(KeyEvent.VK_LEFT)) {
-	    	controller.onStartMovingAsked(Direction.LEFT);
-	    }
-	    else {
-	    	controller.onStopMovingAsked(Direction.LEFT);
-	    }
-	    
-	    if (keyboard.isPressed(KeyEvent.VK_RIGHT)) {
-	    	controller.onStartMovingAsked(Direction.RIGHT);
-	    }
-	    else {
-	    	controller.onStopMovingAsked(Direction.RIGHT);
-	    }
-	    
-	    if (keyboard.isPressed(KeyEvent.VK_UP)) {
-	    	controller.onStartMovingAsked(Direction.UP);
-	    }
-	    else {
-	    	controller.onStopMovingAsked(Direction.UP);
-	    }
-	    
-	    if (keyboard.isPressed(KeyEvent.VK_DOWN)) {
-	    	controller.onStartMovingAsked(Direction.DOWN);
-	    }
-	    else {
-	    	controller.onStopMovingAsked(Direction.DOWN);
-	    }
-	    
-	    if (keyboard.isPressedOnce(KeyEvent.VK_ENTER)) {
-	    	controller.onValidate();
-	    }
+		// LEFT
+		if (keyboard.isPressed(KeyEvent.VK_LEFT)) {
+			controller.onStartMovingAsked(Direction.LEFT);
+		}
+		else {
+			controller.onStopMovingAsked(Direction.LEFT);
+		}
+		
+		// RIGHT
+		if (keyboard.isPressed(KeyEvent.VK_RIGHT)) {
+			controller.onStartMovingAsked(Direction.RIGHT);
+		}
+		else {
+			controller.onStopMovingAsked(Direction.RIGHT);
+		}
+		
+		// UP
+		if (keyboard.isPressed(KeyEvent.VK_UP)) {
+			controller.onStartMovingAsked(Direction.UP);
+		}
+		else {
+			controller.onStopMovingAsked(Direction.UP);
+		}
+		
+		// DOWN
+		if (keyboard.isPressed(KeyEvent.VK_DOWN)) {
+			controller.onStartMovingAsked(Direction.DOWN);
+		}
+		else {
+			controller.onStopMovingAsked(Direction.DOWN);
+		}
+		
+		// ENTER
+		if (keyboard.isPressedOnce(KeyEvent.VK_ENTER)) {
+			controller.onValidate();
+		}
+		
+		// I
+		if (keyboard.isPressedOnce(KeyEvent.VK_I)) {
+			controller.onOpenBag();
+		}
 	}
 }

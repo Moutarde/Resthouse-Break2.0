@@ -2,11 +2,12 @@ package gui;
 
 import gui.sprite.Sprite;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import model.GameModel;
 import model.Message;
-import model.Player;
+import model.player.Player;
 import model.rooms.Matrix;
 
 /**
@@ -42,10 +43,32 @@ public class GameRenderer implements Renderer {
 		int py = y + player.getCoord().getY() * Matrix.CASE_SIZE + player.getMove().getDistMove().getY() - 5;
 		playerSprite.draw(g, px, py, player.getPosture());
 		
-		// Render the text
+		// Render the bottom message
 		Message message = model.getCurrentMessage();
 		if(message != null && !message.isEmpty()) {
-			message.draw(g);
+			int offsetX = 10;
+			int offsetY = 20;
+			int position = GamePanel.SIZE.height - GamePanel.TEXT_ZONE_HEIGHT;
+			
+			g.setColor(Color.white);
+			g.fillRect(0, position, GamePanel.SIZE.width, GamePanel.SIZE.height);
+			g.setColor(Color.black);
+			g.drawString(message.getString(), offsetX, position + offsetY);
+			String pressEnter = UserInterface.getLang().getString("pressEnter");
+			g.drawString(pressEnter, GamePanel.SIZE.width - offsetX - (pressEnter.length()*6), GamePanel.SIZE.height - 10);
+		}
+		
+		// Render the menu
+		ContextMenu menu = model.getMenu();
+		if(menu != null && !menu.isEmpty()) {
+			int offsetX = 10;
+			int offsetY = 20;
+			int positionX = GamePanel.SIZE.width - GamePanel.MENU_SIZE.width;
+			
+			g.setColor(Color.white);
+			g.fillRect(positionX, 0, GamePanel.SIZE.width, GamePanel.MENU_SIZE.height);
+			g.setColor(Color.black);
+			g.drawString(menu.getContent(), positionX + offsetX, offsetY);
 		}
 	}
 

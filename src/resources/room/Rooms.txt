@@ -1,12 +1,20 @@
+# -1	: outside the room
+# 0		: you can't walk here
+# 1		: you can walk here
+# 10-19	: door
+# 30-39	: chest
+
 R_GINETTE
 image=src/resources/room/ginetteRoom.jpg
 size=6x6
 { 0, 0, 0, 0, 0, 0}
-{ 0, 1, 0, 0, 1, 1}
+{ 0, 1,30,31, 1, 1}
 { 1, 1, 1, 1, 1,10}
 {11, 1, 1, 1, 1, 1}
 { 1, 1, 1, 0, 1, 1}
 { 1, 1, 0, 0, 1, 0}
+CHEST:30;null
+CHEST:31;O_TEETH
 END
 
 R_PARK
