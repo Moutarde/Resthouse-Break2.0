@@ -22,7 +22,7 @@ public class Bag {
 	public void addItem(Item i) {
 		if (items.containsKey(i)) {
 			int currentAmount = items.get(i);
-			items.put(i, currentAmount++);
+			items.put(i, ++currentAmount);
 		}
 		else {
 			items.put(i, 1);
@@ -39,7 +39,7 @@ public class Bag {
 			items.remove(i);
 		}
 		else {
-			items.put(i, currentAmount--);
+			items.put(i, --currentAmount);
 		}
 	}
 }

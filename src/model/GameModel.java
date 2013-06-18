@@ -1,6 +1,3 @@
-/**
- * 
- */
 package model;
 
 import gui.ContextMenu;

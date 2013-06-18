@@ -27,6 +27,27 @@ public class Item {
 		return itemList.get(id);
 	}
 	
+	@Override
+    public boolean equals(Object obj) {
+        if (obj==this) {
+            return true;
+        }
+ 
+        if (obj instanceof Item) {
+        	Item item = (Item)obj;
+ 
+            if (this.name != item.name) {
+                if (this.name == null || !this.name.equals(item.name)) {
+                    return false;
+                }
+            }
+ 
+            return true;
+        }
+ 
+        return false;
+    }
+	
 	public static void createItems() throws IOException {
 		itemList = new HashMap<String, Item>();
 		

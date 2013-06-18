@@ -47,28 +47,36 @@ public class GameRenderer implements Renderer {
 		Message message = model.getCurrentMessage();
 		if(message != null && !message.isEmpty()) {
 			int offsetX = 10;
-			int offsetY = 20;
+			int offsetY = 10;
 			int position = GamePanel.SIZE.height - GamePanel.TEXT_ZONE_HEIGHT;
 			
 			g.setColor(Color.white);
 			g.fillRect(0, position, GamePanel.SIZE.width, GamePanel.SIZE.height);
 			g.setColor(Color.black);
-			g.drawString(message.getString(), offsetX, position + offsetY);
+			g.drawString(message.getString(), offsetX, position + offsetY + g.getFontMetrics().getHeight()/2);
 			String pressEnter = UserInterface.getLang().getString("pressEnter");
-			g.drawString(pressEnter, GamePanel.SIZE.width - offsetX - (pressEnter.length()*6), GamePanel.SIZE.height - 10);
+			offsetX += g.getFontMetrics().stringWidth(pressEnter);
+			g.drawString(pressEnter, GamePanel.SIZE.width - offsetX, GamePanel.SIZE.height - offsetY);
 		}
 		
 		// Render the menu
 		ContextMenu menu = model.getMenu();
 		if(menu != null && !menu.isEmpty()) {
+			int textHeight = g.getFontMetrics().getHeight();
 			int offsetX = 10;
-			int offsetY = 20;
+			int offsetY = 10 + textHeight/2;
 			int positionX = GamePanel.SIZE.width - GamePanel.MENU_SIZE.width;
+			
+			String[] lines = menu.getContent().split("\n");
 			
 			g.setColor(Color.white);
 			g.fillRect(positionX, 0, GamePanel.SIZE.width, GamePanel.MENU_SIZE.height);
 			g.setColor(Color.black);
-			g.drawString(menu.getContent(), positionX + offsetX, offsetY);
+			
+			for (String string : lines) {
+				g.drawString(string, positionX + offsetX, offsetY);
+				offsetY += textHeight;
+			}
 		}
 	}
 

@@ -1,3 +1,11 @@
 O_TEETH
 name=teeth
 END
+
+O_KEY
+name=key
+END
+
+O_WHEEL_CHAIR
+name=wheel chair
+END
