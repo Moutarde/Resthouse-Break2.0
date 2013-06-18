@@ -74,17 +74,14 @@ public class GameModel extends Observable {
 		else {
 			boolean playerIsOnDoor = currentRoom.getSquareType(player.getCoord()) == SquareType.DOOR;
 			boolean nextSquareIsOutside = currentRoom.getSquareType(player.getNextSquare(d)) == SquareType.OUTSIDE;
-			if(playerIsOnDoor && nextSquareIsOutside) {
-				player.getMove().setDir(d);
-				player.getMove().setIsLeavingRoom(true);
-				return true;
-			}
-			else {
-				player.setPosture(Posture.getPosture(d, 0));
-				return false;
-			}
-		}
 			
+			if(playerIsOnDoor && nextSquareIsOutside) {
+				changeRoom();
+			}
+			
+			player.setPosture(Posture.getPosture(d, 0));
+			return false;
+		}
 	}
 	
 	public boolean isMovementPossible(Direction d) {
@@ -102,13 +99,7 @@ public class GameModel extends Observable {
 		player.setPosture(Posture.getPosture(dir, move.getStep()));
 
 		if(move.isMoveFinished()) {
-			if(move.isLeavingRoom()) {
-				changeRoom();
-				move.setIsLeavingRoom(false);
-			}
-			else {
-				player.moveSquare(dir);
-			}
+			player.moveSquare(dir);
 			move.setStep(0);
 			move.setDistMove(new Coord(0,0));
 			return true;
