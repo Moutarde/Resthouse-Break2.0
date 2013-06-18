@@ -49,7 +49,7 @@ public class GameController {
 		if(!moving && !isMessageDisplayed && !isMenuDisplayed) {
 			boolean movementPossible = model.setMovementIFP(d);
 			if (movementPossible) {
-				this.stopMovingAsked.put(d, false);
+				stopMovingAsked.put(d, false);
 				moving = true;
 			}
 		}

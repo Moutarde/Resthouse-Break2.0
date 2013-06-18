@@ -5,11 +5,13 @@ import gui.sprite.Sprite;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import model.Coord;
 import model.GameModel;
 import model.Message;
 import model.player.Move;
 import model.player.Player;
 import model.rooms.Matrix;
+import model.rooms.SquareType;
 
 /**
  * @author Nicolas Kniebihler
@@ -21,6 +23,8 @@ import model.rooms.Matrix;
  *
  */
 public class GameRenderer implements Renderer {
+	private boolean debugMode = false;
+	
 	private GameModel model;
 	
 	private Sprite playerSprite;
@@ -44,7 +48,44 @@ public class GameRenderer implements Renderer {
 		
 		
 		// Render the background
-		g.drawImage(model.getCurrentRoom().getRes().getBufferedImage(), bgx, bgy, null);
+		if (debugMode) {
+			Matrix mat = model.getCurrentRoom().getMat(); 
+			int positionX = bgx;
+			int positionY = bgy;
+			for (int lineId = 0; lineId < mat.getHeight(); ++lineId) {
+				for (int colId = 0; colId < mat.getWidth(); ++colId) {
+					SquareType type = model.getCurrentRoom().getSquareType(new Coord(colId, lineId));
+					switch (type) {
+					case FREESQUARE:
+						g.setColor(Color.white);
+						break;
+					case DOOR:
+						g.setColor(Color.red);
+						break;
+					case CHEST:
+						g.setColor(Color.blue);
+						break;
+					case OBSTACLE:
+						g.setColor(Color.gray);
+						break;
+					case OUTSIDE:
+						g.setColor(Color.darkGray);
+						break;
+					default:
+						assert false : "Square type unknown : " + type;
+						break;
+					}
+					
+					g.fillRect(positionX, positionY, Matrix.CASE_SIZE, Matrix.CASE_SIZE);
+					positionX += Matrix.CASE_SIZE;
+				}
+				positionX = bgx;
+				positionY += Matrix.CASE_SIZE;
+			}
+		}
+		else {
+			g.drawImage(model.getCurrentRoom().getRes().getBufferedImage(), bgx, bgy, null);
+		}
 		
 		// Render the player
 		playerSprite.draw(g, px, py, player.getPosture());
@@ -71,19 +112,26 @@ public class GameRenderer implements Renderer {
 			int textHeight = g.getFontMetrics().getHeight();
 			int offsetX = 10;
 			int offsetY = 10 + textHeight/2;
-			int positionX = GamePanel.SIZE.width - GamePanel.MENU_SIZE.width;
+			int menuPositionX = GamePanel.SIZE.width - GamePanel.MENU_SIZE.width;
 			
 			String[] lines = menu.getContent().split("\n");
 			
 			g.setColor(Color.white);
-			g.fillRect(positionX, 0, GamePanel.SIZE.width, GamePanel.MENU_SIZE.height);
+			g.fillRect(menuPositionX, 0, GamePanel.SIZE.width, GamePanel.MENU_SIZE.height);
 			g.setColor(Color.black);
 			
 			for (String string : lines) {
-				g.drawString(string, positionX + offsetX, offsetY);
+				g.drawString(string, menuPositionX + offsetX, offsetY);
 				offsetY += textHeight;
 			}
 		}
 	}
 
+	@Override
+	public void changeDebugMode() {
+		if (debugMode)
+			debugMode = false;
+		else
+			debugMode = true;
+	}
 }

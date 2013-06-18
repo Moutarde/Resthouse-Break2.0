@@ -82,7 +82,7 @@ public class Room {
 		else if (squareValue == 1) {
 			return SquareType.FREESQUARE;
 		}
-		else if (squareValue >= 10 && squareValue < 20) {
+		else if (squareValue >= 10 && squareValue < 29) {
 			return SquareType.DOOR;
 		}
 		else if (squareValue >= 30 && squareValue < 40) {

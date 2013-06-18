@@ -1,7 +1,7 @@
 # -1	: outside the room
 # 0		: you can't walk here
 # 1		: you can walk here
-# 10-19	: door
+# 10-29	: door
 # 30-39	: chest
 
 R_GINETTE
@@ -73,8 +73,22 @@ CHEST:32;O_WHEEL_CHAIR
 CHEST:33;O_TEETH
 END
 
+R_CORIDOR
+image=src/resources/room/couloir1.jpg
+size=12x6
+{ 1, 1,11, 1,12, 1, 1,13, 1, 1,14, 1}
+{10, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+{ 1, 1,20, 1,19, 1,18,17, 1, 1, 1, 1}
+{-1,-1,-1,-1,-1,-1,-1,-1, 0, 1, 1, 1}
+{-1,-1,-1,-1,-1,-1,-1,-1,-1,16, 1,15}
+{-1,-1,-1,-1,-1,-1,-1,-1, 0, 1, 1, 1}
+END
+
 NEIGHBOR:R_GINETTE;11;R_PARK;12
 NEIGHBOR:R_COMMUNAL_ROOM;13;R_PARK;10
 NEIGHBOR:R_COMMUNAL_ROOM;12;R_PARK;11
+NEIGHBOR:R_CORIDOR;16;R_GINETTE;10
+NEIGHBOR:R_CORIDOR;17;R_COMMUNAL_ROOM;11
+NEIGHBOR:R_CORIDOR;18;R_COMMUNAL_ROOM;10
 
 START_ROOM:R_GINETTE

@@ -95,9 +95,14 @@ public class GameEngine {
 			controller.onValidate();
 		}
 		
-		// I
+		// I --> bag
 		if (keyboard.isPressedOnce(KeyEvent.VK_I)) {
 			controller.onOpenBag();
+		}
+		
+		// TAB --> debug display
+		if (keyboard.isPressedOnce(KeyEvent.VK_D)) {
+			renderer.changeDebugMode();
 		}
 	}
 }
