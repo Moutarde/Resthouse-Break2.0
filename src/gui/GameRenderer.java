@@ -7,6 +7,7 @@ import java.awt.Graphics;
 
 import model.GameModel;
 import model.Message;
+import model.player.Move;
 import model.player.Player;
 import model.rooms.Matrix;
 
@@ -32,15 +33,20 @@ public class GameRenderer implements Renderer {
 
 	@Override
 	public void render(Graphics g) {
+		Player player = model.getPlayer();
+		Move move = player.getMove();
+		
+		int px = GamePanel.SIZE.width/2 - Matrix.CASE_SIZE/2 - playerSprite.getOffset().getX();
+		int py = GamePanel.SIZE.height/2 - Matrix.CASE_SIZE/2 - playerSprite.getOffset().getY();
+		
+		int bgx = px - (player.getCoord().getX() * Matrix.CASE_SIZE + move.getDistMove().getX() - 3);
+		int bgy = py - (player.getCoord().getY() * Matrix.CASE_SIZE + move.getDistMove().getY() - 5);
+		
+		
 		// Render the background
-		int x = GamePanel.SIZE.width/2 - (model.getCurrentRoom().getMat().getWidth() * Matrix.CASE_SIZE)/2;
-		int y = GamePanel.SIZE.height/2 - (model.getCurrentRoom().getMat().getHeight() * Matrix.CASE_SIZE)/2;
-		g.drawImage(model.getCurrentRoom().getRes().getBufferedImage(), x, y, null);
+		g.drawImage(model.getCurrentRoom().getRes().getBufferedImage(), bgx, bgy, null);
 		
 		// Render the player
-		Player player = model.getPlayer();
-		int px = x + player.getCoord().getX() * Matrix.CASE_SIZE + player.getMove().getDistMove().getX() - 3;
-		int py = y + player.getCoord().getY() * Matrix.CASE_SIZE + player.getMove().getDistMove().getY() - 5;
 		playerSprite.draw(g, px, py, player.getPosture());
 		
 		// Render the bottom message

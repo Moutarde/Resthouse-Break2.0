@@ -13,17 +13,19 @@ import controller.Direction;
  */
 public class Move {
 	public static final int NB_STEPS = 4;
+	public static final int TIMER_MAX = 3;
 	
+	// This parameter is incremeted each frame, and allows to smooth the movement.
+	// When timer reaches TIMER_MAX, step is incremented and timer is set to 0.
+	private int timer = 0;
+	private int step = 0;
+	
+	private Coord distMove = new Coord(0,0);
+	private boolean isLeavingRoom = false;
 	private Direction dir;
-	private int step;
-	private Coord distMove;
-	private boolean isLeavingRoom;
 	
 	public Move(Direction dir) {
 		this.dir = dir;
-		step = 0;
-		distMove = new Coord(0,0);
-		isLeavingRoom = false;
 	}
 
 	public int getStep() {
@@ -53,18 +55,19 @@ public class Move {
 	}
 
 	public void update() {
+		int dist = (int)((step + (timer/(float)TIMER_MAX)) * (Matrix.CASE_SIZE / NB_STEPS));
 		switch(dir) {
 		case UP:
-			distMove.setY(- step * (Matrix.CASE_SIZE / NB_STEPS));
+			distMove.setY(-dist);
 			break;
 		case DOWN:
-			distMove.setY(step * (Matrix.CASE_SIZE / NB_STEPS));
+			distMove.setY(dist);
 			break;
 		case LEFT:
-			distMove.setX(- step * (Matrix.CASE_SIZE / NB_STEPS));
+			distMove.setX(-dist);
 			break;
 		case RIGHT:
-			distMove.setX(step * (Matrix.CASE_SIZE / NB_STEPS));
+			distMove.setX(dist);
 			break;
 		default:
 			assert false;
@@ -87,5 +90,23 @@ public class Move {
 
 	public void setIsLeavingRoom(boolean isLeavingRoom) {
 		this.isLeavingRoom = isLeavingRoom;
+	}
+
+	public int getTimer() {
+		return timer;
+	}
+
+	/**
+	 * @return true if timer has reached TIMER_MAX
+	 */
+	public boolean updateTimer() {
+		boolean timerMaxReached = false;
+		++timer;
+		if (timer == TIMER_MAX) {
+			timer = 0;
+			timerMaxReached = true;
+		}
+		update();
+		return timerMaxReached;
 	}
 }

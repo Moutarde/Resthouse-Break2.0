@@ -33,6 +33,6 @@ public class SpriteSheet {
 	}
 	
 	public Sprite getSprite(int x, int y) {
-		return new Sprite(image.getSubimage(x * spriteWidth, y * spriteHeight, spriteWidth, spriteHeight), spriteWidth/3, spriteHeight/4);
+		return new Sprite(image.getSubimage(x * spriteWidth, y * spriteHeight, spriteWidth, spriteHeight), spriteWidth/3, spriteHeight/4, 3, 5);
 	}
 }

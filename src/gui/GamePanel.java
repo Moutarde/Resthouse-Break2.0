@@ -28,9 +28,9 @@ public class GamePanel extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = -8860204251354754377L;
 
-	public static final Dimension SIZE = new Dimension(725, 527);
-	public static final int TEXT_ZONE_HEIGHT = 70;
-	public static final Dimension MENU_SIZE = new Dimension(200, 300);
+	public static final Dimension SIZE = new Dimension(400, 400);
+	public static final int TEXT_ZONE_HEIGHT = 60;
+	public static final Dimension MENU_SIZE = new Dimension(120, 280);
 
 	private GameEngine engine;
 	private JPanel screen;
@@ -103,6 +103,9 @@ public class GamePanel extends JPanel implements Runnable {
 				} catch (Exception e) {
 					// It's an interrupted exception, and nobody cares
 				}
+			}
+			else {
+				System.out.println("Frame rate too slow");
 			}
 		}
 	}

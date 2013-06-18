@@ -18,10 +18,7 @@ public class GameController {
 	private boolean moving = false;
 	private boolean isMessageDisplayed = false;
 	private boolean isMenuDisplayed = false;
-	private int timer = 0;
 	private final HashMap<Direction, Boolean> stopMovingAsked;
-	
-	private static final int TIMER_SPEED = 2;
 
 	public GameController(GameModel model) {
 		this.model = model;
@@ -33,19 +30,17 @@ public class GameController {
 
 	public void update(float delta) {
 		if (moving && !isMessageDisplayed && !isMenuDisplayed) {
-			timer++;
-			if(timer > TIMER_SPEED) {
+			Move move = model.getPlayer().getMove();
+			boolean timerEnded = move.updateTimer();
+			if(timerEnded) {
 				boolean moveIsFinished = model.evolveMove();
 
 				if(moveIsFinished) {
-					Move move = model.getPlayer().getMove();
 					Direction dir = move.getDir();
 					if(stopMovingAsked.get(dir) || !model.isMovementPossible(dir)) {
 						moving = false;
 					}
 				}
-
-				timer = 0;
 			}
 		}
 	}
