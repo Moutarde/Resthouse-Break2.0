@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.MediaTracker;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -27,6 +28,7 @@ import controller.GameEngine;
 public class GamePanel extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = -8860204251354754377L;
+	private static final boolean debugFrameRate = false;
 
 	public static final Dimension SIZE = new Dimension(400, 400);
 	public static final int TEXT_ZONE_HEIGHT = 60;
@@ -72,13 +74,17 @@ public class GamePanel extends JPanel implements Runnable {
 	@Override
 	public void run() {
 		// Set up the graphics stuff, double-buffering.
+		MediaTracker tracker = new MediaTracker(this);
 		BufferedImage image = new BufferedImage(SIZE.width, SIZE.height, BufferedImage.TYPE_INT_RGB);
+		tracker.addImage(image, 0);
 		Graphics g = image.getGraphics();
 		Graphics appletGraphics = screen.getGraphics();
 		
 		requestFocus();
 
 		long delta = 0l;
+		long timeToSleep = 0l;
+		long frameRate = 0l;
 
 		// Game loop.
 		while (true) {
@@ -91,21 +97,38 @@ public class GamePanel extends JPanel implements Runnable {
 			engine.update((float)(delta / 1000000000.0));
 			// Render the world
 			engine.render(g);
+			
+			if (debugFrameRate) {
+				g.setColor(Color.red);
+				g.drawString("frameRate = " + frameRate, 5, appletGraphics.getFontMetrics().getHeight());
+			}
 
 			// Draw the entire results on the screen.
 			appletGraphics.drawImage(image, 0, 0, null);
+			
+			try {
+				tracker.waitForID(0);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 
 			// Lock the frame rate
 			delta = System.nanoTime() - lastTime;
-			if (delta < 20000000L) {
+			if (delta < 20000000l) {
 				try {
-					Thread.sleep((20000000L - delta) / 1000000L);
+					timeToSleep = (20000000l - delta) / 1000000l;
+					Thread.sleep(timeToSleep);
 				} catch (Exception e) {
-					// It's an interrupted exception, and nobody cares
+					e.printStackTrace();
 				}
 			}
 			else {
 				System.out.println("Frame rate too slow");
+			}
+			
+			if (debugFrameRate) {
+				long newFrameRate = 1000000000l / (System.nanoTime() - lastTime);
+				frameRate = Math.abs(frameRate - newFrameRate) > 0.5 ? newFrameRate : frameRate;
 			}
 		}
 	}

@@ -100,7 +100,7 @@ public class GameEngine {
 			controller.onOpenBag();
 		}
 		
-		// TAB --> debug display
+		// D --> debug display
 		if (keyboard.isPressedOnce(KeyEvent.VK_D)) {
 			renderer.changeDebugMode();
 		}
