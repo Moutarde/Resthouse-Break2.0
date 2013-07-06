@@ -2,14 +2,11 @@ package controller;
 
 import gui.GameRenderer;
 import gui.Renderer;
-import gui.sprite.Posture;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
-import model.Coord;
 import model.GameModel;
-import model.player.Player;
 
 /**
  * @author Nicolas
@@ -21,16 +18,13 @@ import model.player.Player;
  *
  */
 public class GameEngine {
-	private Player player;
 	private GameModel model;
 	private Renderer renderer;
 	private GameController controller;
 	private Keyboard keyboard;
 
 	public GameEngine() {
-		player = new Player(new Coord(3,3), Posture.LOOK_DOWN);
-
-		model = new GameModel(player);
+		model = new GameModel();
 		model.init();
 
 		renderer = new GameRenderer(model);

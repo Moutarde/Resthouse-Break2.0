@@ -15,6 +15,18 @@ public class Matrix {
 		width = squares[0].length;
 	}
 
+	public Matrix(Matrix matrixToCopy) {
+		squares = new int[matrixToCopy.height][matrixToCopy.width];
+		
+		for (int i = 0; i < matrixToCopy.width; ++i) {
+			for (int j = 0; j < matrixToCopy.height; ++j) {
+				squares[j][i] = matrixToCopy.squares[j][i];
+			}
+		}
+		height = squares.length;
+		width = squares[0].length;
+	}
+
 	public int[][] squares() {
 		return squares;
 	}
@@ -36,6 +48,18 @@ public class Matrix {
 	
 	public int getSquareValue(Coord c) {
 		return getSquareValue(c.getX(), c.getY());
+	}
+	
+	public boolean setSquareValue(int value, int i, int j) {
+		if(i < 0 || j < 0 || i >= getWidth() || j >= getHeight()) {
+			return false;
+		}
+		squares[j][i] = value;
+		return true;
+	}
+	
+	public boolean setSquareValue(int value, Coord c) {
+		return setSquareValue(value, c.getX(), c.getY());
 	}
 	
 	public Coord getCoordFromValue(int value) {

@@ -8,7 +8,8 @@ import java.awt.Graphics;
 import model.Coord;
 import model.GameModel;
 import model.Message;
-import model.player.Move;
+import model.Move;
+import model.npc.NPC;
 import model.player.Player;
 import model.rooms.Matrix;
 import model.rooms.SquareType;
@@ -54,26 +55,33 @@ public class GameRenderer implements Renderer {
 			int positionY = bgy;
 			for (int lineId = 0; lineId < mat.getHeight(); ++lineId) {
 				for (int colId = 0; colId < mat.getWidth(); ++colId) {
-					SquareType type = model.getCurrentRoom().getSquareType(new Coord(colId, lineId));
-					switch (type) {
-					case FREESQUARE:
-						g.setColor(Color.white);
-						break;
-					case DOOR:
-						g.setColor(Color.red);
-						break;
-					case CHEST:
-						g.setColor(Color.blue);
-						break;
-					case OBSTACLE:
-						g.setColor(Color.gray);
-						break;
-					case OUTSIDE:
-						g.setColor(Color.darkGray);
-						break;
-					default:
-						assert false : "Square type unknown : " + type;
-						break;
+					Coord coord = new Coord(colId, lineId);
+					SquareType typeFromEvolutiveMat = model.getCurrentRoom().getSquareTypeFromEvolutiveMat(coord);
+					if (typeFromEvolutiveMat == SquareType.CHARACTER) {
+						g.setColor(Color.yellow);
+					}
+					else {
+						SquareType type = model.getCurrentRoom().getSquareType(coord);
+						switch (type) {
+						case FREESQUARE:
+							g.setColor(Color.white);
+							break;
+						case DOOR:
+							g.setColor(Color.red);
+							break;
+						case CHEST:
+							g.setColor(Color.blue);
+							break;
+						case OBSTACLE:
+							g.setColor(Color.gray);
+							break;
+						case OUTSIDE:
+							g.setColor(Color.darkGray);
+							break;
+						default:
+							assert false : "Square type unknown : " + type;
+							break;
+						}
 					}
 					
 					g.fillRect(positionX, positionY, Matrix.CASE_SIZE, Matrix.CASE_SIZE);
@@ -89,6 +97,14 @@ public class GameRenderer implements Renderer {
 		
 		// Render the player
 		playerSprite.draw(g, px, py, player.getPosture());
+		
+		Sprite npcSprite;
+		for (NPC npc : NPC.getNPCsInRoom(model.getCurrentRoom())) {
+			npcSprite = model.getCharactersSpriteSheet().getSprite(npc.getSpriteCoord());
+			int npcx = bgx + npc.getCoord().getX() * Matrix.CASE_SIZE + npc.getMove().getDistMove().getX() - npcSprite.getOffset().getX();
+			int npcy = bgy + npc.getCoord().getY() * Matrix.CASE_SIZE + npc.getMove().getDistMove().getY() - npcSprite.getOffset().getY();
+			npcSprite.draw(g, npcx, npcy, npc.getPosture());
+		}
 		
 		// Render the bottom message
 		Message message = model.getCurrentMessage();

@@ -5,6 +5,8 @@ package model.player;
 
 import gui.sprite.Posture;
 import model.Coord;
+import model.Move;
+import model.rooms.Room;
 import controller.Direction;
 
 /**
@@ -12,21 +14,40 @@ import controller.Direction;
  *
  */
 public class Player {
+	private int id;
+	private Room room;
 	private Coord coord;
 	private Posture posture;
 	private Move move = new Move(Direction.NONE);
 	
-	public Player(Coord coord, Posture posture) {
+	public Player(int id, Room room, Coord coord, Posture posture) {
+		this.id = id;
+		this.room = room;
 		this.coord = coord;
 		this.posture = posture;
+
+		this.room.setPlayerOnSquare(id, coord);
+	}
+
+	public int getId() {
+		return id;
+	}
+	
+	public Room getRoom() {
+		return room;
+	}
+	
+	public void setRoom(Room room) {
+		this.room = room;
 	}
 
 	public Coord getCoord() {
 		return coord;
 	}
 
-	public void setCoord(Coord coord) {
-		this.coord = coord;
+	public void setCoord(Coord newCoord) {
+		room.setPlayerOnSquare(id, newCoord);
+		this.coord = newCoord;
 	}
 
 	public Posture getPosture() {
@@ -42,7 +63,9 @@ public class Player {
 	}
 
 	public void moveSquare(Direction dir) {
+		room.freeSquare(coord);
 		coord = getNextSquare(dir);
+		room.setPlayerOnSquare(id, coord);
 	}
 
 	public Coord getFrontSquare() {
@@ -75,5 +98,11 @@ public class Player {
 		int yp = coord.getY();
 
 		return new Coord(xp + xMove, yp + yMove);
+	}
+
+	public void startMove(Direction d) {
+		setPosture(Posture.getPosture(d, 0));
+		move.setDir(d);
+		room.setPlayerOnSquare(id, getNextSquare(d));
 	}
 }

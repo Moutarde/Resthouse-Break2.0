@@ -26,6 +26,7 @@ public class Room {
 	
 	private Resource res;
 	private Matrix mat;
+	private Matrix evolutiveMat;
 	private HashMap<Integer, Room> neighbors;
 	private HashMap<Integer, Integer> neighborsDoorsIds;
 	private HashMap<Integer, Chest> chests;
@@ -33,6 +34,7 @@ public class Room {
 	private Room(Resource res, Matrix mat) {
 		this.res = res;
 		this.mat = mat;
+		this.evolutiveMat = new Matrix(mat);
 		this.neighbors = new HashMap<Integer, Room>();
 		this.neighborsDoorsIds = new HashMap<Integer, Integer>();
 		this.chests = new HashMap<Integer, Chest>();
@@ -50,7 +52,13 @@ public class Room {
 		return mat;
 	}
 	
-	public boolean canWalkOnSquare(Coord c) {
+	public boolean canWalkOnSquare(Coord c, int id) {
+		SquareType evolutiveMatType = getSquareTypeFromEvolutiveMat(c);
+		
+		if (evolutiveMatType == SquareType.CHARACTER && evolutiveMat.getSquareValue(c) != id) {
+			return false;
+		}
+		
 		SquareType type = getSquareType(c);
 
 		if (type == SquareType.FREESQUARE || type == SquareType.DOOR) {
@@ -72,7 +80,7 @@ public class Room {
 	
 	public SquareType getSquareType(Coord c) {
 		int squareValue = mat.getSquareValue(c);
-		
+
 		if (squareValue == -1) {
 			return SquareType.OUTSIDE;
 		}
@@ -82,7 +90,7 @@ public class Room {
 		else if (squareValue == 1) {
 			return SquareType.FREESQUARE;
 		}
-		else if (squareValue >= 10 && squareValue < 29) {
+		else if (squareValue >= 10 && squareValue < 30) {
 			return SquareType.DOOR;
 		}
 		else if (squareValue >= 30 && squareValue < 40) {
@@ -92,6 +100,25 @@ public class Room {
 			assert false : "Square type unknown : " + squareValue;
 			return null;
 		}
+	}
+	
+	public SquareType getSquareTypeFromEvolutiveMat(Coord c) {
+		int squareValueFromEvolutiveMat = evolutiveMat.getSquareValue(c);
+		
+		if (squareValueFromEvolutiveMat >= 100 && squareValueFromEvolutiveMat < 200) {
+			return SquareType.CHARACTER;
+		}
+		else {
+			return SquareType.FREESQUARE;
+		}
+	}
+
+	public void setPlayerOnSquare(int id, Coord newCoord) {
+		evolutiveMat.setSquareValue(id, newCoord);
+	}
+
+	public void freeSquare(Coord coord) {
+		evolutiveMat.setSquareValue(1, coord);
 	}
 
 	private void addNeighbor(int doorId, Room newNeighbor, int neighborLinkedDoorId) {
@@ -237,5 +264,9 @@ public class Room {
 	private static void setLinkedRooms(Room room1, int doorId1, Room room2, int doorId2) {
 		room1.addNeighbor(doorId1, room2, doorId2);
 		room2.addNeighbor(doorId2, room1, doorId1);
+	}
+
+	public static Room getRoom(String id) {
+		return roomList.get(id);
 	}
 }

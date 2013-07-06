@@ -5,5 +5,5 @@ package model.rooms;
  *
  */
 public enum SquareType {
-	OUTSIDE, OBSTACLE, FREESQUARE, DOOR, CHEST; 
+	OUTSIDE, OBSTACLE, FREESQUARE, DOOR, CHEST, CHARACTER; 
 }

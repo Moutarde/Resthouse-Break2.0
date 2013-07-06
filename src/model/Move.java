@@ -1,9 +1,8 @@
 /**
  * 
  */
-package model.player;
+package model;
 
-import model.Coord;
 import model.rooms.Matrix;
 import controller.Direction;
 
@@ -69,8 +68,9 @@ public class Move {
 		case RIGHT:
 			distMove.setX(dist);
 			break;
-		default:
-			assert false;
+		case NONE:
+			distMove.setX(0);
+			distMove.setY(0);
 			break;
 		}
 	}

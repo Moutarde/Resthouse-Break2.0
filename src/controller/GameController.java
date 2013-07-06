@@ -6,7 +6,7 @@ package controller;
 import java.util.HashMap;
 
 import model.GameModel;
-import model.player.Move;
+import model.Move;
 
 /**
  * @author Nicolas Kniebihler
@@ -29,6 +29,8 @@ public class GameController {
 	}
 
 	public void update(float delta) {
+		model.evolveNPCs();
+		
 		if (moving && !isMessageDisplayed && !isMenuDisplayed) {
 			Move move = model.getPlayer().getMove();
 			boolean timerEnded = move.updateTimer();

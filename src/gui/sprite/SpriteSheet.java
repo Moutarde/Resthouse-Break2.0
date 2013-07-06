@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import model.Coord;
 import model.Resource;
 
 /**
@@ -34,5 +35,9 @@ public class SpriteSheet {
 	
 	public Sprite getSprite(int x, int y) {
 		return new Sprite(image.getSubimage(x * spriteWidth, y * spriteHeight, spriteWidth, spriteHeight), spriteWidth/3, spriteHeight/4, 3, 5);
+	}
+
+	public Sprite getSprite(Coord spriteCoord) {
+		return getSprite(spriteCoord.getX(), spriteCoord.getY());
 	}
 }

@@ -12,8 +12,8 @@ import java.util.Observer;
 
 import model.chests.Chest;
 import model.chests.Item;
+import model.npc.NPC;
 import model.player.Bag;
-import model.player.Move;
 import model.player.Player;
 import model.rooms.Room;
 import model.rooms.SquareType;
@@ -32,23 +32,25 @@ public class GameModel extends Observable {
     private ContextMenu menu;
 	private Bag bag;
 
-	public GameModel(Player player) {
+	public GameModel() {
 		super();
-		
-		this.player = player;
 	}
 
 	public void init() {
 		try {
 			Item.createItems();
 			currentRoom = Room.createRooms();
+			NPC.createNPC();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		charactersSpriteSheet = new SpriteSheet(Resource.SPRITE_SHEET, 32*3, 32*4);
-		bag = new Bag();
+		
 		currentMessage = new Message();
 		menu = new ContextMenu();
+		bag = new Bag();
+		
+		player = new Player(100, currentRoom, new Coord(3,3), Posture.LOOK_DOWN);
 	}
 
 	public Room getCurrentRoom() {
@@ -67,8 +69,8 @@ public class GameModel extends Observable {
 	 * @return true if the movement is possible
 	 */
 	public boolean setMovementIFP(Direction d) {
-		if(isMovementPossible(d)) {
-			player.getMove().setDir(d);
+		if (isMovementPossible(d)) {
+			player.startMove(d);
 			return true;
 		}
 		else {
@@ -80,12 +82,13 @@ public class GameModel extends Observable {
 			}
 			
 			player.setPosture(Posture.getPosture(d, 0));
+			player.getMove().setDir(d);
 			return false;
 		}
 	}
 	
 	public boolean isMovementPossible(Direction d) {
-		return currentRoom.canWalkOnSquare(player.getNextSquare(d));
+		return currentRoom.canWalkOnSquare(player.getNextSquare(d), player.getId());
 	}
 
 	/**
@@ -94,6 +97,7 @@ public class GameModel extends Observable {
 	public boolean evolveMove() {
 		Move move = player.getMove();
 		Direction dir = move.getDir();
+		player.getRoom().setPlayerOnSquare(player.getId(), player.getNextSquare(dir));
 
 		move.nextStep();
 		player.setPosture(Posture.getPosture(dir, move.getStep()));
@@ -126,8 +130,10 @@ public class GameModel extends Observable {
 			System.out.println("The starting coords were not found from door " + doorId);
 			return;
 		}
-		
+
+		player.getRoom().freeSquare(player.getCoord());
 		currentRoom = nextRoom;
+		player.setRoom(currentRoom);
 		player.setCoord(newCoord);
 	}
 
@@ -181,6 +187,40 @@ public class GameModel extends Observable {
 			chest.empty();
 			setNewMessage(UserInterface.getLang().getString("itemFound") + item.getName());
 			return true;
+		}
+	}
+	
+	public void evolveNPCs() {
+		for (NPC npc : NPC.getNPCsInRoom(currentRoom)) {
+			Direction nextDir = npc.getCurrentDirectionInScript();
+			Move move = npc.getMove();
+
+			if (nextDir == Direction.NONE) {
+				return;
+			}
+			else if (!currentRoom.canWalkOnSquare(npc.getNextSquare(nextDir), npc.getId())) {
+				npc.setPosture(Posture.getPosture(nextDir, 0));
+				move.setDir(Direction.NONE);
+				move.setStep(0);
+				move.setDistMove(new Coord(0,0));
+				return;
+			}
+			else {
+				npc.getRoom().setPlayerOnSquare(npc.getId(), npc.getNextSquare(nextDir));
+				move.setDir(nextDir);
+				npc.setPosture(Posture.getPosture(nextDir, move.getStep()));
+				
+				if (move.updateTimer()) {
+					move.nextStep();
+			
+					if(move.isMoveFinished()) {
+						npc.moveSquare(nextDir);
+						move.setStep(0);
+						move.setDistMove(new Coord(0,0));
+						npc.goToNextStepOfScript();
+					}
+				}
+			}
 		}
 	}
 
