@@ -3,6 +3,7 @@
  */
 package model.rooms;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,6 +32,8 @@ public class Room {
 	private HashMap<Integer, Room> neighbors;
 	private HashMap<Integer, Integer> neighborsDoorsIds;
 	private HashMap<Integer, Chest> chests;
+	
+	private BufferedImage img;
 
 	private Room(Resource res, Matrix mat) {
 		this.res = res;
@@ -51,6 +54,18 @@ public class Room {
 
 	public Matrix getMat() {
 		return mat;
+	}
+	
+	public void loadImg() {
+		img = res.getBufferedImage();
+	}
+	
+	public void unloadImg() {
+		img = null;
+	}
+	
+	public BufferedImage getImg() {
+		return img;
 	}
 	
 	public boolean canWalkOnSquare(Coord c, int id) {

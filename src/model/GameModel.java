@@ -40,6 +40,7 @@ public class GameModel extends Observable {
 		try {
 			Item.createItems();
 			currentRoom = Room.createRooms();
+			currentRoom.loadImg();
 			NPC.createNPC();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -132,7 +133,9 @@ public class GameModel extends Observable {
 		}
 
 		player.getRoom().freeSquare(player.getCoord());
+		currentRoom.unloadImg();
 		currentRoom = nextRoom;
+		currentRoom.loadImg();
 		player.setRoom(currentRoom);
 		player.setCoord(newCoord);
 	}

@@ -92,7 +92,7 @@ public class GameRenderer implements Renderer {
 			}
 		}
 		else {
-			g.drawImage(model.getCurrentRoom().getRes().getBufferedImage(), bgx, bgy, null);
+			g.drawImage(model.getCurrentRoom().getImg(), bgx, bgy, null);
 		}
 		
 		// Render the player
