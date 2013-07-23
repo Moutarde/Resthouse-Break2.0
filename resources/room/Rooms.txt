@@ -5,7 +5,7 @@
 # 30-39	: chest
 
 R_GINETTE
-image=src/resources/room/ginetteRoom.jpg
+image=/room/ginetteRoom.jpg
 size=6x6
 { 0, 0, 0, 0, 0, 0}
 { 0, 1,30,31, 1, 1}
@@ -18,7 +18,7 @@ CHEST:31;O_TEETH
 END
 
 R_PARK
-image=src/resources/room/parc.jpg
+image=/room/parc.jpg
 size=29x21
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1, 0, 0, 0}
 { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0,10,11, 0, 1, 1}
@@ -50,7 +50,7 @@ CHEST:35;O_KEY
 END
 
 R_COMMUNAL_ROOM
-image=src/resources/room/salleCommune.jpg
+image=/room/salleCommune.jpg
 size=29x15
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1, 0, 0, 0, 0, 0,32, 0, 0, 0, 0, 0}
 { 1, 0, 1, 1, 1,30,30,30, 1, 1, 1, 0, 1, 1, 1, 1,10,11, 1, 1,31, 1, 1, 1, 1, 1, 1, 1, 0}
@@ -74,7 +74,7 @@ CHEST:33;O_TEETH
 END
 
 R_CORIDOR
-image=src/resources/room/couloir1.jpg
+image=/room/couloir1.jpg
 size=12x6
 { 1, 1,11, 1,12, 1, 1,13, 1, 1,14, 1}
 {10, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}

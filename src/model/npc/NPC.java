@@ -3,8 +3,9 @@ package model.npc;
 import gui.sprite.Posture;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,7 @@ import controller.Direction;
  *
  */
 public class NPC extends Player {
-	private static String npcDescriptorFilePath = "src/resources/characters/characters.txt";
+	private static String npcDescriptorFilePath = "/characters/characters.txt";
 	private static HashMap<String, NPC> npcList;
 
 	private String name;
@@ -81,7 +82,9 @@ public class NPC extends Player {
 	public static void createNPC() throws IOException {
 		npcList = new HashMap<String, NPC>();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(npcDescriptorFilePath));
+		URL url = NPC.class.getResource(npcDescriptorFilePath);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+		assert reader != null;
 		
 		String line = null;
 		String currentNPCId = null;

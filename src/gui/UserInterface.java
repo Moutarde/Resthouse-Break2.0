@@ -9,33 +9,21 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
- * @author Nicolas
+ * @author Nicolas Kniebihler
  *
  */
-public class UserInterface extends JFrame implements Observer {
-
-	private static final long serialVersionUID = -1180186872270103912L;
-
+public class UserInterface implements Observer {
 	private static ResourceBundle lang;
 
-	private JPanel container;
+	private JPanel container = new JPanel();
 
 	public UserInterface() {
 		setLang(Locale.getDefault());
 
-		setTitle("Resthouse Break");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(false);
-
 		initComponents();
-
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
 	}
 
 	public static ResourceBundle getLang() {
@@ -43,20 +31,16 @@ public class UserInterface extends JFrame implements Observer {
 	}
 
 	public static void setLang(Locale l) {
-		lang = ResourceBundle.getBundle("resources/lang/Text", l);
+		lang = ResourceBundle.getBundle("lang/Text", l);
 	}
 
 	private void initComponents() {
-		container = new JPanel();
-
 		container.setLayout(new BorderLayout());
 
 		HomePanel home = new HomePanel(this);
 		container.add(home, BorderLayout.NORTH);
 
 		container.setPreferredSize(HomePanel.SIZE);
-
-		setContentPane(container);
 	}
 
 	@Override
@@ -66,21 +50,24 @@ public class UserInterface extends JFrame implements Observer {
 	}
 
 	public void newGame() {
-		container.removeAll();
 		GamePanel gp = new GamePanel();
-		container.add(gp, BorderLayout.NORTH);
-		container.revalidate();
-
-		container.setPreferredSize(GamePanel.SIZE);
-		
-		pack();
-		setLocationRelativeTo(null);
+		updateContainers(gp);
 
 		new Thread(gp).start();
+	}
+	
+	public void updateContainers(GamePanel gp) {
+		container.removeAll();
+		container.add(gp, BorderLayout.NORTH);
+		container.revalidate();
+		container.setPreferredSize(GamePanel.SIZE);
 	}
 
 	public void quit() {
 		System.exit(0);
 	}
-
+	
+	public JPanel getUIContainer() {
+		return container;
+	}
 }

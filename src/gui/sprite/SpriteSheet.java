@@ -4,10 +4,6 @@
 package gui.sprite;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import model.Coord;
 import model.Resource;
@@ -23,12 +19,7 @@ public class SpriteSheet {
 	private int spriteHeight;
 	
 	public SpriteSheet(Resource sheet, int spriteWidth, int spriteHeight) {
-		try {
-			image = ImageIO.read(new File(sheet.path()));
-		} catch (IOException e) {
-			System.out.println("URL does'nt exist...");
-			e.printStackTrace();
-		}
+		image = sheet.getBufferedImage();
 		this.spriteHeight = spriteHeight;
 		this.spriteWidth = spriteWidth;
 	}

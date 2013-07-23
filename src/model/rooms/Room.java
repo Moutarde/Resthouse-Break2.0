@@ -4,8 +4,9 @@
 package model.rooms;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,7 @@ import model.chests.Item;
  *
  */
 public class Room {
-	private static String roomsDescriptorFilePath = "src/resources/room/Rooms.txt";
+	private static String roomsDescriptorFilePath = "/room/Rooms.txt";
 	private static HashMap<String, Room> roomList;
 	
 	private Resource res;
@@ -147,10 +148,12 @@ public class Room {
 	
 	public static Room createRooms() throws IOException {
 		roomList = new HashMap<String, Room>();
+		
+		URL url = Room.class.getResource(roomsDescriptorFilePath);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+		assert reader != null;
+		
 		Room startRoom = null;
-		
-		BufferedReader reader = new BufferedReader(new FileReader(roomsDescriptorFilePath));
-		
 		StringTokenizer splitter;
 		String line = null;
 		String currentRoomName = null;
