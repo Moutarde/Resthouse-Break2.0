@@ -1,5 +1,7 @@
 package controller;
 
+import gui.UserInterface;
+
 import java.util.HashMap;
 
 import model.GameModel;
@@ -21,7 +23,7 @@ public class GameController {
 		this.model = model;
 		this.stopMovingAsked = new HashMap<Direction, Boolean>();
 		
-		model.setNewMessage("Good morning Granny Ginette !");
+		model.setNewMessage(UserInterface.getLang().getString("firstMessage"));
 		isMessageDisplayed = true;
 	}
 
