@@ -1,12 +1,12 @@
-/**
- *
- */
 package model.player;
 
 import gui.sprite.Posture;
 import model.Coord;
 import model.Move;
+import model.chests.Chest;
+import model.chests.Item;
 import model.rooms.Room;
+import model.rooms.SquareType;
 import controller.Direction;
 
 /**
@@ -14,11 +14,14 @@ import controller.Direction;
  *
  */
 public class Player {
+    public static int controllablePlayerId = 100;
+
     private int id;
     private Room room;
     private Coord coord;
     private Posture posture;
     private Move move = new Move(Direction.NONE);
+    private Bag bag = new Bag();
 
     public Player(int id, Room room, Coord coord, Posture posture) {
         this.id = id;
@@ -62,13 +65,18 @@ public class Player {
         return move;
     }
 
+    public Bag getBag() {
+        return bag;
+    }
+
     public void moveSquare(Direction dir) {
         room.freeSquare(coord);
         coord = getNextSquare(dir);
         room.setPlayerOnSquare(id, coord);
+        move.reset();
     }
 
-    public Coord getFrontSquare() {
+    private Coord getFrontSquare() {
         return getNextSquare(Posture.getLookingDirection(posture));
     }
 
@@ -100,9 +108,101 @@ public class Player {
         return new Coord(xp + xMove, yp + yMove);
     }
 
+    private SquareType getCurrentSquareType() {
+        return room.getSquareType(coord);
+    }
+
+    private SquareType getNextSquareType(Direction d) {
+        return room.getSquareType(getNextSquare(d));
+    }
+
+    public boolean canWalkOnSquare(Direction d) {
+        return room.canWalkOnSquare(id, getNextSquare(d));
+    }
+
+    public void setOnSquare(Direction d) {
+        room.setPlayerOnSquare(id, getNextSquare(d));
+    }
+
     public void startMove(Direction d) {
         setPosture(Posture.getPosture(d, 0));
         move.setDir(d);
         room.setPlayerOnSquare(id, getNextSquare(d));
+    }
+
+    /**
+     * @return true if the movement is possible
+     */
+    public boolean setMovementIFP(Direction d) {
+        if (canWalkOnSquare(d)) {
+            startMove(d);
+            return true;
+        }
+        else {
+            boolean playerIsOnDoor = getCurrentSquareType() == SquareType.DOOR;
+            boolean nextSquareIsOutside = getNextSquareType(d) == SquareType.OUTSIDE;
+
+            if(playerIsOnDoor && nextSquareIsOutside) {
+                changeRoom();
+            }
+
+            posture = Posture.getPosture(d, 0);
+            move.setDir(d);
+            return false;
+        }
+    }
+
+    private void changeRoom() {
+        int doorId = room.getMat().getSquareValue(coord);
+        if(doorId == -1) {
+            System.out.println("Door id not found at coord " + coord);
+            return;
+        }
+
+        Room nextRoom = room.getNeighbor(doorId);
+        if(nextRoom == null) {
+            System.out.println("No neighbor room found from door " + doorId);
+            return;
+        }
+
+        Coord newCoord = room.getStartingCoordFromDoor(doorId);
+        if(newCoord == null) {
+            System.out.println("The starting coords were not found from door " + doorId);
+            return;
+        }
+
+        if (nextRoom.canWalkOnSquare(id, newCoord)) {
+            room.freeSquare(coord);
+
+            if (id == controllablePlayerId)
+                room.unloadImg();
+
+            room = nextRoom;
+
+            if (id == controllablePlayerId)
+                room.loadImg();
+
+            setCoord(newCoord);
+        }
+    }
+
+    public boolean isInFrontOfAChest() {
+        return room.isChest(getFrontSquare());
+    }
+
+    /**
+     * @return true if an item was picked
+     */
+    public Item pickChestContentIFP() {
+        int chestId = room.getMat().getSquareValue(getFrontSquare());
+        Chest chest = room.getChest(chestId);
+        Item item = chest.getItem();
+
+        if (item != null) {
+            bag.addItem(item);
+            chest.empty();
+        }
+
+        return item;
     }
 }

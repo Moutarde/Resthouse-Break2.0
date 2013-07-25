@@ -12,6 +12,7 @@ import model.Move;
 import model.npc.NPC;
 import model.player.Player;
 import model.rooms.Matrix;
+import model.rooms.Room;
 import model.rooms.SquareType;
 
 /**
@@ -39,6 +40,7 @@ public class GameRenderer implements Renderer {
     @Override
     public void render(Graphics g) {
         Player player = model.getPlayer();
+        Room currentRoom = player.getRoom();
         Move move = player.getMove();
 
         int px = GamePanel.SIZE.width/2 - Matrix.CASE_SIZE/2 - playerSprite.getOffset().getX();
@@ -50,18 +52,18 @@ public class GameRenderer implements Renderer {
 
         // Render the background
         if (debugMode) {
-            Matrix mat = model.getCurrentRoom().getMat();
+            Matrix mat = currentRoom.getMat();
             int positionX = bgx;
             int positionY = bgy;
             for (int lineId = 0; lineId < mat.getHeight(); ++lineId) {
                 for (int colId = 0; colId < mat.getWidth(); ++colId) {
                     Coord coord = new Coord(colId, lineId);
-                    SquareType typeFromEvolutiveMat = model.getCurrentRoom().getSquareTypeFromEvolutiveMat(coord);
+                    SquareType typeFromEvolutiveMat = currentRoom.getSquareTypeFromEvolutiveMat(coord);
                     if (typeFromEvolutiveMat == SquareType.CHARACTER) {
                         g.setColor(Color.yellow);
                     }
                     else {
-                        SquareType type = model.getCurrentRoom().getSquareType(coord);
+                        SquareType type = currentRoom.getSquareType(coord);
                         switch (type) {
                         case FREESQUARE:
                             g.setColor(Color.white);
@@ -92,14 +94,14 @@ public class GameRenderer implements Renderer {
             }
         }
         else {
-            g.drawImage(model.getCurrentRoom().getImg(), bgx, bgy, null);
+            g.drawImage(currentRoom.getImg(), bgx, bgy, null);
         }
 
         // Render the player
         playerSprite.draw(g, px, py, player.getPosture());
 
         Sprite npcSprite;
-        for (NPC npc : NPC.getNPCsInRoom(model.getCurrentRoom())) {
+        for (NPC npc : NPC.getNPCsInRoom(currentRoom)) {
             npcSprite = model.getCharactersSpriteSheet().getSprite(npc.getSpriteCoord());
             int npcx = bgx + npc.getCoord().getX() * Matrix.CASE_SIZE + npc.getMove().getDistMove().getX() - npcSprite.getOffset().getX();
             int npcy = bgy + npc.getCoord().getY() * Matrix.CASE_SIZE + npc.getMove().getDistMove().getY() - npcSprite.getOffset().getY();
@@ -107,8 +109,9 @@ public class GameRenderer implements Renderer {
         }
 
         // Render the bottom message
-        Message message = model.getCurrentMessage();
-        if(message != null && !message.isEmpty()) {
+        if(model.isMessageDisplayed()) {
+            Message message = model.getCurrentMessage();
+
             int offsetX = 10;
             int offsetY = 10;
             int position = GamePanel.SIZE.height - GamePanel.TEXT_ZONE_HEIGHT;
@@ -123,8 +126,9 @@ public class GameRenderer implements Renderer {
         }
 
         // Render the menu
-        ContextMenu menu = model.getMenu();
-        if(menu != null && !menu.isEmpty()) {
+        if(model.isMenuDisplayed()) {
+            ContextMenu menu = model.getMenu();
+
             int textHeight = g.getFontMetrics().getHeight();
             int offsetX = 10;
             int offsetY = 10 + textHeight/2;

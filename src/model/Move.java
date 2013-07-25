@@ -109,4 +109,9 @@ public class Move {
         update();
         return timerMaxReached;
     }
+
+    public void reset() {
+        setStep(0);
+        setDistMove(new Coord(0,0));
+    }
 }

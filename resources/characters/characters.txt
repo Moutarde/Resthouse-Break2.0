@@ -26,10 +26,19 @@ spriteCoord=4,1
 END
 
 C_TESTIMMOBILE
-name=test3
+name=testimmobile
 startRooom=R_GINETTE
 startCoord=1,1
 startPosture=LOOK_DOWN
 moveScript=NONE
 spriteCoord=0,1
+END
+
+C_TESTCHANGEROOM
+name=testchangeroom
+startRooom=R_PARK
+startCoord=26,12
+startPosture=LOOK_RIGHT
+moveScript=RIGHT;RIGHT;RIGHT;RIGHT;RIGHT;LEFT;LEFT;LEFT;LEFT;LEFT
+spriteCoord=5,5
 END

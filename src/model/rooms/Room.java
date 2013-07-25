@@ -68,22 +68,6 @@ public class Room {
         return img;
     }
 
-    public boolean canWalkOnSquare(Coord c, int id) {
-        SquareType evolutiveMatType = getSquareTypeFromEvolutiveMat(c);
-
-        if (evolutiveMatType == SquareType.CHARACTER && evolutiveMat.getSquareValue(c) != id) {
-            return false;
-        }
-
-        SquareType type = getSquareType(c);
-
-        if (type == SquareType.FREESQUARE || type == SquareType.DOOR) {
-            return true;
-        }
-
-        return false;
-    }
-
     public boolean isChest(Coord c) {
         SquareType type = getSquareType(c);
 
@@ -127,6 +111,22 @@ public class Room {
         else {
             return SquareType.FREESQUARE;
         }
+    }
+
+    public boolean canWalkOnSquare(int id, Coord c) {
+        SquareType evolutiveMatType = getSquareTypeFromEvolutiveMat(c);
+
+        if (evolutiveMatType == SquareType.CHARACTER && evolutiveMat.getSquareValue(c) != id) {
+            return false;
+        }
+
+        SquareType type = getSquareType(c);
+
+        if (type == SquareType.FREESQUARE || type == SquareType.DOOR) {
+            return true;
+        }
+
+        return false;
     }
 
     public void setPlayerOnSquare(int id, Coord newCoord) {

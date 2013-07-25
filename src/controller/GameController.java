@@ -1,11 +1,8 @@
 package controller;
 
 import gui.UserInterface;
-
-import java.util.HashMap;
-
 import model.GameModel;
-import model.Move;
+import model.chests.Item;
 
 /**
  * @author Nicolas Kniebihler
@@ -13,72 +10,53 @@ import model.Move;
  */
 public class GameController {
     private GameModel model;
-
-    private boolean moving = false;
-    private boolean isMessageDisplayed = false;
-    private boolean isMenuDisplayed = false;
-    private final HashMap<Direction, Boolean> stopMovingAsked;
+    private MoveHandler moveHandler;
 
     public GameController(GameModel model) {
         this.model = model;
-        this.stopMovingAsked = new HashMap<Direction, Boolean>();
+        this.moveHandler = new MoveHandler(model);
 
         model.setNewMessage(UserInterface.getLang().getString("firstMessage"));
-        isMessageDisplayed = true;
     }
 
     public void update(float delta) {
-        model.evolveNPCs();
-
-        if (moving && !isMessageDisplayed && !isMenuDisplayed) {
-            Move move = model.getPlayer().getMove();
-            boolean timerEnded = move.updateTimer();
-            if(timerEnded) {
-                boolean moveIsFinished = model.evolveMove();
-
-                if(moveIsFinished) {
-                    Direction dir = move.getDir();
-                    if(stopMovingAsked.get(dir) || !model.isMovementPossible(dir)) {
-                        moving = false;
-                    }
-                }
-            }
+        if (!model.isGamePaused()) {
+            moveHandler.evolvePlayers();
+            moveHandler.evolveMove(model.getPlayer());
         }
     }
 
     public void onStartMovingAsked(Direction d) {
-        if(!moving && !isMessageDisplayed && !isMenuDisplayed) {
-            boolean movementPossible = model.setMovementIFP(d);
-            if (movementPossible) {
-                stopMovingAsked.put(d, false);
-                moving = true;
-            }
+        if (!model.isGamePaused()) {
+            moveHandler.startMoving(d);
         }
     }
 
     public void onStopMovingAsked(Direction d) {
-        this.stopMovingAsked.put(d, true);
+        moveHandler.stopMoving(d);
     }
 
     public void onValidate() {
-        if (isMessageDisplayed) {
+        if (model.isMessageDisplayed()) {
             model.hideMessage();
-            isMessageDisplayed = false;
         }
-        else if (!moving && !isMenuDisplayed && model.isInFrontOfAChest()) {
-            model.pickChestContentIFP();
-            isMessageDisplayed = true;
+        else if (!moveHandler.isMoving() && !model.isMenuDisplayed() && model.getPlayer().isInFrontOfAChest()) {
+            Item item = model.getPlayer().pickChestContentIFP();
+            if (item != null) {
+                model.setNewMessage(UserInterface.getLang().getString("itemFound") + item.getName());
+            }
+            else {
+                model.setNewMessage(UserInterface.getLang().getString("nothingHere"));
+            }
         }
     }
 
     public void onOpenBag() {
-        if (isMenuDisplayed) {
+        if (model.isMenuDisplayed()) {
             model.hideMenu();
-            isMenuDisplayed = false;
         }
-        else if (!isMessageDisplayed) {
+        else if (!model.isMessageDisplayed()) {
             model.showBag();
-            isMenuDisplayed = true;
         }
     }
 

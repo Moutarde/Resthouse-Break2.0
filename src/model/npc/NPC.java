@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,9 +61,11 @@ public class NPC extends Player {
         }
 
         Direction nextDir = moveScript.get(currentStepInScript);
-        if (getRoom().canWalkOnSquare(getNextSquare(nextDir), getId())) {
-            startMove(nextDir);
-        }
+        setMovementIFP(nextDir);
+    }
+
+    public static Collection<NPC> getNPCList() {
+        return npcList.values();
     }
 
     public static NPC getNPC(String id) {
