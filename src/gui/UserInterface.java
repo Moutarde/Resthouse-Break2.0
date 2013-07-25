@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gui;
 
@@ -16,58 +16,58 @@ import javax.swing.JPanel;
  *
  */
 public class UserInterface implements Observer {
-	private static ResourceBundle lang;
+    private static ResourceBundle lang;
 
-	private JPanel container = new JPanel();
+    private JPanel container = new JPanel();
 
-	public UserInterface() {
-		setLang(Locale.getDefault());
+    public UserInterface() {
+        setLang(Locale.getDefault());
 
-		initComponents();
-	}
+        initComponents();
+    }
 
-	public static ResourceBundle getLang() {
-		return lang;
-	}
+    public static ResourceBundle getLang() {
+        return lang;
+    }
 
-	public static void setLang(Locale l) {
-		lang = ResourceBundle.getBundle("lang/Text", l);
-	}
+    public static void setLang(Locale l) {
+        lang = ResourceBundle.getBundle("lang/Text", l);
+    }
 
-	private void initComponents() {
-		container.setLayout(new BorderLayout());
+    private void initComponents() {
+        container.setLayout(new BorderLayout());
 
-		HomePanel home = new HomePanel(this);
-		container.add(home, BorderLayout.NORTH);
+        HomePanel home = new HomePanel(this);
+        container.add(home, BorderLayout.NORTH);
 
-		container.setPreferredSize(HomePanel.SIZE);
-	}
+        container.setPreferredSize(HomePanel.SIZE);
+    }
 
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
+    @Override
+    public void update(Observable arg0, Object arg1) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	public void newGame() {
-		GamePanel gp = new GamePanel();
-		updateContainers(gp);
+    public void newGame() {
+        GamePanel gp = new GamePanel();
+        updateContainers(gp);
 
-		new Thread(gp).start();
-	}
-	
-	public void updateContainers(GamePanel gp) {
-		container.removeAll();
-		container.add(gp, BorderLayout.NORTH);
-		container.revalidate();
-		container.setPreferredSize(GamePanel.SIZE);
-	}
+        new Thread(gp).start();
+    }
 
-	public void quit() {
-		System.exit(0);
-	}
-	
-	public JPanel getUIContainer() {
-		return container;
-	}
+    public void updateContainers(GamePanel gp) {
+        container.removeAll();
+        container.add(gp, BorderLayout.NORTH);
+        container.revalidate();
+        container.setPreferredSize(GamePanel.SIZE);
+    }
+
+    public void quit() {
+        System.exit(0);
+    }
+
+    public JPanel getUIContainer() {
+        return container;
+    }
 }

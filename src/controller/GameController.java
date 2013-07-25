@@ -12,74 +12,74 @@ import model.Move;
  *
  */
 public class GameController {
-	private GameModel model;
+    private GameModel model;
 
-	private boolean moving = false;
-	private boolean isMessageDisplayed = false;
-	private boolean isMenuDisplayed = false;
-	private final HashMap<Direction, Boolean> stopMovingAsked;
+    private boolean moving = false;
+    private boolean isMessageDisplayed = false;
+    private boolean isMenuDisplayed = false;
+    private final HashMap<Direction, Boolean> stopMovingAsked;
 
-	public GameController(GameModel model) {
-		this.model = model;
-		this.stopMovingAsked = new HashMap<Direction, Boolean>();
-		
-		model.setNewMessage(UserInterface.getLang().getString("firstMessage"));
-		isMessageDisplayed = true;
-	}
+    public GameController(GameModel model) {
+        this.model = model;
+        this.stopMovingAsked = new HashMap<Direction, Boolean>();
 
-	public void update(float delta) {
-		model.evolveNPCs();
-		
-		if (moving && !isMessageDisplayed && !isMenuDisplayed) {
-			Move move = model.getPlayer().getMove();
-			boolean timerEnded = move.updateTimer();
-			if(timerEnded) {
-				boolean moveIsFinished = model.evolveMove();
+        model.setNewMessage(UserInterface.getLang().getString("firstMessage"));
+        isMessageDisplayed = true;
+    }
 
-				if(moveIsFinished) {
-					Direction dir = move.getDir();
-					if(stopMovingAsked.get(dir) || !model.isMovementPossible(dir)) {
-						moving = false;
-					}
-				}
-			}
-		}
-	}
+    public void update(float delta) {
+        model.evolveNPCs();
 
-	public void onStartMovingAsked(Direction d) {
-		if(!moving && !isMessageDisplayed && !isMenuDisplayed) {
-			boolean movementPossible = model.setMovementIFP(d);
-			if (movementPossible) {
-				stopMovingAsked.put(d, false);
-				moving = true;
-			}
-		}
-	}
+        if (moving && !isMessageDisplayed && !isMenuDisplayed) {
+            Move move = model.getPlayer().getMove();
+            boolean timerEnded = move.updateTimer();
+            if(timerEnded) {
+                boolean moveIsFinished = model.evolveMove();
 
-	public void onStopMovingAsked(Direction d) {
-		this.stopMovingAsked.put(d, true);
-	}
+                if(moveIsFinished) {
+                    Direction dir = move.getDir();
+                    if(stopMovingAsked.get(dir) || !model.isMovementPossible(dir)) {
+                        moving = false;
+                    }
+                }
+            }
+        }
+    }
 
-	public void onValidate() {
-		if (isMessageDisplayed) {
-			model.hideMessage();
-			isMessageDisplayed = false;
-		}
-		else if (!moving && !isMenuDisplayed && model.isInFrontOfAChest()) {
-			model.pickChestContentIFP();
-			isMessageDisplayed = true;
-		}
-	}
+    public void onStartMovingAsked(Direction d) {
+        if(!moving && !isMessageDisplayed && !isMenuDisplayed) {
+            boolean movementPossible = model.setMovementIFP(d);
+            if (movementPossible) {
+                stopMovingAsked.put(d, false);
+                moving = true;
+            }
+        }
+    }
 
-	public void onOpenBag() {
-		if (isMenuDisplayed) {
-			model.hideMenu();
-			isMenuDisplayed = false;
-		}
-		else if (!isMessageDisplayed) {
-			model.showBag();
-			isMenuDisplayed = true;
-		}
-	}
+    public void onStopMovingAsked(Direction d) {
+        this.stopMovingAsked.put(d, true);
+    }
+
+    public void onValidate() {
+        if (isMessageDisplayed) {
+            model.hideMessage();
+            isMessageDisplayed = false;
+        }
+        else if (!moving && !isMenuDisplayed && model.isInFrontOfAChest()) {
+            model.pickChestContentIFP();
+            isMessageDisplayed = true;
+        }
+    }
+
+    public void onOpenBag() {
+        if (isMenuDisplayed) {
+            model.hideMenu();
+            isMenuDisplayed = false;
+        }
+        else if (!isMessageDisplayed) {
+            model.showBag();
+            isMenuDisplayed = true;
+        }
+    }
 
 }

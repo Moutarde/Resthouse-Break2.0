@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package model.player;
 
@@ -14,95 +14,95 @@ import controller.Direction;
  *
  */
 public class Player {
-	private int id;
-	private Room room;
-	private Coord coord;
-	private Posture posture;
-	private Move move = new Move(Direction.NONE);
-	
-	public Player(int id, Room room, Coord coord, Posture posture) {
-		this.id = id;
-		this.room = room;
-		this.coord = coord;
-		this.posture = posture;
+    private int id;
+    private Room room;
+    private Coord coord;
+    private Posture posture;
+    private Move move = new Move(Direction.NONE);
 
-		this.room.setPlayerOnSquare(id, coord);
-	}
+    public Player(int id, Room room, Coord coord, Posture posture) {
+        this.id = id;
+        this.room = room;
+        this.coord = coord;
+        this.posture = posture;
 
-	public int getId() {
-		return id;
-	}
-	
-	public Room getRoom() {
-		return room;
-	}
-	
-	public void setRoom(Room room) {
-		this.room = room;
-	}
+        this.room.setPlayerOnSquare(id, coord);
+    }
 
-	public Coord getCoord() {
-		return coord;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setCoord(Coord newCoord) {
-		room.setPlayerOnSquare(id, newCoord);
-		this.coord = newCoord;
-	}
+    public Room getRoom() {
+        return room;
+    }
 
-	public Posture getPosture() {
-		return posture;
-	}
+    public void setRoom(Room room) {
+        this.room = room;
+    }
 
-	public void setPosture(Posture posture) {
-		this.posture = posture;
-	}
+    public Coord getCoord() {
+        return coord;
+    }
 
-	public Move getMove() {
-		return move;
-	}
+    public void setCoord(Coord newCoord) {
+        room.setPlayerOnSquare(id, newCoord);
+        this.coord = newCoord;
+    }
 
-	public void moveSquare(Direction dir) {
-		room.freeSquare(coord);
-		coord = getNextSquare(dir);
-		room.setPlayerOnSquare(id, coord);
-	}
+    public Posture getPosture() {
+        return posture;
+    }
 
-	public Coord getFrontSquare() {
-		return getNextSquare(Posture.getLookingDirection(posture));
-	}
-	
-	public Coord getNextSquare(Direction d) {
-		int xMove = 0;
-		int yMove = 0;
+    public void setPosture(Posture posture) {
+        this.posture = posture;
+    }
 
-		switch(d) {
-		case UP:
-			yMove = -1;
-			break;
-		case DOWN:
-			yMove = 1;
-			break;
-		case LEFT:
-			xMove = -1;
-			break;
-		case RIGHT:
-			xMove = 1;
-			break;
-		default:
-			assert false;
-			break;
-		}
+    public Move getMove() {
+        return move;
+    }
 
-		int xp = coord.getX();
-		int yp = coord.getY();
+    public void moveSquare(Direction dir) {
+        room.freeSquare(coord);
+        coord = getNextSquare(dir);
+        room.setPlayerOnSquare(id, coord);
+    }
 
-		return new Coord(xp + xMove, yp + yMove);
-	}
+    public Coord getFrontSquare() {
+        return getNextSquare(Posture.getLookingDirection(posture));
+    }
 
-	public void startMove(Direction d) {
-		setPosture(Posture.getPosture(d, 0));
-		move.setDir(d);
-		room.setPlayerOnSquare(id, getNextSquare(d));
-	}
+    public Coord getNextSquare(Direction d) {
+        int xMove = 0;
+        int yMove = 0;
+
+        switch(d) {
+        case UP:
+            yMove = -1;
+            break;
+        case DOWN:
+            yMove = 1;
+            break;
+        case LEFT:
+            xMove = -1;
+            break;
+        case RIGHT:
+            xMove = 1;
+            break;
+        default:
+            assert false;
+            break;
+        }
+
+        int xp = coord.getX();
+        int yp = coord.getY();
+
+        return new Coord(xp + xMove, yp + yMove);
+    }
+
+    public void startMove(Direction d) {
+        setPosture(Posture.getPosture(d, 0));
+        move.setDir(d);
+        room.setPlayerOnSquare(id, getNextSquare(d));
+    }
 }

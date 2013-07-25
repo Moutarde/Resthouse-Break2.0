@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gui;
 
@@ -20,46 +20,46 @@ import model.Resource;
  */
 public class HomePanel extends JPanel {
 
-	private static final long serialVersionUID = -59115957354504598L;
-	
-	public static final Dimension SIZE = new Dimension(270, 240);
+    private static final long serialVersionUID = -59115957354504598L;
 
-	private UserInterface gui;
-	private JButton newgame;
-	private JButton quit;
+    public static final Dimension SIZE = new Dimension(270, 240);
 
-	public HomePanel(UserInterface gui) {
-		super();
-		
-		this.gui = gui;
+    private UserInterface gui;
+    private JButton newgame;
+    private JButton quit;
 
-		setPreferredSize(SIZE);
+    public HomePanel(UserInterface gui) {
+        super();
 
-		setLayout(new BorderLayout());
+        this.gui = gui;
 
-		JLabel img = new JLabel(Resource.HOME.getImageIcon());
+        setPreferredSize(SIZE);
 
-		JPanel buttons = new JPanel();
-		newgame = new JButton(UserInterface.getLang().getString("newgame"));
-		newgame.addActionListener(new ButtonListener());
-		quit = new JButton(UserInterface.getLang().getString("quit"));
-		quit.addActionListener(new ButtonListener());
-		buttons.add(newgame);
-		buttons.add(quit);
+        setLayout(new BorderLayout());
 
-		this.add(img, BorderLayout.NORTH);
-		this.add(buttons, BorderLayout.SOUTH);
-	}
+        JLabel img = new JLabel(Resource.HOME.getImageIcon());
 
-	class ButtonListener implements ActionListener{
-		public void actionPerformed(ActionEvent e){
-			if(e.getSource() == newgame) {
-				gui.newGame();
-			}
-			if(e.getSource() == quit) {
-				gui.quit();
-			}
-		}
-	}
+        JPanel buttons = new JPanel();
+        newgame = new JButton(UserInterface.getLang().getString("newgame"));
+        newgame.addActionListener(new ButtonListener());
+        quit = new JButton(UserInterface.getLang().getString("quit"));
+        quit.addActionListener(new ButtonListener());
+        buttons.add(newgame);
+        buttons.add(quit);
+
+        this.add(img, BorderLayout.NORTH);
+        this.add(buttons, BorderLayout.SOUTH);
+    }
+
+    class ButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            if(e.getSource() == newgame) {
+                gui.newGame();
+            }
+            if(e.getSource() == quit) {
+                gui.quit();
+            }
+        }
+    }
 
 }

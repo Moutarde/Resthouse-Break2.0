@@ -11,20 +11,20 @@ import javax.swing.JApplet;
  */
 public class Game extends JApplet {
 
-	private static final long serialVersionUID = -7803629994015778818L;
+    private static final long serialVersionUID = -7803629994015778818L;
 
-	@Override
-	public void init() {
-		UserInterface gui = new UserInterface();
-		getContentPane().setLayout(new BorderLayout()); 
-		getContentPane().add(gui.getUIContainer(), BorderLayout.CENTER);
-	}
+    @Override
+    public void init() {
+        UserInterface gui = new UserInterface();
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(gui.getUIContainer(), BorderLayout.CENTER);
+    }
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		new UserInterfaceWithExternalWindow();
-	}
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        new UserInterfaceWithExternalWindow();
+    }
 
 }
