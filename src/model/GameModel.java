@@ -1,11 +1,12 @@
 package model;
 
-import gui.ContextMenu;
+import gui.contextMenu.BagMenu;
+import gui.contextMenu.ContextMenu;
+import gui.contextMenu.Menu;
 import gui.sprite.Posture;
 import gui.sprite.SpriteSheet;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,7 +16,7 @@ import model.player.Player;
 import model.rooms.Room;
 
 /**
- * @author Nicolas
+ * @author Nicolas Kniebihler
  *
  */
 public class GameModel extends Observable {
@@ -23,11 +24,12 @@ public class GameModel extends Observable {
     private Player player;
     private SpriteSheet charactersSpriteSheet = new SpriteSheet(Resource.SPRITE_SHEET, 32*3, 32*4);
     private Message currentMessage = new Message();
-    private ContextMenu menu = new ContextMenu();
+    private ContextMenu menu;
+    private Menu subMenu;
     private boolean gameIsPaused = false;
 
     public GameModel() {
-        super();
+        menu = new ContextMenu(this);
     }
 
     public void init() {
@@ -50,6 +52,8 @@ public class GameModel extends Observable {
         return player;
     }
 
+    // MESSAGE
+
     public Message getCurrentMessage() {
         return currentMessage;
     }
@@ -69,27 +73,43 @@ public class GameModel extends Observable {
         return currentMessage != null && !currentMessage.isEmpty();
     }
 
+    // MENU
+
     public ContextMenu getMenu() {
         return menu;
     }
 
     public boolean isMenuDisplayed() {
-        return menu != null && !menu.isEmpty();
+        return menu != null && menu.isDisplayed();
     }
 
-    public void showBag() {
-        String content = "Bag :\n";
-        HashMap<Item, Integer> bagContent = player.getBag().getContent();
-        for (Item item : bagContent.keySet()) {
-            content += "  " + bagContent.get(item) + "x " + item.getName() + "\n";
-        }
-        menu.setContent(content);
+    public void showMenu() {
+        menu.display(true);
         gameIsPaused = true;
     }
 
     public void hideMenu() {
-        menu.setContent("");
+        menu.display(false);
         gameIsPaused = false;
+    }
+
+    // SUB MENU
+
+    public Menu getSubMenu() {
+        return subMenu;
+    }
+
+    public boolean isSubMenuDisplayed() {
+        return subMenu != null && subMenu.isDisplayed();
+    }
+
+    public void showBag() {
+        subMenu = new BagMenu("bag", player.getBag(), this);
+        subMenu.display(true);
+    }
+
+    public void hideSubMenu() {
+        subMenu = null;
     }
 
     public boolean isGamePaused() {

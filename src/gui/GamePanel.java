@@ -33,6 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final Dimension SIZE = new Dimension(400, 400);
     public static final int TEXT_ZONE_HEIGHT = 60;
     public static final Dimension MENU_SIZE = new Dimension(120, 280);
+    public static final Dimension SUBMENU_SIZE = new Dimension(150, 120);
 
     private GameEngine engine;
     private JPanel screen;

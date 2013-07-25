@@ -1,5 +1,7 @@
 package gui;
 
+import gui.contextMenu.ContextMenu;
+import gui.contextMenu.Menu;
 import gui.sprite.Sprite;
 
 import java.awt.Color;
@@ -138,6 +140,27 @@ public class GameRenderer implements Renderer {
 
             g.setColor(Color.white);
             g.fillRect(menuPositionX, 0, GamePanel.SIZE.width, GamePanel.MENU_SIZE.height);
+            g.setColor(Color.black);
+
+            for (String string : lines) {
+                g.drawString(string, menuPositionX + offsetX, offsetY);
+                offsetY += textHeight;
+            }
+        }
+
+        // Render the sub menu
+        if(model.isSubMenuDisplayed()) {
+            Menu subMenu = model.getSubMenu();
+
+            int textHeight = g.getFontMetrics().getHeight();
+            int offsetX = 10;
+            int offsetY = 10 + textHeight/2;
+            int menuPositionX = GamePanel.SIZE.width - GamePanel.SUBMENU_SIZE.width;
+
+            String[] lines = subMenu.getContent().split("\n");
+
+            g.setColor(Color.white);
+            g.fillRect(menuPositionX, 0, GamePanel.SIZE.width, GamePanel.SUBMENU_SIZE.height);
             g.setColor(Color.black);
 
             for (String string : lines) {

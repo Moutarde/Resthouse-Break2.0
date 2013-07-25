@@ -69,7 +69,10 @@ public class GameEngine {
         }
 
         // UP
-        if (keyboard.isPressed(KeyEvent.VK_UP)) {
+        if (keyboard.isPressedOnce(KeyEvent.VK_UP) && model.isMenuDisplayed()) {
+            controller.onMoveMenuSelection(Direction.UP);
+        }
+        else if (keyboard.isPressed(KeyEvent.VK_UP)) {
             controller.onStartMovingAsked(Direction.UP);
         }
         else {
@@ -77,7 +80,10 @@ public class GameEngine {
         }
 
         // DOWN
-        if (keyboard.isPressed(KeyEvent.VK_DOWN)) {
+        if (keyboard.isPressedOnce(KeyEvent.VK_DOWN) && model.isMenuDisplayed()) {
+            controller.onMoveMenuSelection(Direction.DOWN);
+        }
+        else if (keyboard.isPressed(KeyEvent.VK_DOWN)) {
             controller.onStartMovingAsked(Direction.DOWN);
         }
         else {
@@ -89,9 +95,9 @@ public class GameEngine {
             controller.onValidate();
         }
 
-        // I --> bag
-        if (keyboard.isPressedOnce(KeyEvent.VK_I)) {
-            controller.onOpenBag();
+        // ESC --> menu
+        if (keyboard.isPressedOnce(KeyEvent.VK_ESCAPE)) {
+            controller.onOpenMenu();
         }
 
         // D --> debug display

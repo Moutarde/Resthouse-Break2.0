@@ -57,7 +57,7 @@ public class HomePanel extends JPanel {
                 gui.newGame();
             }
             if(e.getSource() == quit) {
-                gui.quit();
+                UserInterface.quit();
             }
         }
     }

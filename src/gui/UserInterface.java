@@ -63,7 +63,7 @@ public class UserInterface implements Observer {
         container.setPreferredSize(GamePanel.SIZE);
     }
 
-    public void quit() {
+    public static void quit() {
         System.exit(0);
     }
 

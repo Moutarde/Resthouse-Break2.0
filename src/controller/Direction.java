@@ -1,10 +1,7 @@
-/**
- *
- */
 package controller;
 
 /**
- * @author Nicolas
+ * @author Nicolas Kniebihler
  *
  */
 public enum Direction {

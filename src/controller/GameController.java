@@ -40,7 +40,15 @@ public class GameController {
         if (model.isMessageDisplayed()) {
             model.hideMessage();
         }
-        else if (!moveHandler.isMoving() && !model.isMenuDisplayed() && model.getPlayer().isInFrontOfAChest()) {
+        else if (model.isMenuDisplayed()) {
+            if (model.isSubMenuDisplayed()) {
+                model.getSubMenu().selectElement();
+            }
+            else {
+                model.getMenu().selectElement();
+            }
+        }
+        else if (!moveHandler.isMoving() && model.getPlayer().isInFrontOfAChest()) {
             Item item = model.getPlayer().pickChestContentIFP();
             if (item != null) {
                 model.setNewMessage(UserInterface.getLang().getString("itemFound") + item.getName());
@@ -51,13 +59,23 @@ public class GameController {
         }
     }
 
-    public void onOpenBag() {
+    public void onOpenMenu() {
         if (model.isMenuDisplayed()) {
             model.hideMenu();
         }
         else if (!model.isMessageDisplayed()) {
-            model.showBag();
+            model.showMenu();
         }
     }
 
+    public void onMoveMenuSelection(Direction d) {
+        if (model.isMenuDisplayed()) {
+            if (model.isSubMenuDisplayed()) {
+                model.getSubMenu().changePointedElement(d == Direction.DOWN ? 1 : -1);
+            }
+            else {
+                model.getMenu().changePointedElement(d == Direction.DOWN ? 1 : -1);
+            }
+        }
+    }
 }
