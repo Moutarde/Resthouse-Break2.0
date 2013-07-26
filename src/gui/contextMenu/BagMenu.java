@@ -15,15 +15,16 @@ import model.player.Bag;
 public class BagMenu extends Menu {
     private Bag bag;
 
-    public BagMenu(String name, Bag bag, GameModel model) {
-        super(name, bag.getContent().size() + 1, model);
-        this.bag = bag;
+    public BagMenu(String name, GameModel model) {
+        super(name, model.getPlayer().getBag().getContent().size() + 1, model);
+        this.bag = model.getPlayer().getBag();
     }
 
     @Override
     public void selectElement() {
         if (getPointedElementId() == getNbElements() - 1) {
-            getModel().hideSubMenu();
+            setChanged();
+            notifyObservers(MenuAction.RETURN);
         }
     }
 

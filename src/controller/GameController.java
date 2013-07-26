@@ -11,12 +11,18 @@ import model.chests.Item;
 public class GameController {
     private GameModel model;
     private MoveHandler moveHandler;
+    private MenuHandler menuHandler;
 
     public GameController(GameModel model) {
         this.model = model;
         this.moveHandler = new MoveHandler(model);
+        this.menuHandler = new MenuHandler(model);
 
-        model.setNewMessage(UserInterface.getLang().getString("firstMessage"));
+        this.model.setNewMessage(UserInterface.getLang().getString("firstMessage"));
+    }
+
+    public MenuHandler getMenuHandler() {
+        return menuHandler;
     }
 
     public void update(float delta) {
@@ -41,12 +47,7 @@ public class GameController {
             model.hideMessage();
         }
         else if (model.isMenuDisplayed()) {
-            if (model.isSubMenuDisplayed()) {
-                model.getSubMenu().selectElement();
-            }
-            else {
-                model.getMenu().selectElement();
-            }
+            menuHandler.validate();
         }
         else if (!moveHandler.isMoving() && model.getPlayer().isInFrontOfAChest()) {
             Item item = model.getPlayer().pickChestContentIFP();
@@ -60,22 +61,10 @@ public class GameController {
     }
 
     public void onOpenMenu() {
-        if (model.isMenuDisplayed()) {
-            model.hideMenu();
-        }
-        else if (!model.isMessageDisplayed()) {
-            model.showMenu();
-        }
+        menuHandler.openOrClose();
     }
 
     public void onMoveMenuSelection(Direction d) {
-        if (model.isMenuDisplayed()) {
-            if (model.isSubMenuDisplayed()) {
-                model.getSubMenu().changePointedElement(d == Direction.DOWN ? 1 : -1);
-            }
-            else {
-                model.getMenu().changePointedElement(d == Direction.DOWN ? 1 : -1);
-            }
-        }
+        menuHandler.moveSelection(d == Direction.DOWN ? 1 : -1);
     }
 }

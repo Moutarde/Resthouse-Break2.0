@@ -1,5 +1,7 @@
 package gui.contextMenu;
 
+import java.util.Observable;
+
 import model.GameModel;
 import gui.UserInterface;
 
@@ -7,7 +9,7 @@ import gui.UserInterface;
  * @author Nicolas Kniebihler
  *
  */
-public abstract class Menu {
+public abstract class Menu extends Observable {
     private String name;
     private int nbElements;
     private GameModel model;

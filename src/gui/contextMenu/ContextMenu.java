@@ -20,13 +20,15 @@ public class ContextMenu extends Menu {
         MenuCategory pointedCategory = MenuCategory.values()[getPointedElementId()];
         switch (pointedCategory) {
         case BAG:
-            getModel().showBag();
+            setChanged();
+            notifyObservers(MenuAction.SHOW_SUBMENU);
             break;
         case QUIT:
             UserInterface.quit();
             break;
         case RETURN:
-            getModel().hideMenu();
+            setChanged();
+            notifyObservers(MenuAction.RETURN);
             break;
         default:
             break;

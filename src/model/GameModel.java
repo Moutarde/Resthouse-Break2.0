@@ -1,6 +1,5 @@
 package model;
 
-import gui.contextMenu.BagMenu;
 import gui.contextMenu.ContextMenu;
 import gui.contextMenu.Menu;
 import gui.sprite.Posture;
@@ -29,7 +28,7 @@ public class GameModel extends Observable {
     private boolean gameIsPaused = false;
 
     public GameModel() {
-        menu = new ContextMenu(this);
+        this.menu = new ContextMenu(this);
     }
 
     public void init() {
@@ -79,18 +78,12 @@ public class GameModel extends Observable {
         return menu;
     }
 
+    public void setMenu(ContextMenu menu) {
+        this.menu = menu;
+    }
+
     public boolean isMenuDisplayed() {
         return menu != null && menu.isDisplayed();
-    }
-
-    public void showMenu() {
-        menu.display(true);
-        gameIsPaused = true;
-    }
-
-    public void hideMenu() {
-        menu.display(false);
-        gameIsPaused = false;
     }
 
     // SUB MENU
@@ -99,17 +92,16 @@ public class GameModel extends Observable {
         return subMenu;
     }
 
+    public void setSubMenu(Menu menu) {
+        subMenu = menu;
+    }
+
     public boolean isSubMenuDisplayed() {
         return subMenu != null && subMenu.isDisplayed();
     }
 
-    public void showBag() {
-        subMenu = new BagMenu("bag", player.getBag(), this);
-        subMenu.display(true);
-    }
-
-    public void hideSubMenu() {
-        subMenu = null;
+    public void setGamePaused(boolean isPaused) {
+        gameIsPaused = isPaused;
     }
 
     public boolean isGamePaused() {
