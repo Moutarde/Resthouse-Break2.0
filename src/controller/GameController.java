@@ -21,6 +21,7 @@ public class GameController {
         this.conversationHandler = new ConversationHandler(model);
 
         this.model.setNewMessage(UserInterface.getLang().getString("firstMessage"));
+        this.model.setGamePaused(true);
     }
 
     public MenuHandler getMenuHandler() {
@@ -51,6 +52,9 @@ public class GameController {
             }
             else {
                 model.hideMessage();
+                if (!model.isMenuDisplayed()) {
+                    model.setGamePaused(false);
+                }
             }
         }
         else if (model.isMenuDisplayed()) {
@@ -65,6 +69,7 @@ public class GameController {
                 else {
                     model.setNewMessage(UserInterface.getLang().getString("nothingHere"));
                 }
+                model.setGamePaused(true);
             }
             else if (model.getPlayer().isInFrontOfACharacter()) {
                 conversationHandler.start();
@@ -73,10 +78,14 @@ public class GameController {
     }
 
     public void onOpenMenu() {
-        menuHandler.openOrClose();
+        if (!model.isMessageDisplayed()) {
+            menuHandler.openOrClose();
+        }
     }
 
     public void onMoveMenuSelection(Direction d) {
-        menuHandler.moveSelection(d == Direction.DOWN ? 1 : -1);
+        if (!model.isMessageDisplayed()) {
+            menuHandler.moveSelection(d == Direction.DOWN ? 1 : -1);
+        }
     }
 }

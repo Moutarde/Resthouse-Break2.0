@@ -60,12 +60,10 @@ public class GameModel extends Observable {
     public void setNewMessage(String str) {
         assert str != "" : "Trying to set an empty message";
         currentMessage.setString(str);
-        gameIsPaused = true;
     }
 
     public void hideMessage() {
         currentMessage.setString("");
-        gameIsPaused = false;
     }
 
     public boolean isMessageDisplayed() {

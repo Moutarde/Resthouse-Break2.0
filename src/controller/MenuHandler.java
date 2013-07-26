@@ -9,6 +9,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.GameModel;
+import model.chests.Item;
 
 /**
  * @author Nicolas Kniebihler
@@ -73,6 +74,18 @@ public class MenuHandler implements Observer {
             else {
                 assert false : "Trying to show a subMenu that doesn't exist : " + pointedCategory;
             }
+            break;
+        case SHOW_MESSAGE:
+            Menu subMenu = model.getSubMenu();
+            if (subMenu != null && subMenu instanceof BagMenu) {
+                assert model.isSubMenuDisplayed() : "Trying to show item description while subMenu isn't displayed";
+
+                int itemId = model.getSubMenu().getPointedElementId();
+                Item item = model.getPlayer().getBag().getItem(itemId);
+                model.setNewMessage(item.getDescription());
+            }
+            break;
+        default:
             break;
         }
     }

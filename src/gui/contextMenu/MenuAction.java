@@ -5,5 +5,5 @@ package gui.contextMenu;
  *
  */
 public enum MenuAction {
-    SHOW_SUBMENU, RETURN;
+    SHOW_SUBMENU, SHOW_MESSAGE, RETURN;
 }

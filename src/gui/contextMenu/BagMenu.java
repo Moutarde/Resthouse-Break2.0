@@ -1,9 +1,6 @@
 package gui.contextMenu;
 
 import gui.UserInterface;
-
-import java.util.HashMap;
-
 import model.GameModel;
 import model.chests.Item;
 import model.player.Bag;
@@ -26,6 +23,10 @@ public class BagMenu extends Menu {
             setChanged();
             notifyObservers(MenuAction.RETURN);
         }
+        else {
+            setChanged();
+            notifyObservers(MenuAction.SHOW_MESSAGE);
+        }
     }
 
     @Override
@@ -34,16 +35,8 @@ public class BagMenu extends Menu {
             return UserInterface.getLang().getString("return");
         }
 
-        int i = 0;
-        HashMap<Item, Integer> bagContent = bag.getContent();
-        for (Item item : bagContent.keySet()) {
-            if (i == index) {
-                return "" + bagContent.get(item) + "x " + item.getName();
-            }
-        }
-
-        assert false : "No item for index " + index;
-        return null;
+        Item item = bag.getItem(index);
+        return "" + bag.getContent().get(item) + "x " + item.getName();
     }
 
 }

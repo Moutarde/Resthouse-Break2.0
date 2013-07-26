@@ -1,5 +1,7 @@
 package model.chests;
 
+import gui.UserInterface;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,13 +17,19 @@ public class Item {
     private static HashMap<String, Item> itemList;
 
     private String name;
+    private String description;
 
-    public Item(String name) {
+    public Item(String name, String description) {
         this.name = name;
+        this.description = description;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return UserInterface.getLang().getString(description);
     }
 
     public static Item getItem(String id) {
@@ -59,11 +67,13 @@ public class Item {
         String line = null;
         String currentItemId = null;
         String currentItemName = null;
+        String currentItemDescription = null;
 
         while ((line = reader.readLine()) != null) {
             // ID
             if (line.startsWith("O_")) {
                 currentItemId = line;
+                currentItemDescription = currentItemId.substring(2) + "_descr";
             }
             // NAME
             else if (line.startsWith("name=")) {
@@ -73,11 +83,12 @@ public class Item {
             // END LINE -> construct item
             else if (line.equals("END"))
             {
-                Item item = new Item(currentItemName);
+                Item item = new Item(currentItemName, currentItemDescription);
                 itemList.put(currentItemId, item);
 
                 currentItemId = null;
                 currentItemName = null;
+                currentItemDescription = null;
             }
         }
 

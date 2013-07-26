@@ -42,4 +42,17 @@ public class Bag {
             items.put(i, --currentAmount);
         }
     }
+
+    public Item getItem(int index) {
+        int i = 0;
+        for (Item item : items.keySet()) {
+            if (i == index) {
+                return item;
+            }
+            ++i;
+        }
+
+        assert false : "No item for index " + index;
+        return null;
+    }
 }

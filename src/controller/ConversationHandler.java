@@ -51,6 +51,7 @@ public class ConversationHandler {
             currentSpeech.clear();
             isSpeaking = false;
             model.hideMessage();
+            model.setGamePaused(false);
         }
         else {
             displayCurrentMessage();
