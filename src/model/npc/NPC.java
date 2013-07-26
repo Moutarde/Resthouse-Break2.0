@@ -26,17 +26,22 @@ public class NPC extends Player {
 
     private String name;
     private List<Direction> moveScript = new ArrayList<Direction>();
+    private List<String> speech = new ArrayList<String>();
     private int currentStepInScript = 0;
 
     private Coord spriteCoord;
 
-    public NPC(Coord coord, Posture posture, int id, String name, Room startRoom, List<Direction> moveScript, Coord spriteCoord) {
+    public NPC(Coord coord, Posture posture, int id, String name, Room startRoom, List<Direction> moveScript, List<String> speech, Coord spriteCoord) {
         super(id, startRoom, coord, posture);
         this.name = name;
 
         if (!moveScript.isEmpty()) {
             this.moveScript.addAll(moveScript);
             this.getMove().setDir(moveScript.get(0));
+        }
+
+        if (!speech.isEmpty()) {
+            this.speech.addAll(speech);
         }
 
         this.spriteCoord = spriteCoord;
@@ -48,6 +53,10 @@ public class NPC extends Player {
 
     public Coord getSpriteCoord() {
         return spriteCoord;
+    }
+
+    public List<String> getSpeech() {
+        return speech;
     }
 
     public Direction getCurrentDirectionInScript() {
@@ -70,6 +79,17 @@ public class NPC extends Player {
 
     public static NPC getNPC(String id) {
         return npcList.get(id);
+    }
+
+    public static NPC getNPC(int id) {
+        for (NPC npc : npcList.values()) {
+            if (npc.getId() == id) {
+                return npc;
+            }
+        }
+
+        assert false : "NPC not found : " + id;
+        return null;
     }
 
     public static List<NPC> getNPCsInRoom(Room room) {
@@ -97,6 +117,7 @@ public class NPC extends Player {
         Coord currentNPCStartCoord = null;
         Posture currentNPCStartPosture = null;
         List<Direction> currentNPCMoveScript = new ArrayList<Direction>();
+        List<String> currentNPCSpeech = new ArrayList<String>();
         Coord currentNPCspriteCoord = null;
 
         while ((line = reader.readLine()) != null) {
@@ -154,6 +175,15 @@ public class NPC extends Player {
                     currentNPCMoveScript.add(dir);
                 }
             }
+            // SPEECH
+            else if (line.startsWith("speech=")) {
+                String[] tokens = line.split("=");
+                String[] speech = tokens[1].split(";");
+
+                for (String str : speech) {
+                    currentNPCSpeech.add(str);
+                }
+            }
             // START COORD
             else if (line.startsWith("spriteCoord=")) {
                 String[] tokens = line.split("=");
@@ -165,7 +195,7 @@ public class NPC extends Player {
             {
                 Room startRoom = Room.getRoom(currentNPCStartRoom);
 
-                NPC npc = new NPC(currentNPCStartCoord, currentNPCStartPosture, currentNumericId, currentNPCName, startRoom, currentNPCMoveScript, currentNPCspriteCoord);
+                NPC npc = new NPC(currentNPCStartCoord, currentNPCStartPosture, currentNumericId, currentNPCName, startRoom, currentNPCMoveScript, currentNPCSpeech, currentNPCspriteCoord);
                 npcList.put(currentNPCId, npc);
 
                 currentNPCId = null;
@@ -174,10 +204,10 @@ public class NPC extends Player {
                 currentNPCStartCoord = null;
                 currentNPCStartPosture = null;
                 currentNPCMoveScript.clear();
+                currentNPCSpeech.clear();
             }
         }
 
         reader.close();
     }
-
 }

@@ -12,11 +12,13 @@ public class GameController {
     private GameModel model;
     private MoveHandler moveHandler;
     private MenuHandler menuHandler;
+    private ConversationHandler conversationHandler;
 
     public GameController(GameModel model) {
         this.model = model;
         this.moveHandler = new MoveHandler(model);
         this.menuHandler = new MenuHandler(model);
+        this.conversationHandler = new ConversationHandler(model);
 
         this.model.setNewMessage(UserInterface.getLang().getString("firstMessage"));
     }
@@ -44,18 +46,28 @@ public class GameController {
 
     public void onValidate() {
         if (model.isMessageDisplayed()) {
-            model.hideMessage();
+            if (conversationHandler.isSpeaking()) {
+                conversationHandler.continueSpeech();
+            }
+            else {
+                model.hideMessage();
+            }
         }
         else if (model.isMenuDisplayed()) {
             menuHandler.validate();
         }
-        else if (!moveHandler.isMoving() && model.getPlayer().isInFrontOfAChest()) {
-            Item item = model.getPlayer().pickChestContentIFP();
-            if (item != null) {
-                model.setNewMessage(UserInterface.getLang().getString("itemFound") + item.getName());
+        else if (!moveHandler.isMoving()) {
+            if (model.getPlayer().isInFrontOfAChest()) {
+                Item item = model.getPlayer().pickChestContentIFP();
+                if (item != null) {
+                    model.setNewMessage(UserInterface.getLang().getString("itemFound") + item.getName());
+                }
+                else {
+                    model.setNewMessage(UserInterface.getLang().getString("nothingHere"));
+                }
             }
-            else {
-                model.setNewMessage(UserInterface.getLang().getString("nothingHere"));
+            else if (model.getPlayer().isInFrontOfACharacter()) {
+                conversationHandler.start();
             }
         }
     }

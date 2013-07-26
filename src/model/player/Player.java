@@ -5,6 +5,7 @@ import model.Coord;
 import model.Move;
 import model.chests.Chest;
 import model.chests.Item;
+import model.npc.NPC;
 import model.rooms.Room;
 import model.rooms.SquareType;
 import controller.Direction;
@@ -147,7 +148,6 @@ public class Player {
             }
 
             posture = Posture.getPosture(d, 0);
-            move.setDir(d);
             return false;
         }
     }
@@ -187,7 +187,7 @@ public class Player {
     }
 
     public boolean isInFrontOfAChest() {
-        return room.isChest(getFrontSquare());
+        return room.getSquareType(getFrontSquare()) == SquareType.CHEST;
     }
 
     /**
@@ -204,5 +204,20 @@ public class Player {
         }
 
         return item;
+    }
+
+    public boolean isInFrontOfACharacter() {
+        if (room.getSquareTypeFromEvolutiveMat(getFrontSquare()) == SquareType.CHARACTER) {
+            NPC npc = getFrontNPC();
+            if (npc.getMove().getDir() == Direction.NONE) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public NPC getFrontNPC() {
+        return NPC.getNPC(room.getSquareValueFromEvolutiveMat(getFrontSquare()));
     }
 }

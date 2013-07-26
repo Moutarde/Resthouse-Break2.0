@@ -68,16 +68,6 @@ public class Room {
         return img;
     }
 
-    public boolean isChest(Coord c) {
-        SquareType type = getSquareType(c);
-
-        if (type == SquareType.CHEST) {
-            return true;
-        }
-
-        return false;
-    }
-
     public SquareType getSquareType(Coord c) {
         int squareValue = mat.getSquareValue(c);
 
@@ -111,6 +101,10 @@ public class Room {
         else {
             return SquareType.FREESQUARE;
         }
+    }
+
+    public int getSquareValueFromEvolutiveMat(Coord c) {
+        return evolutiveMat.getSquareValue(c);
     }
 
     public boolean canWalkOnSquare(int id, Coord c) {

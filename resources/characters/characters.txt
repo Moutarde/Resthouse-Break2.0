@@ -4,6 +4,7 @@ startRooom=R_PARK
 startCoord=25,15
 startPosture=LOOK_RIGHT
 moveScript=RIGHT;DOWN;DOWN;LEFT;UP;UP
+speech=speechHello1;speechHello2;speechHello3
 spriteCoord=3,3
 END
 
@@ -13,6 +14,7 @@ startRooom=R_PARK
 startCoord=6,7
 startPosture=LOOK_RIGHT
 moveScript=RIGHT;RIGHT;RIGHT;DOWN;DOWN;DOWN;LEFT;LEFT;LEFT;UP;UP;UP
+speech=speechHello1
 spriteCoord=5,2
 END
 
@@ -22,6 +24,7 @@ startRooom=R_COMMUNAL_ROOM
 startCoord=1,2
 startPosture=LOOK_DOWN
 moveScript=DOWN;DOWN;DOWN;DOWN;DOWN;DOWN;DOWN;DOWN;DOWN;DOWN;DOWN;DOWN;UP;UP;UP;UP;UP;UP;UP;UP;UP;UP;UP;UP
+speech=speechHello2
 spriteCoord=4,1
 END
 
@@ -31,6 +34,7 @@ startRooom=R_GINETTE
 startCoord=1,1
 startPosture=LOOK_DOWN
 moveScript=NONE
+speech=speechHello3
 spriteCoord=0,1
 END
 
@@ -40,5 +44,6 @@ startRooom=R_PARK
 startCoord=26,12
 startPosture=LOOK_RIGHT
 moveScript=RIGHT;RIGHT;RIGHT;RIGHT;RIGHT;LEFT;LEFT;LEFT;LEFT;LEFT
+speech=speechHello2
 spriteCoord=5,5
 END
