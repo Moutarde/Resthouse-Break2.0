@@ -2,18 +2,15 @@
 #
 # key -> door=R_RoomName;id
 
-O_TEETH
-name=teeth
+O_TOOTH
 type=normal
 END
 
 O_DIRECTOR_KEY
-name=director_key
 type=key
 DOOR:10;R_ADMIN
 END
 
 O_WHEEL_CHAIR
-name=wheel chair
 type=normal
 END

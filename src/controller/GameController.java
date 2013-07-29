@@ -74,6 +74,10 @@ public class GameController {
             else if (model.getPlayer().isInFrontOfACharacter()) {
                 conversationHandler.start();
             }
+            else if (model.getPlayer().isInFrontOfALockedDoor()) {
+                model.setNewMessage(UserInterface.getLang().getString("doorLocked"));
+                model.setGamePaused(true);
+            }
         }
     }
 

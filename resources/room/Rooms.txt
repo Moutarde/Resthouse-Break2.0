@@ -13,8 +13,8 @@ size=6x6
 {11, 1, 1, 1, 1, 1}
 { 1, 1, 1, 0, 1, 1}
 { 1, 1, 0, 0, 1, 0}
-CHEST:30;O_KEY
-CHEST:31;O_TEETH
+CHEST:30;O_DIRECTOR_KEY
+CHEST:31;O_TOOTH
 END
 
 R_PARK
@@ -41,11 +41,11 @@ size=29x21
 { 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-CHEST:30;O_TEETH
-CHEST:31;O_TEETH
-CHEST:32;O_TEETH
-CHEST:33;O_TEETH
-CHEST:34;O_TEETH
+CHEST:30;O_TOOTH
+CHEST:31;O_TOOTH
+CHEST:32;O_TOOTH
+CHEST:33;O_TOOTH
+CHEST:34;O_TOOTH
 CHEST:35;O_DIRECTOR_KEY
 END
 
@@ -67,10 +67,10 @@ size=29x15
 { 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0}
 { 1, 1, 1, 1, 1, 1, 1,13,12, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,33}
-CHEST:30;O_TEETH
-CHEST:31;O_TEETH
+CHEST:30;O_TOOTH
+CHEST:31;O_TOOTH
 CHEST:32;O_WHEEL_CHAIR
-CHEST:33;O_TEETH
+CHEST:33;O_TOOTH
 END
 
 R_CORIDOR

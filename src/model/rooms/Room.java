@@ -28,6 +28,7 @@ public class Room {
     private static String roomsDescriptorFilePath = "/room/Rooms.txt";
     private static HashMap<String, Room> roomList;
 
+    private String id;
     private Resource res;
     private Matrix mat;
     private Matrix evolutiveMat;
@@ -38,7 +39,8 @@ public class Room {
 
     private BufferedImage img;
 
-    private Room(Resource res, Matrix mat) {
+    private Room(String id, Resource res, Matrix mat) {
+        this.id = id;
         this.res = res;
         this.mat = mat;
         this.evolutiveMat = new Matrix(mat);
@@ -90,6 +92,10 @@ public class Room {
             assert false : "Square type unknown : " + squareValue;
             return null;
         }
+    }
+
+    public int getSquareValue(Coord c) {
+        return mat.getSquareValue(c);
     }
 
     public SquareType getSquareTypeFromEvolutiveMat(Coord c) {
@@ -159,12 +165,37 @@ public class Room {
         return lockedDoors.contains(doorId);
     }
 
+    public boolean isDoorLocked(Coord coord) {
+        return isDoorLocked(getSquareValue(coord));
+    }
+
     public void lockDoor(int doorId) {
         lockedDoors.add(doorId);
     }
 
     public void unlockDoor(int doorId) {
         lockedDoors.remove(doorId);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj instanceof Room) {
+            Room room = (Room)obj;
+
+            if (this.id != room.id) {
+                if (this.id == null || !this.id.equals(room.id)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public static Room createRooms() throws IOException {
@@ -231,7 +262,7 @@ public class Room {
                 Resource res = new Resource(currentRoomRes);
 
                 // ROOM
-                Room room = new Room(res, mat);
+                Room room = new Room(currentRoomName, res, mat);
                 room.chests.putAll(currentRoomChestList);
                 room.lockedDoors.addAll(currentRoomLockedDoors);
                 roomList.put(currentRoomName, room);

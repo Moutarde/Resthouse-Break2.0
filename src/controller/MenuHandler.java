@@ -111,6 +111,7 @@ public class MenuHandler implements Observer {
                     int itemId = model.getSubMenu().getPointedElementId();
                     Item item = model.getPlayer().getBag().getItem(itemId);
                     model.setNewMessage(item.getDescription());
+                    model.setGamePaused(true);
                 }
             }
             break;
@@ -123,11 +124,13 @@ public class MenuHandler implements Observer {
                     int itemId = model.getSubMenu().getPointedElementId();
                     Item item = model.getPlayer().getBag().getItem(itemId);
                     if (item.isUsable()) {
-                        item.use();
+                        boolean useSucceed = item.use(model);
+                        model.setNewMessage(useSucceed ? item.getUseFeedback() : item.getUseFailFeedback());
                     }
                     else {
                         model.setNewMessage(UserInterface.getLang().getString("notUsable"));
                     }
+                    model.setGamePaused(true);
                 }
             }
             break;

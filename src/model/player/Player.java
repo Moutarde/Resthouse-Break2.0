@@ -7,6 +7,7 @@ import model.items.Chest;
 import model.items.Item;
 import model.npc.NPC;
 import model.rooms.Room;
+import model.rooms.RoomDoorPair;
 import model.rooms.SquareType;
 import controller.Direction;
 
@@ -150,7 +151,7 @@ public class Player {
     }
 
     private void changeRoomIFN() {
-        int doorId = room.getMat().getSquareValue(coord);
+        int doorId = room.getSquareValue(coord);
         if (room.isDoorLocked(doorId)) {
             return;
         }
@@ -219,5 +220,22 @@ public class Player {
 
     public NPC getFrontNPC() {
         return NPC.getNPC(room.getSquareValueFromEvolutiveMat(getFrontSquare()));
+    }
+
+    public boolean isInFrontOfDoor(RoomDoorPair pair) {
+        boolean sameRoom = room.equals(Room.getRoom(pair.room));
+        boolean onDoor = getCurrentSquareType() == SquareType.DOOR;
+        boolean lookingOutside = getNextSquareType(Posture.getLookingDirection(posture)) == SquareType.OUTSIDE;
+        boolean sameDoor = room.getMat().getSquareValue(coord) == pair.door;
+
+        return sameRoom && onDoor && lookingOutside && sameDoor;
+    }
+
+    public boolean isInFrontOfADoor() {
+        return getCurrentSquareType() == SquareType.DOOR && room.getSquareType(getFrontSquare()) == SquareType.OUTSIDE;
+    }
+
+    public boolean isInFrontOfALockedDoor() {
+        return isInFrontOfADoor() && room.isDoorLocked(coord);
     }
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import model.GameModel;
 import model.rooms.RoomDoorPair;
 
 /**
@@ -23,28 +24,41 @@ public class Item {
 
     private String name;
     private String description;
+    private String useFeedback;
+    private String useFailFeedback;
     private boolean isUsable = false;
 
-    public Item(String name, String description, boolean isUsable) {
+    public Item(String name, String description, String useFeedback, String useFailFeedback, boolean isUsable) {
         this.name = name;
         this.description = description;
+        this.useFeedback = useFeedback;
+        this.useFailFeedback = useFailFeedback;
         this.isUsable = isUsable;
     }
 
     public String getName() {
-        return name;
+        return UserInterface.getLang().getString(name);
     }
 
     public String getDescription() {
         return UserInterface.getLang().getString(description);
     }
 
+    public String getUseFeedback() {
+        return UserInterface.getLang().getString(useFeedback);
+    }
+
+    public String getUseFailFeedback() {
+        return UserInterface.getLang().getString(useFailFeedback);
+    }
+
     public boolean isUsable() {
         return isUsable;
     }
 
-    public void use() {
+    public boolean use(GameModel model) {
         assert false : "Simple items are not usable !";
+        return false;
     }
 
     public static Item getItem(String id) {
@@ -83,6 +97,8 @@ public class Item {
         String currentItemId = null;
         String currentItemName = null;
         String currentItemDescription = null;
+        String currentItemUseFeedback = null;
+        String currentItemUseFailFeedback = null;
         ItemType currentItemType = null;
 
         // KEY
@@ -92,12 +108,12 @@ public class Item {
             // ID
             if (line.startsWith("O_")) {
                 currentItemId = line;
-                currentItemDescription = currentItemId.substring(2) + "_descr";
-            }
-            // NAME
-            else if (line.startsWith("name=")) {
-                String[] tokens = line.split("=");
-                currentItemName = tokens[1];
+
+                String id = currentItemId.substring(2);
+                currentItemName = id + "_name";
+                currentItemDescription = id + "_descr";
+                currentItemUseFeedback = id + "_use";
+                currentItemUseFailFeedback = id + "_useFail";
             }
             // TYPE
             else if (line.startsWith("type=")) {
@@ -135,10 +151,10 @@ public class Item {
                 Item item = null;
                 switch (currentItemType) {
                 case NORMAL:
-                    item = new Item(currentItemName, currentItemDescription, false);
+                    item = new Item(currentItemName, currentItemDescription, currentItemUseFeedback, currentItemUseFailFeedback, false);
                     break;
                 case KEY:
-                    item = new Key(currentItemName, currentItemDescription, currentKeyDoorList);
+                    item = new Key(currentItemName, currentItemDescription, currentItemUseFeedback, currentItemUseFailFeedback, currentKeyDoorList);
                     break;
                 }
 
@@ -148,6 +164,8 @@ public class Item {
                 currentItemName = null;
                 currentItemDescription = null;
                 currentItemType = null;
+                currentItemUseFeedback = null;
+                currentItemUseFailFeedback = null;
 
                 currentKeyDoorList.clear();
             }
