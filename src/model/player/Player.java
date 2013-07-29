@@ -3,8 +3,8 @@ package model.player;
 import gui.sprite.Posture;
 import model.Coord;
 import model.Move;
-import model.chests.Chest;
-import model.chests.Item;
+import model.items.Chest;
+import model.items.Item;
 import model.npc.NPC;
 import model.rooms.Room;
 import model.rooms.SquareType;
@@ -140,11 +140,8 @@ public class Player {
             return true;
         }
         else {
-            boolean playerIsOnDoor = getCurrentSquareType() == SquareType.DOOR;
-            boolean nextSquareIsOutside = getNextSquareType(d) == SquareType.OUTSIDE;
-
-            if(playerIsOnDoor && nextSquareIsOutside) {
-                changeRoom();
+            if(getCurrentSquareType() == SquareType.DOOR && getNextSquareType(d) == SquareType.OUTSIDE) {
+                changeRoomIFN();
             }
 
             posture = Posture.getPosture(d, 0);
@@ -152,9 +149,12 @@ public class Player {
         }
     }
 
-    private void changeRoom() {
+    private void changeRoomIFN() {
         int doorId = room.getMat().getSquareValue(coord);
-        if(doorId == -1) {
+        if (room.isDoorLocked(doorId)) {
+            return;
+        }
+        else if(doorId == -1) {
             System.out.println("Door id not found at coord " + coord);
             return;
         }

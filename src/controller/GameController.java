@@ -2,7 +2,7 @@ package controller;
 
 import gui.UserInterface;
 import model.GameModel;
-import model.chests.Item;
+import model.items.Item;
 
 /**
  * @author Nicolas Kniebihler

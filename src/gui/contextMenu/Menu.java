@@ -57,7 +57,7 @@ public abstract class Menu extends Observable {
     }
 
     public String getContent() {
-        String content = UserInterface.getLang().getString(name) + " :\n";
+        String content = name.isEmpty() ? "" : UserInterface.getLang().getString(name) + " :\n";
         for (int i = 0 ; i < nbElements ; ++i) {
             content += "  ";
             if (i == pointedElementId) {

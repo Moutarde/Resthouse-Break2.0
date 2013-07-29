@@ -10,13 +10,15 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import model.Coord;
 import model.Resource;
-import model.chests.Chest;
-import model.chests.Item;
+import model.items.Chest;
+import model.items.Item;
 
 /**
  * @author Nicolas
@@ -29,9 +31,10 @@ public class Room {
     private Resource res;
     private Matrix mat;
     private Matrix evolutiveMat;
-    private HashMap<Integer, Room> neighbors;
-    private HashMap<Integer, Integer> neighborsDoorsIds;
-    private HashMap<Integer, Chest> chests;
+    private Set<Integer> lockedDoors = new HashSet<Integer>();
+    private HashMap<Integer, Room> neighbors = new HashMap<Integer, Room>();
+    private HashMap<Integer, Integer> neighborsDoorsIds = new HashMap<Integer, Integer>();
+    private HashMap<Integer, Chest> chests = new HashMap<Integer, Chest>();
 
     private BufferedImage img;
 
@@ -39,9 +42,6 @@ public class Room {
         this.res = res;
         this.mat = mat;
         this.evolutiveMat = new Matrix(mat);
-        this.neighbors = new HashMap<Integer, Room>();
-        this.neighborsDoorsIds = new HashMap<Integer, Integer>();
-        this.chests = new HashMap<Integer, Chest>();
     }
 
     public Resource getRes() {
@@ -155,6 +155,18 @@ public class Room {
         return chests.get(chestId);
     }
 
+    public boolean isDoorLocked(int doorId) {
+        return lockedDoors.contains(doorId);
+    }
+
+    public void lockDoor(int doorId) {
+        lockedDoors.add(doorId);
+    }
+
+    public void unlockDoor(int doorId) {
+        lockedDoors.remove(doorId);
+    }
+
     public static Room createRooms() throws IOException {
         roomList = new HashMap<String, Room>();
 
@@ -171,6 +183,7 @@ public class Room {
         int currentRoomNbLines = 0;
         List<String> values = new ArrayList<String>();
         HashMap<Integer, Chest> currentRoomChestList = new HashMap<Integer, Chest>();
+        List<Integer> currentRoomLockedDoors = new ArrayList<Integer>();
 
         while ((line = reader.readLine()) != null) {
             // NAME
@@ -220,6 +233,7 @@ public class Room {
                 // ROOM
                 Room room = new Room(res, mat);
                 room.chests.putAll(currentRoomChestList);
+                room.lockedDoors.addAll(currentRoomLockedDoors);
                 roomList.put(currentRoomName, room);
 
                 currentRoomName = null;
@@ -228,6 +242,7 @@ public class Room {
                 currentRoomNbLines = 0;
                 values.clear();
                 currentRoomChestList.clear();
+                currentRoomLockedDoors.clear();
             }
             // CHEST
             else if (line.startsWith("CHEST:")) {
@@ -244,6 +259,15 @@ public class Room {
                 }
 
                 currentRoomChestList.put(chestId1, chest);
+            }
+            // LOCKED DOORS
+            else if (line.startsWith("locked_doors=")) {
+                String[] tokens = line.split("=");
+                String[] ids = tokens[1].split(";");
+
+                for (String id : ids) {
+                    currentRoomLockedDoors.add(Integer.parseInt(id));
+                }
             }
             // NEIGHBOR
             else if (line.startsWith("NEIGHBOR:")) {

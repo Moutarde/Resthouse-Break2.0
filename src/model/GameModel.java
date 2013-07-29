@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
-import model.chests.Item;
+import model.items.Item;
 import model.npc.NPC;
 import model.player.Player;
 import model.rooms.Room;
@@ -25,6 +25,7 @@ public class GameModel extends Observable {
     private Message currentMessage = new Message();
     private ContextMenu menu;
     private Menu subMenu;
+    private Menu choiceBox;
     private boolean gameIsPaused = false;
 
     public GameModel() {
@@ -97,6 +98,22 @@ public class GameModel extends Observable {
     public boolean isSubMenuDisplayed() {
         return subMenu != null && subMenu.isDisplayed();
     }
+
+    // CHOICE BOX
+
+    public Menu getChoiceBox() {
+        return choiceBox;
+    }
+
+    public void setChoiceBox(Menu menu) {
+        choiceBox = menu;
+    }
+
+    public boolean isChoiceBoxDisplayed() {
+        return choiceBox != null && choiceBox.isDisplayed();
+    }
+
+    // PAUSE
 
     public void setGamePaused(boolean isPaused) {
         gameIsPaused = isPaused;

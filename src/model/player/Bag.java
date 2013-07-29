@@ -2,7 +2,7 @@ package model.player;
 
 import java.util.HashMap;
 
-import model.chests.Item;
+import model.items.Item;
 
 /**
  * @author Nicolas Kniebihler

@@ -1,6 +1,8 @@
 package controller;
 
+import gui.UserInterface;
 import gui.contextMenu.BagMenu;
+import gui.contextMenu.InspectItemBox;
 import gui.contextMenu.Menu;
 import gui.contextMenu.MenuAction;
 import gui.contextMenu.MenuCategory;
@@ -9,7 +11,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.GameModel;
-import model.chests.Item;
+import model.items.Item;
 
 /**
  * @author Nicolas Kniebihler
@@ -39,7 +41,7 @@ public class MenuHandler implements Observer {
     // SUB MENU
 
     public void showBag() {
-        Menu subMenu = new BagMenu("bag", model);
+        Menu subMenu = new BagMenu(model);
         subMenu.addObserver(this);
         subMenu.display(true);
         model.setSubMenu(subMenu);
@@ -49,13 +51,29 @@ public class MenuHandler implements Observer {
         model.setSubMenu(null);
     }
 
+    // CHOICE BOX
+
+    public void showInspectItemBox() {
+        Menu inspectItemBox = new InspectItemBox(model);
+        inspectItemBox.addObserver(this);
+        inspectItemBox.display(true);
+        model.setChoiceBox(inspectItemBox);
+    }
+
+    public void hideChoiceBox() {
+        model.setChoiceBox(null);
+    }
+
     @Override
     public void update(Observable obs, Object action) {
         assert action instanceof MenuAction : "Trying to update MenuHandler with an object which is not a MenuAction";
 
         switch ((MenuAction)action) {
         case RETURN:
-            if (model.isSubMenuDisplayed()) {
+            if (model.isChoiceBoxDisplayed()) {
+                hideChoiceBox();
+            }
+            else if (model.isSubMenuDisplayed()) {
                 hideSubMenu();
             }
             else if (model.isMenuDisplayed()) {
@@ -75,32 +93,64 @@ public class MenuHandler implements Observer {
                 assert false : "Trying to show a subMenu that doesn't exist : " + pointedCategory;
             }
             break;
-        case SHOW_MESSAGE:
-            Menu subMenu = model.getSubMenu();
-            if (subMenu != null && subMenu instanceof BagMenu) {
-                assert model.isSubMenuDisplayed() : "Trying to show item description while subMenu isn't displayed";
-
-                int itemId = model.getSubMenu().getPointedElementId();
-                Item item = model.getPlayer().getBag().getItem(itemId);
-                model.setNewMessage(item.getDescription());
+        case SHOW_CHOICE_BOX:
+            assert !model.isChoiceBoxDisplayed() : "Trying to show item inspection box while it is already displayed";
+            if (model.isSubMenuDisplayed() && model.getSubMenu() instanceof BagMenu) {
+                showInspectItemBox();
+            }
+            else {
+                assert false : "Trying to show a choice box that doesn't exist";
             }
             break;
-        default:
+        case SHOW_MESSAGE:
+            {
+                Menu subMenu = model.getSubMenu();
+                if (subMenu != null && subMenu instanceof BagMenu) {
+                    assert model.isSubMenuDisplayed() : "Trying to show item description while subMenu isn't displayed";
+
+                    int itemId = model.getSubMenu().getPointedElementId();
+                    Item item = model.getPlayer().getBag().getItem(itemId);
+                    model.setNewMessage(item.getDescription());
+                }
+            }
+            break;
+        case USE_ITEM:
+            {
+                Menu subMenu = model.getSubMenu();
+                if (subMenu != null && subMenu instanceof BagMenu) {
+                    assert model.isSubMenuDisplayed() : "Trying to use item while subMenu isn't displayed";
+
+                    int itemId = model.getSubMenu().getPointedElementId();
+                    Item item = model.getPlayer().getBag().getItem(itemId);
+                    if (item.isUsable()) {
+                        item.use();
+                    }
+                    else {
+                        model.setNewMessage(UserInterface.getLang().getString("notUsable"));
+                    }
+                }
+            }
             break;
         }
     }
 
     public void validate() {
-        if (model.isSubMenuDisplayed()) {
+        if (model.isChoiceBoxDisplayed()) {
+            model.getChoiceBox().selectElement();
+        }
+        else if (model.isSubMenuDisplayed()) {
             model.getSubMenu().selectElement();
         }
-        else {
+        else if (model.isMenuDisplayed()) {
             model.getMenu().selectElement();
         }
     }
 
     public void openOrClose() {
-        if (model.isMenuDisplayed()) {
+        if (model.isChoiceBoxDisplayed()) {
+            hideChoiceBox();
+        }
+        else if (model.isMenuDisplayed()) {
             if (model.isSubMenuDisplayed()) {
                 hideSubMenu();
             }
@@ -114,7 +164,10 @@ public class MenuHandler implements Observer {
     }
 
     public void moveSelection(int i) {
-        if (model.isMenuDisplayed()) {
+        if (model.isChoiceBoxDisplayed()) {
+            model.getChoiceBox().changePointedElement(i);
+        }
+        else if (model.isMenuDisplayed()) {
             if (model.isSubMenuDisplayed()) {
                 model.getSubMenu().changePointedElement(i);
             }

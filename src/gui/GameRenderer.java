@@ -135,6 +135,14 @@ public class GameRenderer implements Renderer {
             Coord offset = new Coord(10, 10);
             drawText(g, menuPosition, model.getSubMenu().getContent(), offset);
         }
+
+        // Render the choice box
+        if(model.isChoiceBoxDisplayed()) {
+            Coord menuPosition = new Coord(GamePanel.SIZE.width / 3, GamePanel.SIZE.height / 3);
+            drawFramedRect(g, menuPosition, GamePanel.CHOICEBOX_SIZE, 2);
+            Coord offset = new Coord(10, 10);
+            drawText(g, menuPosition, model.getChoiceBox().getContent(), offset);
+        }
     }
 
     private static void drawFramedRect(Graphics g, Coord position, Dimension size, int borderWidth) {

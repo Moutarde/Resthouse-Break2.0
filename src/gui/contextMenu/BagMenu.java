@@ -2,7 +2,7 @@ package gui.contextMenu;
 
 import gui.UserInterface;
 import model.GameModel;
-import model.chests.Item;
+import model.items.Item;
 import model.player.Bag;
 
 /**
@@ -12,8 +12,8 @@ import model.player.Bag;
 public class BagMenu extends Menu {
     private Bag bag;
 
-    public BagMenu(String name, GameModel model) {
-        super(name, model.getPlayer().getBag().getContent().size() + 1, model);
+    public BagMenu(GameModel model) {
+        super("bag", model.getPlayer().getBag().getContent().size() + 1, model);
         this.bag = model.getPlayer().getBag();
     }
 
@@ -25,7 +25,7 @@ public class BagMenu extends Menu {
         }
         else {
             setChanged();
-            notifyObservers(MenuAction.SHOW_MESSAGE);
+            notifyObservers(MenuAction.SHOW_CHOICE_BOX);
         }
     }
 
