@@ -41,9 +41,9 @@ END
 C_TESTCHANGEROOM
 name=testchangeroom
 startRooom=R_PARK
-startCoord=26,12
-startPosture=LOOK_RIGHT
-moveScript=RIGHT;RIGHT;RIGHT;RIGHT;RIGHT;LEFT;LEFT;LEFT;LEFT;LEFT
+startCoord=24,3
+startPosture=LOOK_UP
+moveScript=UP;UP;UP;UP;UP;DOWN;DOWN;DOWN;DOWN;DOWN
 speech=speechHello2
 spriteCoord=5,5
 END
