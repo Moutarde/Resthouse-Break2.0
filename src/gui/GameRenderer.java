@@ -1,15 +1,13 @@
 package gui;
 
-import gui.contextMenu.ContextMenu;
-import gui.contextMenu.Menu;
 import gui.sprite.Sprite;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 import model.Coord;
 import model.GameModel;
-import model.Message;
 import model.Move;
 import model.npc.NPC;
 import model.player.Player;
@@ -112,61 +110,53 @@ public class GameRenderer implements Renderer {
 
         // Render the bottom message
         if(model.isMessageDisplayed()) {
-            Message message = model.getCurrentMessage();
+            Coord messagePosition = new Coord(0, GamePanel.SIZE.height - GamePanel.TEXT_ZONE_HEIGHT);
+            drawFramedRect(g, messagePosition, new Dimension(GamePanel.SIZE.width, GamePanel.TEXT_ZONE_HEIGHT), 2);
 
-            int offsetX = 10;
-            int offsetY = 10;
-            int position = GamePanel.SIZE.height - GamePanel.TEXT_ZONE_HEIGHT;
+            Coord offset = new Coord(10, 10);
+            drawText(g, messagePosition, model.getCurrentMessage().getString(), offset);
 
-            g.setColor(Color.white);
-            g.fillRect(0, position, GamePanel.SIZE.width, GamePanel.SIZE.height);
-            g.setColor(Color.black);
-            g.drawString(message.getString(), offsetX, position + offsetY + g.getFontMetrics().getHeight()/2);
             String pressEnter = UserInterface.getLang().getString("pressEnter");
-            offsetX += g.getFontMetrics().stringWidth(pressEnter);
-            g.drawString(pressEnter, GamePanel.SIZE.width - offsetX, GamePanel.SIZE.height - offsetY);
+            g.drawString(pressEnter, GamePanel.SIZE.width - (offset.getX() + g.getFontMetrics().stringWidth(pressEnter)), GamePanel.SIZE.height - offset.getY());
         }
 
         // Render the menu
         if(model.isMenuDisplayed()) {
-            ContextMenu menu = model.getMenu();
-
-            int textHeight = g.getFontMetrics().getHeight();
-            int offsetX = 10;
-            int offsetY = 10 + textHeight/2;
-            int menuPositionX = GamePanel.SIZE.width - GamePanel.MENU_SIZE.width;
-
-            String[] lines = menu.getContent().split("\n");
-
-            g.setColor(Color.white);
-            g.fillRect(menuPositionX, 0, GamePanel.SIZE.width, GamePanel.MENU_SIZE.height);
-            g.setColor(Color.black);
-
-            for (String string : lines) {
-                g.drawString(string, menuPositionX + offsetX, offsetY);
-                offsetY += textHeight;
-            }
+            Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.MENU_SIZE.width, 0);
+            drawFramedRect(g, menuPosition, GamePanel.MENU_SIZE, 2);
+            Coord offset = new Coord(10, 10);
+            drawText(g, menuPosition, model.getMenu().getContent(), offset);
         }
 
         // Render the sub menu
         if(model.isSubMenuDisplayed()) {
-            Menu subMenu = model.getSubMenu();
+            Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.SUBMENU_SIZE.width, 0);
+            drawFramedRect(g, menuPosition, GamePanel.SUBMENU_SIZE, 2);
+            Coord offset = new Coord(10, 10);
+            drawText(g, menuPosition, model.getSubMenu().getContent(), offset);
+        }
+    }
 
-            int textHeight = g.getFontMetrics().getHeight();
-            int offsetX = 10;
-            int offsetY = 10 + textHeight/2;
-            int menuPositionX = GamePanel.SIZE.width - GamePanel.SUBMENU_SIZE.width;
+    private static void drawFramedRect(Graphics g, Coord position, Dimension size, int borderWidth) {
+        // Background
+        g.setColor(Color.white);
+        g.fillRect(position.getX(), position.getY(), size.width, size.height);
+        // Border
+        g.setColor(Color.black);
+        for (int i = 0 ; i < borderWidth ; ++i) {
+            g.drawRect(position.getX() + i, position.getY() + i, size.width - 2 * i, size.height - 2 * i);
+        }
+    }
 
-            String[] lines = subMenu.getContent().split("\n");
-
-            g.setColor(Color.white);
-            g.fillRect(menuPositionX, 0, GamePanel.SIZE.width, GamePanel.SUBMENU_SIZE.height);
-            g.setColor(Color.black);
-
-            for (String string : lines) {
-                g.drawString(string, menuPositionX + offsetX, offsetY);
-                offsetY += textHeight;
-            }
+    private static void drawText(Graphics g, Coord position, String content, Coord offset) {
+        g.setColor(Color.black);
+        int textHeight = g.getFontMetrics().getHeight();
+        int offsetX = offset.getX();
+        int offsetY = offset.getY() + textHeight/2;
+        String[] lines = content.split("\n");
+        for (String string : lines) {
+            g.drawString(string, position.getX() + offsetX, position.getY() + offsetY);
+            offsetY += textHeight;
         }
     }
 
