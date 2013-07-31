@@ -1,14 +1,18 @@
 package gui;
 
 import gui.sprite.Sprite;
+import gui.sprite.SpriteSheet;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.HashMap;
+import java.util.Map;
 
 import model.Coord;
 import model.GameModel;
 import model.Move;
+import model.Resource;
 import model.npc.NPC;
 import model.player.Player;
 import model.rooms.Matrix;
@@ -25,16 +29,22 @@ import model.rooms.SquareType;
  *
  */
 public class GameRenderer implements Renderer {
+    private SpriteSheet charactersSpriteSheet = new SpriteSheet(Resource.SPRITE_SHEET, 32*3, 32*4);
+
     private boolean debugMode = false;
 
     private GameModel model;
 
     private Sprite playerSprite;
+    private Map<NPC, Sprite> npcSprites = new HashMap<NPC, Sprite>();
 
     public GameRenderer(GameModel model) {
         this.model = model;
 
-        playerSprite = model.getCharactersSpriteSheet().getSprite(2, 5);
+        playerSprite = charactersSpriteSheet.getSprite(2, 5);
+        for (NPC npc : NPC.getNPCList()) {
+            npcSprites.put(npc, charactersSpriteSheet.getSprite(npc.getSpriteCoord()));
+        }
     }
 
     @Override
@@ -102,7 +112,7 @@ public class GameRenderer implements Renderer {
 
         Sprite npcSprite;
         for (NPC npc : NPC.getNPCsInRoom(currentRoom)) {
-            npcSprite = model.getCharactersSpriteSheet().getSprite(npc.getSpriteCoord());
+            npcSprite = npcSprites.get(npc);
             int npcx = bgx + npc.getCoord().getX() * Matrix.CASE_SIZE + npc.getMove().getDistMove().getX() - npcSprite.getOffset().getX();
             int npcy = bgy + npc.getCoord().getY() * Matrix.CASE_SIZE + npc.getMove().getDistMove().getY() - npcSprite.getOffset().getY();
             npcSprite.draw(g, npcx, npcy, npc.getPosture());

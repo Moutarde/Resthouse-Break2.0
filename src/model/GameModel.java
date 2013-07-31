@@ -3,7 +3,6 @@ package model;
 import gui.contextMenu.ContextMenu;
 import gui.contextMenu.Menu;
 import gui.sprite.Posture;
-import gui.sprite.SpriteSheet;
 
 import java.io.IOException;
 import java.util.Observable;
@@ -22,7 +21,6 @@ import model.rooms.Room;
 public class GameModel extends Observable {
 
     private Player player;
-    private SpriteSheet charactersSpriteSheet = new SpriteSheet(Resource.SPRITE_SHEET, 32*3, 32*4);
     private Message currentMessage = new Message("");
     private ContextMenu menu;
     private Menu subMenu;
@@ -43,10 +41,6 @@ public class GameModel extends Observable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public SpriteSheet getCharactersSpriteSheet() {
-        return charactersSpriteSheet;
     }
 
     public Player getPlayer() {

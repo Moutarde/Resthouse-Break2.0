@@ -66,7 +66,6 @@ public class Sprite {
         return image.getHeight(null);
     }
 
-
     public BufferedImage getObject(Posture p) {
         return image.getSubimage(p.getCoord().getX() * objectWidth, p.getCoord().getY() * objectHeight, objectWidth, objectHeight);
     }
