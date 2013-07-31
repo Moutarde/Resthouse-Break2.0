@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.GameModel;
+import model.messages.Message;
 import model.npc.NPC;
 
 /**
@@ -16,7 +17,7 @@ public class ConversationHandler {
     private GameModel model;
 
     private int currentStep;
-    private List<String> currentSpeech = new ArrayList<String>();
+    private List<Message> currentSpeech = new ArrayList<Message>();
     private String speakerName;
 
     private boolean isSpeaking = false;
@@ -39,7 +40,7 @@ public class ConversationHandler {
     }
 
     public void displayCurrentMessage() {
-        model.setNewMessage(speakerName + " : " + UserInterface.getLang().getString(currentSpeech.get(currentStep)));
+        model.setNewMessage(speakerName + " : " + UserInterface.getLang().getString(currentSpeech.get(currentStep).getString()));
     }
 
     public void continueSpeech() {

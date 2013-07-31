@@ -10,6 +10,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.items.Item;
+import model.messages.Message;
 import model.npc.NPC;
 import model.player.Player;
 import model.rooms.Room;
@@ -22,7 +23,7 @@ public class GameModel extends Observable {
 
     private Player player;
     private SpriteSheet charactersSpriteSheet = new SpriteSheet(Resource.SPRITE_SHEET, 32*3, 32*4);
-    private Message currentMessage = new Message();
+    private Message currentMessage = new Message("");
     private ContextMenu menu;
     private Menu subMenu;
     private Menu choiceBox;

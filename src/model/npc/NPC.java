@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import model.Coord;
+import model.messages.Message;
 import model.player.Player;
 import model.rooms.Room;
 import controller.Direction;
@@ -26,12 +27,12 @@ public class NPC extends Player {
 
     private String name;
     private List<Direction> moveScript = new ArrayList<Direction>();
-    private List<String> speech = new ArrayList<String>();
+    private List<Message> speech = new ArrayList<Message>();
     private int currentStepInScript = 0;
 
     private Coord spriteCoord;
 
-    public NPC(Coord coord, Posture posture, int id, String name, Room startRoom, List<Direction> moveScript, List<String> speech, Coord spriteCoord) {
+    public NPC(Coord coord, Posture posture, int id, String name, Room startRoom, List<Direction> moveScript, List<Message> speech, Coord spriteCoord) {
         super(id, startRoom, coord, posture);
         this.name = name;
 
@@ -55,7 +56,7 @@ public class NPC extends Player {
         return spriteCoord;
     }
 
-    public List<String> getSpeech() {
+    public List<Message> getSpeech() {
         return speech;
     }
 
@@ -117,7 +118,7 @@ public class NPC extends Player {
         Coord currentNPCStartCoord = null;
         Posture currentNPCStartPosture = null;
         List<Direction> currentNPCMoveScript = new ArrayList<Direction>();
-        List<String> currentNPCSpeech = new ArrayList<String>();
+        List<Message> currentNPCSpeech = new ArrayList<Message>();
         Coord currentNPCspriteCoord = null;
 
         while ((line = reader.readLine()) != null) {
@@ -181,7 +182,7 @@ public class NPC extends Player {
                 String[] speech = tokens[1].split(";");
 
                 for (String str : speech) {
-                    currentNPCSpeech.add(str);
+                    currentNPCSpeech.add(new Message(str));
                 }
             }
             // START COORD

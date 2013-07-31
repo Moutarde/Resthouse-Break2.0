@@ -1,4 +1,4 @@
-package model;
+package model.messages;
 
 
 /**
@@ -8,7 +8,8 @@ package model;
 public class Message {
     String currentString = "";
 
-    public Message() {
+    public Message(String str) {
+        currentString = str;
     }
 
     public String getString() {
