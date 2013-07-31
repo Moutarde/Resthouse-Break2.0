@@ -3,6 +3,7 @@ package controller;
 import gui.UserInterface;
 import model.GameModel;
 import model.items.Item;
+import model.items.Key;
 
 /**
  * @author Nicolas Kniebihler
@@ -75,7 +76,14 @@ public class GameController {
                 conversationHandler.start();
             }
             else if (model.getPlayer().isInFrontOfALockedDoor()) {
-                model.setNewMessage(UserInterface.getLang().getString("doorLocked"));
+                Key key = model.getPlayer().getKeyForFrontDoorIFP();
+                if (key != null) {
+                    boolean useSucceed = key.use(model);
+                    model.setNewMessage(useSucceed ? key.getUseFeedback() : key.getUseFailFeedback());
+                }
+                else {
+                    model.setNewMessage(UserInterface.getLang().getString("doorLocked"));
+                }
                 model.setGamePaused(true);
             }
         }

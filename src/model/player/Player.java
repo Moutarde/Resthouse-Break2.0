@@ -5,6 +5,7 @@ import model.Coord;
 import model.Move;
 import model.items.Chest;
 import model.items.Item;
+import model.items.Key;
 import model.npc.NPC;
 import model.rooms.Room;
 import model.rooms.RoomDoorPair;
@@ -237,5 +238,17 @@ public class Player {
 
     public boolean isInFrontOfALockedDoor() {
         return isInFrontOfADoor() && room.isDoorLocked(coord);
+    }
+
+    public Key getKeyForFrontDoorIFP() {
+        for (Item item : bag.getContent().keySet()) {
+            if (item instanceof Key) {
+                if (((Key)item).canOpenDoor(room, room.getMat().getSquareValue(coord))) {
+                    return (Key)item;
+                }
+            }
+        }
+
+        return null;
     }
 }

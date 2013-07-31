@@ -20,6 +20,16 @@ public class Key extends Item {
         this.doors.addAll(doors);
     }
 
+    public boolean canOpenDoor(Room room, int doorId) {
+        for (RoomDoorPair pair : doors) {
+            if (pair.door == doorId && Room.getRoom(pair.room).equals(room)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public boolean use(GameModel model) {
         for (RoomDoorPair pair : doors) {
