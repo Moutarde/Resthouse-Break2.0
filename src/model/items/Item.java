@@ -27,13 +27,15 @@ public class Item {
     private String useFeedback;
     private String useFailFeedback;
     private boolean isUsable = false;
+    private boolean isThrowable = true;
 
-    public Item(String name, String description, String useFeedback, String useFailFeedback, boolean isUsable) {
+    public Item(String name, String description, String useFeedback, String useFailFeedback, boolean isUsable, boolean isThrowable) {
         this.name = name;
         this.description = description;
         this.useFeedback = useFeedback;
         this.useFailFeedback = useFailFeedback;
         this.isUsable = isUsable;
+        this.isThrowable = isThrowable;
     }
 
     public String getName() {
@@ -54,6 +56,10 @@ public class Item {
 
     public boolean isUsable(GameModel model) {
         return isUsable;
+    }
+
+    public boolean isThrowable() {
+        return isThrowable;
     }
 
     public boolean use(GameModel model) {
@@ -151,7 +157,7 @@ public class Item {
                 Item item = null;
                 switch (currentItemType) {
                 case NORMAL:
-                    item = new Item(currentItemName, currentItemDescription, currentItemUseFeedback, currentItemUseFailFeedback, false);
+                    item = new Item(currentItemName, currentItemDescription, currentItemUseFeedback, currentItemUseFailFeedback, false, true);
                     break;
                 case KEY:
                     item = new Key(currentItemName, currentItemDescription, currentItemUseFeedback, currentItemUseFailFeedback, currentKeyDoorList);
@@ -173,4 +179,5 @@ public class Item {
 
         reader.close();
     }
+
 }

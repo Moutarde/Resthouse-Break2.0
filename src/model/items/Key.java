@@ -16,7 +16,7 @@ public class Key extends Item {
     private List<RoomDoorPair> doors = new ArrayList<RoomDoorPair>();
 
     public Key(String name, String description, String useFeedback, String useFailFeedback, List<RoomDoorPair> doors) {
-        super(name, description, useFeedback, useFailFeedback, true);
+        super(name, description, useFeedback, useFailFeedback, true, false);
         this.doors.addAll(doors);
     }
 

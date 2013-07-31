@@ -27,6 +27,10 @@ public abstract class Menu extends Observable {
         return nbElements;
     }
 
+    public void setNbElements(int i) {
+        this.nbElements = i;
+    }
+
     public int getPointedElementId() {
         return pointedElementId;
     }

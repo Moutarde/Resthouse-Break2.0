@@ -1,10 +1,11 @@
 package gui.contextMenu;
 
-import controller.actions.CloseMenu;
-import controller.actions.ShowMessage;
-import controller.actions.UseItem;
 import gui.UserInterface;
 import model.GameModel;
+import controller.actions.CloseMenu;
+import controller.actions.ShowMessage;
+import controller.actions.ThrowItem;
+import controller.actions.UseItem;
 
 /**
  * @author Nicolas Kniebihler
@@ -13,14 +14,16 @@ import model.GameModel;
 public class InspectItemBox extends Menu {
 
     private static enum Choice {
-        INSPECT, USE, RETURN;
+        USE, INSPECT, THROW, RETURN;
 
         public String toString() {
             switch (this) {
-            case INSPECT:
-                return UserInterface.getLang().getString("inspect");
             case USE:
                 return UserInterface.getLang().getString("use");
+            case INSPECT:
+                return UserInterface.getLang().getString("inspect");
+            case THROW:
+                return UserInterface.getLang().getString("throw");
             case RETURN:
                 return UserInterface.getLang().getString("return");
             }
@@ -41,13 +44,19 @@ public class InspectItemBox extends Menu {
             setChanged();
             notifyObservers(new CloseMenu());
             break;
+        case USE:
+            setChanged();
+            notifyObservers(new UseItem());
+            break;
         case INSPECT:
             setChanged();
             notifyObservers(new ShowMessage());
             break;
-        case USE:
+        case THROW:
             setChanged();
-            notifyObservers(new UseItem());
+            notifyObservers(new ThrowItem());
+            break;
+        default:
             break;
         }
     }

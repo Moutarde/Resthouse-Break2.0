@@ -1,0 +1,38 @@
+package controller.actions;
+
+import model.GameModel;
+import model.items.Item;
+import gui.UserInterface;
+import gui.contextMenu.BagMenu;
+import gui.contextMenu.Menu;
+import controller.MenuHandler;
+
+/**
+ * @author Nicolas Kniebihler
+ *
+ */
+public class ThrowItem implements IMenuAction {
+
+    @Override
+    public void execute(Menu menu, MenuHandler handler) {
+        GameModel model = menu.getModel();
+        Menu subMenu = model.getSubMenu();
+        if (subMenu != null && subMenu instanceof BagMenu) {
+            assert model.isSubMenuDisplayed() : "Trying to throw item while subMenu isn't displayed";
+
+            int itemId = subMenu.getPointedElementId();
+            Item item = model.getPlayer().getBag().getItem(itemId);
+            if (item.isThrowable()) {
+                model.getPlayer().getBag().removeItemIFP(item);
+                model.setNewMessage(UserInterface.getLang().getString("thrown") + item.getName());
+                ((BagMenu)subMenu).setNbElements(model.getPlayer().getBag().getContent().size() + 1);
+                menu.display(false);
+            }
+            else {
+                model.setNewMessage(UserInterface.getLang().getString("notThrowable"));
+            }
+            model.setGamePaused(true);
+        }
+    }
+
+}
