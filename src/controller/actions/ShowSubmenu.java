@@ -1,7 +1,7 @@
 package controller.actions;
 
+import gui.contextMenu.ContextMenu;
 import gui.contextMenu.Menu;
-import gui.contextMenu.MenuCategory;
 import model.GameModel;
 import controller.MenuHandler;
 
@@ -15,8 +15,8 @@ public class ShowSubmenu implements IMenuAction {
     public void execute(Menu menu, MenuHandler handler) {
         GameModel model = menu.getModel();
         assert !model.isSubMenuDisplayed() : "Trying to show subMenu while it is already displayed";
-        MenuCategory pointedCategory = MenuCategory.values()[model.getMenu().getPointedElementId()];
-        if (pointedCategory == MenuCategory.BAG) {
+        ContextMenu.MenuCategory pointedCategory = ContextMenu.MenuCategory.values()[model.getMenu().getPointedElementId()];
+        if (pointedCategory == ContextMenu.MenuCategory.BAG) {
             handler.showBag();
         }
         else {

@@ -5,13 +5,28 @@ import controller.actions.ShowSubmenu;
 import gui.UserInterface;
 import model.GameModel;
 
-
 /**
  * @author Nicolas Kniebihler
  *
  */
-
 public class ContextMenu extends Menu {
+
+    public static enum MenuCategory {
+        BAG, QUIT, RETURN;
+
+        public String toString() {
+            switch (this) {
+            case BAG:
+                return UserInterface.getLang().getString("bag");
+            case QUIT:
+                return UserInterface.getLang().getString("menuQuit");
+            case RETURN:
+                return UserInterface.getLang().getString("return");
+            }
+
+            return null;
+        }
+    }
 
     public ContextMenu(GameModel model) {
         super("menu", MenuCategory.values().length, model);
