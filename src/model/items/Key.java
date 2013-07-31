@@ -42,4 +42,9 @@ public class Key extends Item {
         return false;
     }
 
+    @Override
+    public boolean isUsable(GameModel model) {
+        return super.isUsable(model) && model.getPlayer().isInFrontOfALockedDoor();
+    }
+
 }

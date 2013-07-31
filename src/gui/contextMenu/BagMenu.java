@@ -1,5 +1,7 @@
 package gui.contextMenu;
 
+import controller.actions.CloseMenu;
+import controller.actions.ShowChoiceBox;
 import gui.UserInterface;
 import model.GameModel;
 import model.items.Item;
@@ -21,11 +23,11 @@ public class BagMenu extends Menu {
     public void selectElement() {
         if (getPointedElementId() == getNbElements() - 1) {
             setChanged();
-            notifyObservers(MenuAction.RETURN);
+            notifyObservers(new CloseMenu());
         }
         else {
             setChanged();
-            notifyObservers(MenuAction.SHOW_CHOICE_BOX);
+            notifyObservers(new ShowChoiceBox());
         }
     }
 

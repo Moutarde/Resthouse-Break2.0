@@ -53,6 +53,21 @@ public class GameModel extends Observable {
         return player;
     }
 
+    public Menu getPrioritaryDisplayedMenu() {
+        if (isChoiceBoxDisplayed()) {
+            return choiceBox;
+        }
+        else if (isSubMenuDisplayed()) {
+            return subMenu;
+        }
+        else if (isMenuDisplayed()) {
+            return menu;
+        }
+        else {
+            return null;
+        }
+    }
+
     // MESSAGE
 
     public Message getCurrentMessage() {

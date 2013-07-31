@@ -1,5 +1,7 @@
 package gui.contextMenu;
 
+import controller.actions.CloseMenu;
+import controller.actions.ShowSubmenu;
 import gui.UserInterface;
 import model.GameModel;
 
@@ -21,14 +23,14 @@ public class ContextMenu extends Menu {
         switch (pointedCategory) {
         case BAG:
             setChanged();
-            notifyObservers(MenuAction.SHOW_SUBMENU);
+            notifyObservers(new ShowSubmenu());
             break;
         case QUIT:
             UserInterface.quit();
             break;
         case RETURN:
             setChanged();
-            notifyObservers(MenuAction.RETURN);
+            notifyObservers(new CloseMenu());
             break;
         default:
             break;
@@ -39,4 +41,11 @@ public class ContextMenu extends Menu {
     public String getElementString(int index) {
         return MenuCategory.values()[index].toString();
     }
+
+    @Override
+    public void display(boolean value) {
+        super.display(value);
+        getModel().setGamePaused(value);
+    }
+
 }

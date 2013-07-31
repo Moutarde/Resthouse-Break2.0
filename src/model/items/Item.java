@@ -52,7 +52,7 @@ public class Item {
         return UserInterface.getLang().getString(useFailFeedback);
     }
 
-    public boolean isUsable() {
+    public boolean isUsable(GameModel model) {
         return isUsable;
     }
 

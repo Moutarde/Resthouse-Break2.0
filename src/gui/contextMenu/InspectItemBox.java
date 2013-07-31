@@ -1,5 +1,8 @@
 package gui.contextMenu;
 
+import controller.actions.CloseMenu;
+import controller.actions.ShowMessage;
+import controller.actions.UseItem;
 import gui.UserInterface;
 import model.GameModel;
 
@@ -36,15 +39,15 @@ public class InspectItemBox extends Menu {
         switch (pointedChoice) {
         case RETURN:
             setChanged();
-            notifyObservers(MenuAction.RETURN);
+            notifyObservers(new CloseMenu());
             break;
         case INSPECT:
             setChanged();
-            notifyObservers(MenuAction.SHOW_MESSAGE);
+            notifyObservers(new ShowMessage());
             break;
         case USE:
             setChanged();
-            notifyObservers(MenuAction.USE_ITEM);
+            notifyObservers(new UseItem());
             break;
         }
     }
