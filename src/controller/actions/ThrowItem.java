@@ -25,17 +25,13 @@ public class ThrowItem implements IMenuAction {
         Menu subMenu = model.getSubMenu();
         if (subMenu != null && subMenu instanceof BagMenu) {
             assert model.isSubMenuDisplayed() : "Trying to throw item while subMenu isn't displayed";
+            assert item.isThrowable() : "Trying to throw a non-throwable item";
 
-            if (item.isThrowable()) {
-                model.getPlayer().getBag().removeItemIFP(item);
-                model.setNewMessage(UserInterface.getLang().getString("thrown") + item.getName());
-                ((BagMenu)subMenu).setNbElements(model.getPlayer().getBag().getContent().size() + 1);
-                menu.display(false);
-            }
-            else {
-                model.setNewMessage(UserInterface.getLang().getString("notThrowable"));
-            }
-            model.setGamePaused(true);
+            model.getPlayer().getBag().removeItemIFP(item);
+            model.setNewMessage(UserInterface.getLang().getString("thrown") + item.getName());
+
+            ((BagMenu)subMenu).setNbElements(model.getPlayer().getBag().getContent().size() + 1);
+            menu.display(false);
         }
     }
 

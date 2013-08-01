@@ -3,6 +3,7 @@ package controller.actions;
 import gui.contextMenu.Menu;
 import model.GameModel;
 import model.messages.Message;
+import model.messages.Question;
 import controller.MenuHandler;
 
 /**
@@ -20,8 +21,21 @@ public class ShowMessage implements IMenuAction {
     @Override
     public void execute(Menu menu, MenuHandler handler) {
         GameModel model = menu.getModel();
-        model.setNewMessage(message);
-        model.setGamePaused(true);
+
+        if (message == null) {
+            model.hideMessage();
+            if (!model.isMenuDisplayed()) {
+                model.setGamePaused(false);
+            }
+        }
+        else {
+            model.setNewMessage(message);
+            model.setGamePaused(true);
+
+            if (message instanceof Question) {
+                handler.showSelectAnswerBox((Question)message);
+            }
+        }
     }
 
 }

@@ -3,12 +3,14 @@ package controller;
 import gui.contextMenu.BagMenu;
 import gui.contextMenu.InspectItemBox;
 import gui.contextMenu.Menu;
+import gui.contextMenu.SelectAnswerBox;
 
 import java.util.Observable;
 import java.util.Observer;
 
 import model.GameModel;
 import model.items.Item;
+import model.messages.Question;
 import controller.actions.IMenuAction;
 
 /**
@@ -33,13 +35,22 @@ public class MenuHandler implements Observer {
         model.setSubMenu(subMenu);
     }
 
-    // CHOICE BOX
+    // INSPECT ITEM BOX
 
     public void showInspectItemBox(Item item) {
         Menu inspectItemBox = new InspectItemBox(model, item);
         inspectItemBox.addObserver(this);
         inspectItemBox.display(true);
         model.setInspectItemBox(inspectItemBox);
+    }
+
+    // SELECT ANSWER BOX
+
+    public void showSelectAnswerBox(Question question) {
+        Menu selectAnswerBox = new SelectAnswerBox(model, question);
+        selectAnswerBox.addObserver(this);
+        selectAnswerBox.display(true);
+        model.setSelectAnswerBox(selectAnswerBox);
     }
 
     @Override

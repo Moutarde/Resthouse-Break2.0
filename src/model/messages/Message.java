@@ -1,11 +1,13 @@
 package model.messages;
 
+import java.util.Observable;
+
 
 /**
  * @author Nicolas Kniebihler
  *
  */
-public class Message {
+public class Message extends Observable {
     String currentString = "";
 
     public Message(String str) {

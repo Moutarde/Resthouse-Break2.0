@@ -25,6 +25,7 @@ public class GameModel extends Observable {
     private ContextMenu menu;
     private Menu subMenu;
     private Menu inspectItemBox;
+    private Menu selectAnswerBox;
     private boolean gameIsPaused = false;
 
     public GameModel() {
@@ -126,6 +127,20 @@ public class GameModel extends Observable {
 
     public boolean isInspectItemBoxDisplayed() {
         return inspectItemBox != null && inspectItemBox.isDisplayed();
+    }
+
+    // SELECT ANSWER BOX
+
+    public Menu getSelectAnswerBox() {
+        return selectAnswerBox;
+    }
+
+    public void setSelectAnswerBox(Menu menu) {
+        selectAnswerBox = menu;
+    }
+
+    public boolean isSelectAnswerBoxDisplayed() {
+        return selectAnswerBox != null && selectAnswerBox.isDisplayed();
     }
 
     // PAUSE

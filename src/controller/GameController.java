@@ -48,7 +48,10 @@ public class GameController {
 
     public void onValidate() {
         if (model.isMessageDisplayed()) {
-            if (conversationHandler.isSpeaking()) {
+            if (model.isSelectAnswerBoxDisplayed()) {
+                model.getSelectAnswerBox().selectElement();
+            }
+            else if (conversationHandler.isSpeaking()) {
                 conversationHandler.continueSpeech();
             }
             else {
@@ -98,6 +101,9 @@ public class GameController {
     public void onMoveMenuSelection(Direction d) {
         if (!model.isMessageDisplayed()) {
             menuHandler.moveSelection(d == Direction.DOWN ? 1 : -1);
+        }
+        else if (model.isSelectAnswerBoxDisplayed()) {
+            model.getSelectAnswerBox().changePointedElement(d == Direction.DOWN ? 1 : -1);
         }
     }
 }
