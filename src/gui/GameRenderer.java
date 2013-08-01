@@ -147,11 +147,11 @@ public class GameRenderer implements Renderer {
         }
 
         // Render the choice box
-        if(model.isChoiceBoxDisplayed()) {
+        if(model.isInspectItemBoxDisplayed()) {
             Coord menuPosition = new Coord(GamePanel.SIZE.width / 3, GamePanel.SIZE.height / 3);
             drawFramedRect(g, menuPosition, GamePanel.CHOICEBOX_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getChoiceBox().getContent(), offset);
+            drawText(g, menuPosition, model.getInspectItemBox().getContent(), offset);
         }
     }
 

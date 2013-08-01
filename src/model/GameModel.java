@@ -24,7 +24,7 @@ public class GameModel extends Observable {
     private Message currentMessage = new Message("");
     private ContextMenu menu;
     private Menu subMenu;
-    private Menu choiceBox;
+    private Menu inspectItemBox;
     private boolean gameIsPaused = false;
 
     public GameModel() {
@@ -48,8 +48,8 @@ public class GameModel extends Observable {
     }
 
     public Menu getPrioritaryDisplayedMenu() {
-        if (isChoiceBoxDisplayed()) {
-            return choiceBox;
+        if (isInspectItemBoxDisplayed()) {
+            return inspectItemBox;
         }
         else if (isSubMenuDisplayed()) {
             return subMenu;
@@ -109,18 +109,18 @@ public class GameModel extends Observable {
         return subMenu != null && subMenu.isDisplayed();
     }
 
-    // CHOICE BOX
+    // INSPECT ITEM BOX
 
-    public Menu getChoiceBox() {
-        return choiceBox;
+    public Menu getInspectItemBox() {
+        return inspectItemBox;
     }
 
-    public void setChoiceBox(Menu menu) {
-        choiceBox = menu;
+    public void setInspectItemBox(Menu menu) {
+        inspectItemBox = menu;
     }
 
-    public boolean isChoiceBoxDisplayed() {
-        return choiceBox != null && choiceBox.isDisplayed();
+    public boolean isInspectItemBoxDisplayed() {
+        return inspectItemBox != null && inspectItemBox.isDisplayed();
     }
 
     // PAUSE

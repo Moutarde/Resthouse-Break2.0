@@ -8,6 +8,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.GameModel;
+import model.items.Item;
 import controller.actions.IMenuAction;
 
 /**
@@ -34,11 +35,11 @@ public class MenuHandler implements Observer {
 
     // CHOICE BOX
 
-    public void showInspectItemBox() {
-        Menu inspectItemBox = new InspectItemBox(model);
+    public void showInspectItemBox(Item item) {
+        Menu inspectItemBox = new InspectItemBox(model, item);
         inspectItemBox.addObserver(this);
         inspectItemBox.display(true);
-        model.setChoiceBox(inspectItemBox);
+        model.setInspectItemBox(inspectItemBox);
     }
 
     @Override

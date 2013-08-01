@@ -1,10 +1,10 @@
 package controller.actions;
 
-import model.GameModel;
-import model.items.Item;
 import gui.UserInterface;
 import gui.contextMenu.BagMenu;
 import gui.contextMenu.Menu;
+import model.GameModel;
+import model.items.Item;
 import controller.MenuHandler;
 
 /**
@@ -13,6 +13,12 @@ import controller.MenuHandler;
  */
 public class ThrowItem implements IMenuAction {
 
+    private Item item;
+
+    public ThrowItem(Item item) {
+        this.item = item;
+    }
+
     @Override
     public void execute(Menu menu, MenuHandler handler) {
         GameModel model = menu.getModel();
@@ -20,8 +26,6 @@ public class ThrowItem implements IMenuAction {
         if (subMenu != null && subMenu instanceof BagMenu) {
             assert model.isSubMenuDisplayed() : "Trying to throw item while subMenu isn't displayed";
 
-            int itemId = subMenu.getPointedElementId();
-            Item item = model.getPlayer().getBag().getItem(itemId);
             if (item.isThrowable()) {
                 model.getPlayer().getBag().removeItemIFP(item);
                 model.setNewMessage(UserInterface.getLang().getString("thrown") + item.getName());

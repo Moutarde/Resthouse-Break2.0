@@ -1,7 +1,7 @@
 package gui.contextMenu;
 
 import controller.actions.CloseMenu;
-import controller.actions.ShowChoiceBox;
+import controller.actions.ShowInspectItemBox;
 import gui.UserInterface;
 import model.GameModel;
 import model.items.Item;
@@ -21,13 +21,15 @@ public class BagMenu extends Menu {
 
     @Override
     public void selectElement() {
-        if (getPointedElementId() == getNbElements() - 1) {
+        int id = getPointedElementId();
+        if (id == getNbElements() - 1) {
             setChanged();
             notifyObservers(new CloseMenu());
         }
         else {
+            assert id < bag.getContent().size() : "Bag size and BagMenu size are not equal";
             setChanged();
-            notifyObservers(new ShowChoiceBox());
+            notifyObservers(new ShowInspectItemBox(bag.getItem(id)));
         }
     }
 

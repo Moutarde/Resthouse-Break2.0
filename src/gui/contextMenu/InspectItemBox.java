@@ -2,6 +2,8 @@ package gui.contextMenu;
 
 import gui.UserInterface;
 import model.GameModel;
+import model.items.Item;
+import model.messages.Message;
 import controller.actions.CloseMenu;
 import controller.actions.ShowMessage;
 import controller.actions.ThrowItem;
@@ -32,8 +34,12 @@ public class InspectItemBox extends Menu {
         }
     }
 
-    public InspectItemBox(GameModel model) {
+    private Item item;
+
+    public InspectItemBox(GameModel model, Item item) {
         super("", Choice.values().length, model);
+
+        this.item = item;
     }
 
     @Override
@@ -46,15 +52,15 @@ public class InspectItemBox extends Menu {
             break;
         case USE:
             setChanged();
-            notifyObservers(new UseItem());
+            notifyObservers(new UseItem(item));
             break;
         case INSPECT:
             setChanged();
-            notifyObservers(new ShowMessage());
+            notifyObservers(new ShowMessage(new Message(item.getDescription())));
             break;
         case THROW:
             setChanged();
-            notifyObservers(new ThrowItem());
+            notifyObservers(new ThrowItem(item));
             break;
         default:
             break;
