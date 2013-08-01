@@ -1,7 +1,5 @@
 package controller;
 
-import gui.UserInterface;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +16,6 @@ public class ConversationHandler {
 
     private int currentStep;
     private List<Message> currentSpeech = new ArrayList<Message>();
-    private String speakerName;
 
     private boolean isSpeaking = false;
 
@@ -34,13 +31,12 @@ public class ConversationHandler {
         NPC npc = model.getPlayer().getFrontNPC();
 
         currentSpeech.addAll(npc.getSpeech());
-        speakerName = npc.getName();
 
         displayCurrentMessage();
     }
 
     public void displayCurrentMessage() {
-        model.setNewMessage(speakerName + " : " + UserInterface.getLang().getString(currentSpeech.get(currentStep).getString()));
+        model.setNewMessage(currentSpeech.get(currentStep));
     }
 
     public void continueSpeech() {

@@ -1,5 +1,6 @@
 package model.npc;
 
+import gui.UserInterface;
 import gui.sprite.Posture;
 
 import java.io.BufferedReader;
@@ -182,7 +183,7 @@ public class NPC extends Player {
                 String[] speech = tokens[1].split(";");
 
                 for (String str : speech) {
-                    currentNPCSpeech.add(new Message(str));
+                    currentNPCSpeech.add(new Message(currentNPCName + " : " + UserInterface.getLang().getString(str)));
                 }
             }
             // START COORD

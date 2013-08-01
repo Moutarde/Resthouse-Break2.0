@@ -20,7 +20,7 @@ public class ShowMessage implements IMenuAction {
     @Override
     public void execute(Menu menu, MenuHandler handler) {
         GameModel model = menu.getModel();
-        model.setNewMessage(message.getString());
+        model.setNewMessage(message);
         model.setGamePaused(true);
     }
 

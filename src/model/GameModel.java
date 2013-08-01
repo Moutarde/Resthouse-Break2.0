@@ -68,13 +68,18 @@ public class GameModel extends Observable {
         return currentMessage;
     }
 
+    public void setNewMessage(Message message) {
+        assert message != null && !message.getString().equals("") : "Trying to set an empty message";
+        currentMessage = message;
+    }
+
     public void setNewMessage(String str) {
-        assert str != "" : "Trying to set an empty message";
-        currentMessage.setString(str);
+        assert str != null && !str.equals("") : "Trying to set an empty message";
+        setNewMessage(new Message(str));
     }
 
     public void hideMessage() {
-        currentMessage.setString("");
+        currentMessage = null;
     }
 
     public boolean isMessageDisplayed() {
