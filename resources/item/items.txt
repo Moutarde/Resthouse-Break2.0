@@ -1,6 +1,6 @@
 # types : normal, key
 #
-# key -> door=R_RoomName;id
+# key -> DOOR:id;R_RoomName
 
 O_TOOTH
 type=normal
@@ -12,5 +12,9 @@ DOOR:10;R_ADMIN
 END
 
 O_WHEEL_CHAIR
+type=normal
+END
+
+O_PACEMAKER
 type=normal
 END

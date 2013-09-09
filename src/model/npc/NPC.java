@@ -14,9 +14,12 @@ import java.util.List;
 
 import model.Coord;
 import model.messages.Message;
+import model.messages.Question;
 import model.player.Player;
 import model.rooms.Room;
 import controller.Direction;
+import controller.actions.IMenuAction;
+import controller.actions.ShowMessage;
 
 /**
  * @author Nicolas Kniebihler
@@ -183,7 +186,28 @@ public class NPC extends Player {
                 String[] speech = tokens[1].split(";");
 
                 for (String str : speech) {
-                    currentNPCSpeech.add(new Message(currentNPCName + " : " + UserInterface.getLang().getString(str)));
+                    if (str.startsWith("?")) {
+                        String subStr = str.substring(1, str.length());
+                        String[] questionTokens = subStr.split("\\(");
+
+                        String question = questionTokens[0];
+
+                        String[] answersTokens = questionTokens[1].substring(0, questionTokens[1].length() - 1).split(",");
+
+                        List<String> possibleAnswers = new ArrayList<String>();
+                        List<IMenuAction> actions = new ArrayList<IMenuAction>();
+                        for (String answer : answersTokens) {
+                            String[] answerTokens = answer.split(":");
+                            possibleAnswers.add(UserInterface.getLang().getString(answerTokens[0]));
+                            actions.add(new ShowMessage(new Message(currentNPCName + " : " + UserInterface.getLang().getString(answerTokens[1]))));
+                        }
+
+                        Question q = new Question(currentNPCName + " : " + UserInterface.getLang().getString(question), possibleAnswers, actions);
+                        currentNPCSpeech.add(q);
+                    }
+                    else {
+                        currentNPCSpeech.add(new Message(currentNPCName + " : " + UserInterface.getLang().getString(str)));
+                    }
                 }
             }
             // START COORD

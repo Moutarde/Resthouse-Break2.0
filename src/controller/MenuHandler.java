@@ -19,7 +19,7 @@ import controller.actions.IMenuAction;
  */
 public class MenuHandler implements Observer {
 
-    private GameModel model;
+    protected GameModel model;
 
     public MenuHandler(GameModel model) {
         this.model = model;
