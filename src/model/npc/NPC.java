@@ -13,8 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import model.Coord;
+import model.items.Item;
 import model.messages.Message;
+import model.messages.OpenStore;
 import model.messages.Question;
+import model.player.Bag;
 import model.player.Player;
 import model.rooms.Room;
 import controller.Direction;
@@ -36,8 +39,10 @@ public class NPC extends Player {
 
     private Coord spriteCoord;
 
-    public NPC(Coord coord, Posture posture, int id, String name, Room startRoom, List<Direction> moveScript, List<Message> speech, Coord spriteCoord) {
+    public NPC(Coord coord, Posture posture, int id, String name, Room startRoom, List<Direction> moveScript, List<Message> speech, Bag bag, Coord spriteCoord) {
         super(id, startRoom, coord, posture);
+        setBag(bag);
+
         this.name = name;
 
         if (!moveScript.isEmpty()) {
@@ -123,6 +128,7 @@ public class NPC extends Player {
         Posture currentNPCStartPosture = null;
         List<Direction> currentNPCMoveScript = new ArrayList<Direction>();
         List<Message> currentNPCSpeech = new ArrayList<Message>();
+        Bag currentNPCBag = new Bag();
         Coord currentNPCspriteCoord = null;
 
         while ((line = reader.readLine()) != null) {
@@ -186,7 +192,12 @@ public class NPC extends Player {
                 String[] speech = tokens[1].split(";");
 
                 for (String str : speech) {
-                    if (str.startsWith("?")) {
+                    if (str.startsWith("OPENSTORE:")) {
+                        String[] storeTokens = str.split(":");
+                        OpenStore o = new OpenStore(UserInterface.getLang().getString(storeTokens[1]));
+                        currentNPCSpeech.add(o);
+                    }
+                    else if (str.startsWith("?")) {
                         String subStr = str.substring(1, str.length());
                         String[] questionTokens = subStr.split("\\(");
 
@@ -210,6 +221,21 @@ public class NPC extends Player {
                     }
                 }
             }
+            // SPEECH
+            else if (line.startsWith("bag=")) {
+                String[] tokens = line.split("=");
+                String[] bag = tokens[1].split(";");
+
+                for (String str : bag) {
+                    assert str.startsWith("(") && str.endsWith(")") : "FORMAT ERROR (bag) : bag=(O_ITEM1,nb_item1);(O_ITEM2,nb_item2)";
+
+                    String[] slot = str.substring(1, str.length() - 1).split(",");
+                    String itemId = slot[0];
+                    int itemAmount = Integer.parseInt(slot[1]);
+
+                    currentNPCBag.addItem(Item.getItem(itemId), itemAmount);
+                }
+            }
             // START COORD
             else if (line.startsWith("spriteCoord=")) {
                 String[] tokens = line.split("=");
@@ -221,7 +247,7 @@ public class NPC extends Player {
             {
                 Room startRoom = Room.getRoom(currentNPCStartRoom);
 
-                NPC npc = new NPC(currentNPCStartCoord, currentNPCStartPosture, currentNumericId, currentNPCName, startRoom, currentNPCMoveScript, currentNPCSpeech, currentNPCspriteCoord);
+                NPC npc = new NPC(currentNPCStartCoord, currentNPCStartPosture, currentNumericId, currentNPCName, startRoom, currentNPCMoveScript, currentNPCSpeech, currentNPCBag, currentNPCspriteCoord);
                 npcList.put(currentNPCId, npc);
 
                 currentNPCId = null;

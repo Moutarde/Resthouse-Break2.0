@@ -2,13 +2,18 @@ package controller;
 
 import gui.contextMenu.Menu;
 import gui.contextMenu.SelectAnswerBox;
+import gui.contextMenu.StoreMenu;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import controller.actions.CloseMenu;
+import controller.actions.IMenuAction;
+
 import model.GameModel;
 import model.messages.Message;
+import model.messages.OpenStore;
 import model.messages.Question;
 import model.npc.NPC;
 
@@ -19,6 +24,7 @@ import model.npc.NPC;
 public class ConversationHandler extends MenuHandler {
     private int currentStep;
     private List<Message> currentSpeech = new ArrayList<Message>();
+    private NPC speaker;
 
     private boolean isSpeaking = false;
 
@@ -31,15 +37,15 @@ public class ConversationHandler extends MenuHandler {
         isSpeaking = true;
         currentStep = 0;
 
-        NPC npc = model.getPlayer().getFrontNPC();
+        speaker = model.getPlayer().getFrontNPC();
 
-        currentSpeech.addAll(npc.getSpeech());
+        currentSpeech.addAll(speaker.getSpeech());
 
         displayCurrentMessage();
     }
 
     public void displayCurrentMessage() {
-        Message m = currentSpeech.get(currentStep);
+        Message m = speaker.getSpeech().get(currentStep);
 
         model.setNewMessage(m);
 
@@ -50,15 +56,21 @@ public class ConversationHandler extends MenuHandler {
             selectAnswerBox.display(true);
             model.setSelectAnswerBox(selectAnswerBox);
         }
+        else if (m instanceof OpenStore) {
+            Menu storeMenu = new StoreMenu(model, speaker);
+            storeMenu.addObserver(this);
+            storeMenu.display(true);
+            model.setStoreMenu(storeMenu);
+        }
     }
 
     public void continueSpeech() {
-        assert !currentSpeech.isEmpty() : "Trying to continue an empty speech";
+        assert speaker != null : "Trying to continue a speech without speaker";
 
         currentStep++;
-        if (currentStep >= currentSpeech.size()) {
+        if (currentStep >= speaker.getSpeech().size()) { // Speech finished
             currentStep = 0;
-            currentSpeech.clear();
+            speaker = null;
             isSpeaking = false;
             model.hideMessage();
             model.setGamePaused(false);
@@ -76,11 +88,26 @@ public class ConversationHandler extends MenuHandler {
     public void update(Observable obs, Object action) {
         if (isSpeaking) {
             if (obs instanceof Question) {
-                ((Question)obs).getAnswerActionIFP().execute(model.getMenu(), this);
+                ((IMenuAction)action).execute(model.getMenu(), this);
             }
             else {
                 super.update(obs, action);
+                if (obs instanceof StoreMenu && action instanceof CloseMenu) {
+                    continueSpeech();
+                }
             }
         }
     }
+
+    @Override
+    public void validate() {
+        Menu prioritaryDisplayedMenu = model.getPrioritaryDisplayedMenu();
+        if (prioritaryDisplayedMenu != null) {
+            prioritaryDisplayedMenu.selectElement();
+        }
+        else {
+            continueSpeech();
+        }
+    }
+
 }

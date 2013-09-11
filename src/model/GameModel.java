@@ -26,6 +26,7 @@ public class GameModel extends Observable {
     private Menu subMenu;
     private Menu inspectItemBox;
     private Menu selectAnswerBox;
+    private Menu storeMenu;
     private boolean gameIsPaused = false;
 
     public GameModel() {
@@ -49,14 +50,24 @@ public class GameModel extends Observable {
     }
 
     public Menu getPrioritaryDisplayedMenu() {
-        if (isInspectItemBoxDisplayed()) {
-            return inspectItemBox;
-        }
-        else if (isSubMenuDisplayed()) {
-            return subMenu;
+        if (isStoreMenuDisplayed()) {
+            if (isInspectItemBoxDisplayed()) {
+                return inspectItemBox;
+            }
+            else {
+                return storeMenu;
+            }
         }
         else if (isMenuDisplayed()) {
-            return menu;
+            if (isInspectItemBoxDisplayed()) {
+                return inspectItemBox;
+            }
+            else if (isSubMenuDisplayed()) {
+                return subMenu;
+            }
+            else {
+                return menu;
+            }
         }
         else {
             return null;
@@ -143,6 +154,20 @@ public class GameModel extends Observable {
         return selectAnswerBox != null && selectAnswerBox.isDisplayed();
     }
 
+    // STORE MENU
+
+    public Menu getStoreMenu() {
+        return storeMenu;
+    }
+
+    public void setStoreMenu(Menu menu) {
+        storeMenu = menu;
+    }
+
+    public boolean isStoreMenuDisplayed() {
+        return storeMenu != null && storeMenu.isDisplayed();
+    }
+
     // PAUSE
 
     public void setGamePaused(boolean isPaused) {
@@ -175,4 +200,5 @@ public class GameModel extends Observable {
         // TODO Auto-generated method stub
 
     }
+
 }

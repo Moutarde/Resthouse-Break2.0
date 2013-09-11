@@ -29,7 +29,7 @@ public class Question extends Message {
     public void answer(int id) {
         this.answerId = id;
         setChanged();
-        notifyObservers();
+        notifyObservers(getAnswerActionIFP());
     }
 
     public IMenuAction getAnswerActionIFP() {

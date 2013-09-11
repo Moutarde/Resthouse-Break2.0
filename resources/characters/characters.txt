@@ -32,6 +32,17 @@ speech=speechHello2
 spriteCoord=4,1
 END
 
+C_TESTSTORE
+name=teststore
+startRooom=R_GINETTE
+startCoord=1,1
+startPosture=LOOK_DOWN
+moveScript=NONE
+speech=OPENSTORE:speechStore1;speechStore2
+bag=(O_WHEEL_CHAIR,1);(O_PACEMAKER,2)
+spriteCoord=0,1
+END
+
 C_TESTQUESTION
 name=testquestion
 startRooom=R_GINETTE

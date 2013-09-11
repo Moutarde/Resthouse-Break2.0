@@ -52,7 +52,7 @@ public class GameController {
                 model.getSelectAnswerBox().selectElement();
             }
             else if (conversationHandler.isSpeaking()) {
-                conversationHandler.continueSpeech();
+                conversationHandler.validate();
             }
             else {
                 model.hideMessage();
@@ -99,6 +99,14 @@ public class GameController {
     }
 
     public void onMoveMenuSelection(Direction d) {
+        if (model.isStoreMenuDisplayed()) {
+            if (model.isInspectItemBoxDisplayed()) {
+                menuHandler.moveSelection(d == Direction.DOWN ? 1 : -1);
+            }
+            else {
+                model.getStoreMenu().changePointedElement(d == Direction.DOWN ? 1 : -1);
+            }
+        }
         if (!model.isMessageDisplayed()) {
             menuHandler.moveSelection(d == Direction.DOWN ? 1 : -1);
         }

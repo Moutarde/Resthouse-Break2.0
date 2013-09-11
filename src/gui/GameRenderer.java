@@ -161,6 +161,14 @@ public class GameRenderer implements Renderer {
             Coord offset = new Coord(10, 10);
             drawText(g, menuPosition, model.getSelectAnswerBox().getContent(), offset);
         }
+
+        // Render the store menu
+        if(model.isStoreMenuDisplayed()) {
+            Coord menuPosition = new Coord(0, GamePanel.SIZE.height - (GamePanel.TEXT_ZONE_HEIGHT + GamePanel.STORE_MENU_SIZE.height));
+            drawFramedRect(g, menuPosition, GamePanel.STORE_MENU_SIZE, 2);
+            Coord offset = new Coord(10, 10);
+            drawText(g, menuPosition, model.getStoreMenu().getContent(), offset);
+        }
     }
 
     private static void drawFramedRect(Graphics g, Coord position, Dimension size, int borderWidth) {

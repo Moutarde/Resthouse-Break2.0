@@ -72,6 +72,10 @@ public class Player {
         return bag;
     }
 
+    protected void setBag(Bag bag) {
+        this.bag = bag;
+    }
+
     public void moveSquare(Direction dir) {
         room.freeSquare(coord);
         coord = getNextSquare(dir);

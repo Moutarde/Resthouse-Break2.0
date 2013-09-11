@@ -20,12 +20,16 @@ public class Bag {
     }
 
     public void addItem(Item i) {
+        addItem(i, 1);
+    }
+
+    public void addItem(Item i, int nb) {
         if (items.containsKey(i)) {
             int currentAmount = items.get(i);
-            items.put(i, ++currentAmount);
+            items.put(i, currentAmount + nb);
         }
         else {
-            items.put(i, 1);
+            items.put(i, nb);
         }
     }
 

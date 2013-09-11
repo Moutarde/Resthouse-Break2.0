@@ -1,22 +1,23 @@
 package gui.contextMenu;
 
-import controller.actions.CloseMenu;
-import controller.actions.ShowInspectItemBox;
 import gui.UserInterface;
 import model.GameModel;
 import model.items.Item;
 import model.player.Bag;
+import model.player.Player;
+import controller.actions.CloseMenu;
+import controller.actions.ShowInspectItemBox;
 
 /**
  * @author Nicolas Kniebihler
  *
  */
 public class BagMenu extends Menu {
-    private Bag bag;
+    protected Bag bag;
 
-    public BagMenu(GameModel model) {
-        super("bag", model.getPlayer().getBag().getContent().size() + 1, model);
-        this.bag = model.getPlayer().getBag();
+    public BagMenu(GameModel model, Player player) {
+        super("bag", player.getBag().getContent().size() + 1, model);
+        this.bag = player.getBag();
     }
 
     @Override
