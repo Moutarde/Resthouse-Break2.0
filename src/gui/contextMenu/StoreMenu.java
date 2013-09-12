@@ -1,6 +1,7 @@
 package gui.contextMenu;
 
 import model.GameModel;
+import model.items.Item;
 import model.player.Player;
 
 /**
@@ -13,9 +14,14 @@ public class StoreMenu extends BagMenu {
         super(model, player);
     }
 
-    @Override
-    public String getElementString(int index) {
-        return super.getElementString(index);
+    public String getPointedElementDescr() {
+        Item pointedItem = getPointedItem();
+        if (pointedItem == null) {
+            return "";
+        }
+        else {
+            return pointedItem.getDescription();
+        }
     }
 
 }

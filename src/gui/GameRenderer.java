@@ -1,5 +1,6 @@
 package gui;
 
+import gui.contextMenu.StoreMenu;
 import gui.sprite.Sprite;
 import gui.sprite.SpriteSheet;
 
@@ -121,10 +122,11 @@ public class GameRenderer implements Renderer {
         // Render the bottom message
         if(model.isMessageDisplayed()) {
             Coord messagePosition = new Coord(0, GamePanel.SIZE.height - GamePanel.TEXT_ZONE_HEIGHT);
-            drawFramedRect(g, messagePosition, new Dimension(GamePanel.SIZE.width, GamePanel.TEXT_ZONE_HEIGHT), 2);
+            Dimension messageSize = new Dimension(GamePanel.SIZE.width, GamePanel.TEXT_ZONE_HEIGHT);
+            drawFramedRect(g, messagePosition, messageSize, 2);
 
             Coord offset = new Coord(10, 10);
-            drawText(g, messagePosition, model.getCurrentMessage().getString(), offset);
+            drawText(g, messagePosition, model.getCurrentMessage().getString(), offset, messageSize);
 
             String pressEnter = UserInterface.getLang().getString("pressEnter");
             g.drawString(pressEnter, GamePanel.SIZE.width - (offset.getX() + g.getFontMetrics().stringWidth(pressEnter)), GamePanel.SIZE.height - offset.getY());
@@ -135,7 +137,7 @@ public class GameRenderer implements Renderer {
             Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.MENU_SIZE.width, 0);
             drawFramedRect(g, menuPosition, GamePanel.MENU_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getMenu().getContent(), offset);
+            drawText(g, menuPosition, model.getMenu().getContent(), offset, GamePanel.MENU_SIZE);
         }
 
         // Render the sub menu
@@ -143,7 +145,22 @@ public class GameRenderer implements Renderer {
             Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.SUBMENU_SIZE.width, 0);
             drawFramedRect(g, menuPosition, GamePanel.SUBMENU_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getSubMenu().getContent(), offset);
+            drawText(g, menuPosition, model.getSubMenu().getContent(), offset, GamePanel.SUBMENU_SIZE);
+        }
+
+        // Render the store menu
+        if(model.isStoreMenuDisplayed()) {
+            // STORE
+            Coord menuPosition = new Coord(0, GamePanel.SIZE.height - (GamePanel.TEXT_ZONE_HEIGHT + GamePanel.STORE_MENU_SIZE.height));
+            drawFramedRect(g, menuPosition, GamePanel.STORE_MENU_SIZE, 2);
+            Coord offset = new Coord(10, 10);
+            drawText(g, menuPosition, model.getStoreMenu().getContent(), offset, GamePanel.STORE_MENU_SIZE);
+
+            // DETAILS
+            Coord detailsPosition = new Coord(menuPosition.getX() + GamePanel.STORE_MENU_SIZE.width, menuPosition.getY());
+            drawFramedRect(g, detailsPosition, GamePanel.STORE_MENU_DETAILS_SIZE, 2);
+            assert model.getStoreMenu() instanceof StoreMenu : "Store menu is not an instance of StoreMenu";
+            drawText(g, detailsPosition, ((StoreMenu)model.getStoreMenu()).getPointedElementDescr(), offset, GamePanel.STORE_MENU_DETAILS_SIZE);
         }
 
         // Render the inspect item box
@@ -151,7 +168,7 @@ public class GameRenderer implements Renderer {
             Coord menuPosition = new Coord(GamePanel.SIZE.width / 3, GamePanel.SIZE.height / 3);
             drawFramedRect(g, menuPosition, GamePanel.INSPECT_ITEM_BOX_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getInspectItemBox().getContent(), offset);
+            drawText(g, menuPosition, model.getInspectItemBox().getContent(), offset, GamePanel.INSPECT_ITEM_BOX_SIZE);
         }
 
         // Render the select answer box
@@ -159,15 +176,7 @@ public class GameRenderer implements Renderer {
             Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.SELECT_ANSWER_BOX_SIZE.width, GamePanel.SIZE.height - (GamePanel.TEXT_ZONE_HEIGHT + GamePanel.SELECT_ANSWER_BOX_SIZE.height));
             drawFramedRect(g, menuPosition, GamePanel.SELECT_ANSWER_BOX_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getSelectAnswerBox().getContent(), offset);
-        }
-
-        // Render the store menu
-        if(model.isStoreMenuDisplayed()) {
-            Coord menuPosition = new Coord(0, GamePanel.SIZE.height - (GamePanel.TEXT_ZONE_HEIGHT + GamePanel.STORE_MENU_SIZE.height));
-            drawFramedRect(g, menuPosition, GamePanel.STORE_MENU_SIZE, 2);
-            Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getStoreMenu().getContent(), offset);
+            drawText(g, menuPosition, model.getSelectAnswerBox().getContent(), offset, GamePanel.SELECT_ANSWER_BOX_SIZE);
         }
     }
 
@@ -182,14 +191,34 @@ public class GameRenderer implements Renderer {
         }
     }
 
-    private static void drawText(Graphics g, Coord position, String content, Coord offset) {
+    private static void drawText(Graphics g, Coord position, String content, Coord offset, Dimension maxSpace) {
         g.setColor(Color.black);
         int textHeight = g.getFontMetrics().getHeight();
         int offsetX = offset.getX();
         int offsetY = offset.getY() + textHeight/2;
         String[] lines = content.split("\n");
         for (String string : lines) {
-            g.drawString(string, position.getX() + offsetX, position.getY() + offsetY);
+            if (g.getFontMetrics().stringWidth(string) + 2 * offsetX > maxSpace.width) {
+                int wordPosition = offsetX;
+                String[] words = string.split(" ");
+
+                for (String word : words) {
+                    int wordSize = g.getFontMetrics().stringWidth(word);
+                    int wordSizeWithSpace = g.getFontMetrics().stringWidth(word + " ");
+
+                    if (wordPosition + wordSize > maxSpace.width + offsetX) {
+                        offsetY += textHeight;
+                        wordPosition = offsetX;
+                    }
+
+                    g.drawString(word + " ", position.getX() + wordPosition, position.getY() + offsetY);
+                    wordPosition += wordSizeWithSpace;
+                }
+            }
+            else {
+                g.drawString(string, position.getX() + offsetX, position.getY() + offsetY);
+            }
+
             offsetY += textHeight;
         }
     }

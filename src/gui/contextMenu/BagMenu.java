@@ -20,17 +20,27 @@ public class BagMenu extends Menu {
         this.bag = player.getBag();
     }
 
-    @Override
-    public void selectElement() {
+    protected Item getPointedItem() {
         int id = getPointedElementId();
         if (id == getNbElements() - 1) {
+            return null;
+        }
+        else {
+            assert id < bag.getContent().size() : "Bag size and BagMenu size are not equal";
+            return bag.getItem(id);
+        }
+    }
+
+    @Override
+    public void selectElement() {
+        Item pointedItem = getPointedItem();
+        if (pointedItem == null) {
             setChanged();
             notifyObservers(new CloseMenu());
         }
         else {
-            assert id < bag.getContent().size() : "Bag size and BagMenu size are not equal";
             setChanged();
-            notifyObservers(new ShowInspectItemBox(bag.getItem(id)));
+            notifyObservers(new ShowInspectItemBox(pointedItem));
         }
     }
 
