@@ -29,7 +29,7 @@ public class MenuHandler implements Observer {
     // SUB MENU
 
     public void showBag() {
-        Menu subMenu = new BagMenu(model, model.getPlayer());
+        Menu subMenu = new BagMenu(model, model.getPlayer().getBag());
         subMenu.addObserver(this);
         subMenu.display(true);
         model.setSubMenu(subMenu);

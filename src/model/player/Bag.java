@@ -34,16 +34,20 @@ public class Bag {
     }
 
     public void removeItemIFP(Item i) {
+        removeItemIFP(i, 1);
+    }
+
+    public void removeItemIFP(Item i, int nb) {
         if (!items.containsKey(i)) {
             return;
         }
 
         int currentAmount = items.get(i);
-        if (currentAmount == 1) {
+        if (currentAmount <= nb) {
             items.remove(i);
         }
         else {
-            items.put(i, --currentAmount);
+            items.put(i, currentAmount - nb);
         }
     }
 

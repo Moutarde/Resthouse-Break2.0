@@ -27,6 +27,7 @@ public class GameModel extends Observable {
     private Menu inspectItemBox;
     private Menu selectAnswerBox;
     private Menu storeMenu;
+    private Menu transactionMenu;
     private boolean gameIsPaused = false;
 
     public GameModel() {
@@ -51,8 +52,8 @@ public class GameModel extends Observable {
 
     public Menu getPrioritaryDisplayedMenu() {
         if (isStoreMenuDisplayed()) {
-            if (isInspectItemBoxDisplayed()) {
-                return inspectItemBox;
+            if (isTransactionMenuDisplayed()) {
+                return transactionMenu;
             }
             else {
                 return storeMenu;
@@ -166,6 +167,20 @@ public class GameModel extends Observable {
 
     public boolean isStoreMenuDisplayed() {
         return storeMenu != null && storeMenu.isDisplayed();
+    }
+
+    // TRANSACTION MENU
+
+    public Menu getTransactionMenu() {
+        return transactionMenu;
+    }
+
+    public void setTransactionMenu(Menu menu) {
+        transactionMenu = menu;
+    }
+
+    public boolean isTransactionMenuDisplayed() {
+        return transactionMenu != null && transactionMenu.isDisplayed();
     }
 
     // PAUSE

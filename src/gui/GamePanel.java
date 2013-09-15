@@ -35,6 +35,8 @@ public class GamePanel extends JPanel implements Runnable {
     public static final Dimension SELECT_ANSWER_BOX_SIZE = new Dimension(70, 70);
     public static final Dimension STORE_MENU_SIZE = new Dimension(150, 200);
     public static final Dimension STORE_MENU_DETAILS_SIZE = new Dimension(100, 100);
+    public static final Dimension TRANSACTION_MENU_SIZE = new Dimension(100, 100);
+    public static final Dimension ITEMS_OWNED_MENU_SIZE = new Dimension(100, 100);
 
     private GameEngine engine;
     private JPanel screen;

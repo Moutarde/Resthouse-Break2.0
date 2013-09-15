@@ -4,7 +4,6 @@ import gui.UserInterface;
 import model.GameModel;
 import model.items.Item;
 import model.player.Bag;
-import model.player.Player;
 import controller.actions.CloseMenu;
 import controller.actions.ShowInspectItemBox;
 
@@ -15,9 +14,9 @@ import controller.actions.ShowInspectItemBox;
 public class BagMenu extends Menu {
     protected Bag bag;
 
-    public BagMenu(GameModel model, Player player) {
-        super("bag", player.getBag().getContent().size() + 1, model);
-        this.bag = player.getBag();
+    public BagMenu(GameModel model, Bag bag) {
+        super("bag", bag.getContent().size() + 1, model);
+        this.bag = bag;
     }
 
     protected Item getPointedItem() {
@@ -29,6 +28,10 @@ public class BagMenu extends Menu {
             assert id < bag.getContent().size() : "Bag size and BagMenu size are not equal";
             return bag.getItem(id);
         }
+    }
+
+    public void updateContent() {
+        this.setNbElements(bag.getContent().size() + 1);
     }
 
     @Override

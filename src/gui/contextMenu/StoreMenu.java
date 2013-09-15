@@ -3,6 +3,8 @@ package gui.contextMenu;
 import model.GameModel;
 import model.items.Item;
 import model.player.Player;
+import controller.actions.CloseMenu;
+import controller.actions.ShowTransactionMenu;
 
 /**
  * @author Nicolas
@@ -10,8 +12,14 @@ import model.player.Player;
  */
 public class StoreMenu extends BagMenu {
 
-    public StoreMenu(GameModel model, Player player) {
-        super(model, player);
+    private Player seller;
+    private Player buyer;
+
+    public StoreMenu(GameModel model, Player seller, Player buyer) {
+        super(model, seller.getBag());
+
+        this.seller = seller;
+        this.buyer = buyer;
     }
 
     public String getPointedElementDescr() {
@@ -21,6 +29,19 @@ public class StoreMenu extends BagMenu {
         }
         else {
             return pointedItem.getDescription();
+        }
+    }
+
+    @Override
+    public void selectElement() {
+        Item pointedItem = getPointedItem();
+        if (pointedItem == null) {
+            setChanged();
+            notifyObservers(new CloseMenu());
+        }
+        else {
+            setChanged();
+            notifyObservers(new ShowTransactionMenu(pointedItem, seller, buyer));
         }
     }
 

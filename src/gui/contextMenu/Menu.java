@@ -1,21 +1,19 @@
 package gui.contextMenu;
 
-import java.util.Observable;
-
-import model.GameModel;
+import gui.Displayable;
 import gui.UserInterface;
+import model.GameModel;
 
 /**
  * @author Nicolas Kniebihler
  *
  */
-public abstract class Menu extends Observable {
+public abstract class Menu extends Displayable {
     private String name;
     private int nbElements;
     private GameModel model;
 
     private int pointedElementId = 0;
-    private boolean isDisplayed = false;
 
     public Menu(String name, int nbElements, GameModel model) {
         this.name = name;
@@ -51,13 +49,10 @@ public abstract class Menu extends Observable {
         pointedElementId = index;
     }
 
+    @Override
     public void display(boolean value) {
-        isDisplayed = value;
+        super.display(value);
         pointedElementId = 0;
-    }
-
-    public boolean isDisplayed() {
-        return isDisplayed;
     }
 
     public String getContent() {

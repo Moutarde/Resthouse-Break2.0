@@ -93,14 +93,14 @@ public class GameController {
     }
 
     public void onOpenMenu() {
-        if (!model.isMessageDisplayed()) {
+        if (!model.isMessageDisplayed() || model.isTransactionMenuDisplayed()) {
             menuHandler.openOrClose();
         }
     }
 
     public void onMoveMenuSelection(Direction d) {
         if (model.isStoreMenuDisplayed()) {
-            if (model.isInspectItemBoxDisplayed()) {
+            if (model.isTransactionMenuDisplayed()) {
                 menuHandler.moveSelection(d == Direction.DOWN ? 1 : -1);
             }
             else {

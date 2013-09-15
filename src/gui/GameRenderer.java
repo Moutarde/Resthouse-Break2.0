@@ -1,6 +1,7 @@
 package gui;
 
 import gui.contextMenu.StoreMenu;
+import gui.contextMenu.TransactionMenu;
 import gui.sprite.Sprite;
 import gui.sprite.SpriteSheet;
 
@@ -120,7 +121,7 @@ public class GameRenderer implements Renderer {
         }
 
         // Render the bottom message
-        if(model.isMessageDisplayed()) {
+        if (model.isMessageDisplayed()) {
             Coord messagePosition = new Coord(0, GamePanel.SIZE.height - GamePanel.TEXT_ZONE_HEIGHT);
             Dimension messageSize = new Dimension(GamePanel.SIZE.width, GamePanel.TEXT_ZONE_HEIGHT);
             drawFramedRect(g, messagePosition, messageSize, 2);
@@ -133,7 +134,7 @@ public class GameRenderer implements Renderer {
         }
 
         // Render the menu
-        if(model.isMenuDisplayed()) {
+        if (model.isMenuDisplayed()) {
             Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.MENU_SIZE.width, 0);
             drawFramedRect(g, menuPosition, GamePanel.MENU_SIZE, 2);
             Coord offset = new Coord(10, 10);
@@ -141,15 +142,23 @@ public class GameRenderer implements Renderer {
         }
 
         // Render the sub menu
-        if(model.isSubMenuDisplayed()) {
+        if (model.isSubMenuDisplayed()) {
             Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.SUBMENU_SIZE.width, 0);
             drawFramedRect(g, menuPosition, GamePanel.SUBMENU_SIZE, 2);
             Coord offset = new Coord(10, 10);
             drawText(g, menuPosition, model.getSubMenu().getContent(), offset, GamePanel.SUBMENU_SIZE);
         }
 
+        // Render the inspect item box
+        if (model.isInspectItemBoxDisplayed()) {
+            Coord menuPosition = new Coord(GamePanel.SIZE.width / 3, GamePanel.SIZE.height / 3);
+            drawFramedRect(g, menuPosition, GamePanel.INSPECT_ITEM_BOX_SIZE, 2);
+            Coord offset = new Coord(10, 10);
+            drawText(g, menuPosition, model.getInspectItemBox().getContent(), offset, GamePanel.INSPECT_ITEM_BOX_SIZE);
+        }
+
         // Render the store menu
-        if(model.isStoreMenuDisplayed()) {
+        if (model.isStoreMenuDisplayed()) {
             // STORE
             Coord menuPosition = new Coord(0, GamePanel.SIZE.height - (GamePanel.TEXT_ZONE_HEIGHT + GamePanel.STORE_MENU_SIZE.height));
             drawFramedRect(g, menuPosition, GamePanel.STORE_MENU_SIZE, 2);
@@ -163,16 +172,24 @@ public class GameRenderer implements Renderer {
             drawText(g, detailsPosition, ((StoreMenu)model.getStoreMenu()).getPointedElementDescr(), offset, GamePanel.STORE_MENU_DETAILS_SIZE);
         }
 
-        // Render the inspect item box
-        if(model.isInspectItemBoxDisplayed()) {
-            Coord menuPosition = new Coord(GamePanel.SIZE.width / 3, GamePanel.SIZE.height / 3);
-            drawFramedRect(g, menuPosition, GamePanel.INSPECT_ITEM_BOX_SIZE, 2);
+        // Render the transaction menu
+        if (model.isTransactionMenuDisplayed()) {
+            // NB ITEMS TO BUY
+            Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.TRANSACTION_MENU_SIZE.width, 0);
+            drawFramedRect(g, menuPosition, GamePanel.TRANSACTION_MENU_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getInspectItemBox().getContent(), offset, GamePanel.INSPECT_ITEM_BOX_SIZE);
+            drawText(g, menuPosition, model.getTransactionMenu().getContent(), offset, GamePanel.TRANSACTION_MENU_SIZE);
+
+            // NB ITEMS OWNED
+            Coord itemsOwnedPosition = new Coord(0, 0);
+            drawFramedRect(g, itemsOwnedPosition, GamePanel.ITEMS_OWNED_MENU_SIZE, 2);
+            assert model.getTransactionMenu() instanceof TransactionMenu : "Transaction menu is not an instance of TransactionMenu";
+            String itemsOwnedText = ((TransactionMenu)model.getTransactionMenu()).getNbAlreadyOwned() + " " + UserInterface.getLang().getString("owned");
+            drawText(g, itemsOwnedPosition, itemsOwnedText, offset, GamePanel.ITEMS_OWNED_MENU_SIZE);
         }
 
         // Render the select answer box
-        if(model.isSelectAnswerBoxDisplayed()) {
+        if (model.isSelectAnswerBoxDisplayed()) {
             Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.SELECT_ANSWER_BOX_SIZE.width, GamePanel.SIZE.height - (GamePanel.TEXT_ZONE_HEIGHT + GamePanel.SELECT_ANSWER_BOX_SIZE.height));
             drawFramedRect(g, menuPosition, GamePanel.SELECT_ANSWER_BOX_SIZE, 2);
             Coord offset = new Coord(10, 10);
