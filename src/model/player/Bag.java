@@ -1,6 +1,7 @@
 package model.player;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import model.items.Item;
 
@@ -15,8 +16,25 @@ public class Bag {
 
     }
 
-    public HashMap<Item, Integer> getContent() {
-        return items;
+    public int getAmountOf(Item item) {
+        if (items.containsKey(item)) {
+            return items.get(item);
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public int getSize() {
+        return items.size();
+    }
+
+    public boolean contains(Item item) {
+        return items.containsKey(item);
+    }
+
+    public Set<Item> getItems() {
+        return items.keySet();
     }
 
     public void addItem(Item i) {

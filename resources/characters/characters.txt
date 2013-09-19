@@ -1,6 +1,8 @@
 # special speeches :
 #  - OPENSTORE
 #  - ?questionText(answer1:answerSpeech1,answer2:answerSpeech2)
+#
+# bag=(O_ITEM1,nb_item1,O_MONEY,nb_money);(O_ITEM2,nb_item2,O_MONEY,nb_money)
 
 C_TEST
 name=test
@@ -39,7 +41,7 @@ startCoord=1,1
 startPosture=LOOK_DOWN
 moveScript=NONE
 speech=OPENSTORE:speechStore1;speechStore2
-bag=(O_WHEEL_CHAIR,1);(O_PACEMAKER,2)
+bag=(O_WHEEL_CHAIR,1,O_TOOTH,10);(O_PACEMAKER,2,O_TOOTH,5)
 spriteCoord=0,1
 END
 

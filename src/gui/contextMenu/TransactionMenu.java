@@ -1,6 +1,7 @@
 package gui.contextMenu;
 
 import model.items.Item;
+import model.items.Price;
 import model.player.Player;
 import controller.actions.CloseMenu;
 
@@ -11,6 +12,7 @@ import controller.actions.CloseMenu;
 public class TransactionMenu extends Menu {
 
     private Item item;
+    private Price price;
     private Player seller, buyer;
     private int maxNb;
     private int nbAlreadyOwned;
@@ -24,8 +26,12 @@ public class TransactionMenu extends Menu {
         this.seller = seller;
         this.buyer = buyer;
 
-        maxNb = seller.getBag().getContent().get(item);
-        nbAlreadyOwned = buyer.getBag().getContent().containsKey(item) ? buyer.getBag().getContent().get(item) : 0;
+        price = seller.getPrice(item);
+
+        maxNb = Math.min(seller.getBag().getAmountOf(item), buyer.getBag().getAmountOf(price.getItem()) / price.getAmount());
+        assert maxNb > 0 : "Not enough money to buy this";
+
+        nbAlreadyOwned = buyer.getBag().contains(item) ? buyer.getBag().getAmountOf(item) : 0;
     }
 
     public int getNbAlreadyOwned() {
@@ -67,7 +73,13 @@ public class TransactionMenu extends Menu {
     @Override
     public void selectElement() {
         seller.getBag().removeItemIFP(item, selectedNb);
+        if (seller.getPriceMap().containsKey(price.getItem())) {
+            seller.getBag().addItem(price.getItem(), selectedNb * price.getAmount());
+        }
+
         buyer.getBag().addItem(item, selectedNb);
+        buyer.getBag().removeItemIFP(price.getItem(), selectedNb * price.getAmount());
+
         setChanged();
         notifyObservers(new CloseMenu());
     }

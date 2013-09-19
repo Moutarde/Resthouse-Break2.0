@@ -30,28 +30,39 @@ public class Item {
     private boolean isThrowable = true;
 
     public Item(String name, String description, String useFeedback, String useFailFeedback, boolean isUsable, boolean isThrowable) {
-        this.name = name;
-        this.description = description;
-        this.useFeedback = useFeedback;
-        this.useFailFeedback = useFailFeedback;
+        this.name = UserInterface.getLang().getString(name);
+
+        this.description = description != null ? UserInterface.getLang().getString(description) : null;
+
+        if (isUsable) {
+            this.useFeedback = UserInterface.getLang().getString(useFeedback);
+            this.useFailFeedback = UserInterface.getLang().getString(useFailFeedback);
+        }
+        else {
+            this.useFeedback = null;
+            this.useFailFeedback = null;
+        }
+
         this.isUsable = isUsable;
         this.isThrowable = isThrowable;
     }
 
     public String getName() {
-        return UserInterface.getLang().getString(name);
+        return name;
     }
 
     public String getDescription() {
-        return UserInterface.getLang().getString(description);
+        return description;
     }
 
     public String getUseFeedback() {
-        return UserInterface.getLang().getString(useFeedback);
+        assert isUsable : name + " is not usable !";
+        return useFeedback;
     }
 
     public String getUseFailFeedback() {
-        return UserInterface.getLang().getString(useFailFeedback);
+        assert isUsable : name + " is not usable !";
+        return useFailFeedback;
     }
 
     public boolean isUsable(GameModel model) {
@@ -101,10 +112,6 @@ public class Item {
 
         String line = null;
         String currentItemId = null;
-        String currentItemName = null;
-        String currentItemDescription = null;
-        String currentItemUseFeedback = null;
-        String currentItemUseFailFeedback = null;
         ItemType currentItemType = null;
 
         // KEY
@@ -114,12 +121,6 @@ public class Item {
             // ID
             if (line.startsWith("O_")) {
                 currentItemId = line;
-
-                String id = currentItemId.substring(2);
-                currentItemName = id + "_name";
-                currentItemDescription = id + "_descr";
-                currentItemUseFeedback = id + "_use";
-                currentItemUseFailFeedback = id + "_useFail";
             }
             // TYPE
             else if (line.startsWith("type=")) {
@@ -154,24 +155,26 @@ public class Item {
             // END LINE -> construct item
             else if (line.equals("END"))
             {
+                String id = currentItemId.substring(2);
+                String name = id + "_name";
+                String description = id + "_descr";
+                String useFeedback = id + "_use";
+                String useFailFeedback = id + "_useFail";
+
                 Item item = null;
                 switch (currentItemType) {
                 case NORMAL:
-                    item = new Item(currentItemName, currentItemDescription, currentItemUseFeedback, currentItemUseFailFeedback, false, true);
+                    item = new Item(name, description, null, null, false, true);
                     break;
                 case KEY:
-                    item = new Key(currentItemName, currentItemDescription, currentItemUseFeedback, currentItemUseFailFeedback, currentKeyDoorList);
+                    item = new Key(name, description, useFeedback, useFailFeedback, currentKeyDoorList);
                     break;
                 }
 
                 itemList.put(currentItemId, item);
 
                 currentItemId = null;
-                currentItemName = null;
-                currentItemDescription = null;
                 currentItemType = null;
-                currentItemUseFeedback = null;
-                currentItemUseFailFeedback = null;
 
                 currentKeyDoorList.clear();
             }

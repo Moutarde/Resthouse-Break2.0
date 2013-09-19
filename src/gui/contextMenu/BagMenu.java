@@ -15,7 +15,7 @@ public class BagMenu extends Menu {
     protected Bag bag;
 
     public BagMenu(GameModel model, Bag bag) {
-        super("bag", bag.getContent().size() + 1, model);
+        super("bag", bag.getSize() + 1, model);
         this.bag = bag;
     }
 
@@ -25,13 +25,13 @@ public class BagMenu extends Menu {
             return null;
         }
         else {
-            assert id < bag.getContent().size() : "Bag size and BagMenu size are not equal";
+            assert id < bag.getSize() : "Bag size and BagMenu size are not equal";
             return bag.getItem(id);
         }
     }
 
     public void updateContent() {
-        this.setNbElements(bag.getContent().size() + 1);
+        this.setNbElements(bag.getSize() + 1);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class BagMenu extends Menu {
         }
 
         Item item = bag.getItem(index);
-        return "" + bag.getContent().get(item) + "x " + item.getName();
+        return "" + bag.getAmountOf(item) + "x " + item.getName();
     }
 
 }

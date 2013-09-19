@@ -1,11 +1,16 @@
 package model.player;
 
 import gui.sprite.Posture;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import model.Coord;
 import model.Move;
 import model.items.Chest;
 import model.items.Item;
 import model.items.Key;
+import model.items.Price;
 import model.npc.NPC;
 import model.rooms.Room;
 import model.rooms.RoomDoorPair;
@@ -25,6 +30,7 @@ public class Player {
     private Posture posture;
     private Move move = new Move(Direction.NONE);
     private Bag bag = new Bag();
+    private Map<Item, Price> priceMap = new HashMap<Item, Price>();
 
     public Player(int id, Room room, Coord coord, Posture posture) {
         this.id = id;
@@ -74,6 +80,19 @@ public class Player {
 
     protected void setBag(Bag bag) {
         this.bag = bag;
+    }
+
+    public Map<Item, Price> getPriceMap() {
+        return priceMap;
+    }
+
+    public Price getPrice(Item item) {
+        return priceMap.get(item);
+    }
+
+    protected void setPriceMap(Map<Item, Price> map) {
+        assert this.priceMap.isEmpty() : "priceMap allready set";
+        this.priceMap.putAll(map);
     }
 
     public void moveSquare(Direction dir) {
@@ -245,7 +264,7 @@ public class Player {
     }
 
     public Key getKeyForFrontDoorIFP() {
-        for (Item item : bag.getContent().keySet()) {
+        for (Item item : bag.getItems()) {
             if (item instanceof Key) {
                 if (((Key)item).canOpenDoor(room, room.getMat().getSquareValue(coord))) {
                     return (Key)item;

@@ -30,7 +30,7 @@ public class ThrowItem implements IMenuAction {
             model.getPlayer().getBag().removeItemIFP(item);
             model.setNewMessage(UserInterface.getLang().getString("thrown") + item.getName());
 
-            ((BagMenu)subMenu).setNbElements(model.getPlayer().getBag().getContent().size() + 1);
+            ((BagMenu)subMenu).setNbElements(model.getPlayer().getBag().getSize() + 1);
             menu.display(false);
         }
     }

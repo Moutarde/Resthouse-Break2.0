@@ -170,6 +170,11 @@ public class GameRenderer implements Renderer {
             drawFramedRect(g, detailsPosition, GamePanel.STORE_MENU_DETAILS_SIZE, 2);
             assert model.getStoreMenu() instanceof StoreMenu : "Store menu is not an instance of StoreMenu";
             drawText(g, detailsPosition, ((StoreMenu)model.getStoreMenu()).getPointedElementDescr(), offset, GamePanel.STORE_MENU_DETAILS_SIZE);
+
+            // PRICE
+            Coord pricePosition = new Coord(detailsPosition.getX(), detailsPosition.getY() + GamePanel.STORE_MENU_DETAILS_SIZE.height);
+            drawFramedRect(g, pricePosition, GamePanel.PRICE_MENU_SIZE, 2);
+            drawText(g, pricePosition, ((StoreMenu)model.getStoreMenu()).getPointedElementPrice(), offset, GamePanel.PRICE_MENU_SIZE);
         }
 
         // Render the transaction menu
