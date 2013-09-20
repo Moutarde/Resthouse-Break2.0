@@ -243,7 +243,7 @@ public class Room {
                 // MATRIX
                 int[][] matrix = new int[currentRoomNbLines][currentRoomNbCols];
 
-                assert values.size() == currentRoomNbLines;
+                assert values.size() == currentRoomNbLines : "Line number incorrect : " + currentRoomName;
                 int lineId = 0;
                 for (String matrixLine : values) {
                     splitter = new StringTokenizer(matrixLine, ",");
