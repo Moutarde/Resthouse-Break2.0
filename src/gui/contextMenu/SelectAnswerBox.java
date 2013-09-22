@@ -1,7 +1,5 @@
 package gui.contextMenu;
 
-import controller.actions.CloseMenu;
-import model.GameModel;
 import model.messages.Question;
 
 /**
@@ -12,8 +10,8 @@ public class SelectAnswerBox extends Menu {
 
     private Question question;
 
-    public SelectAnswerBox(GameModel model, Question question) {
-        super("", question.getPossibleAnswers().size(), model);
+    public SelectAnswerBox(Question question) {
+        super("", question.getPossibleAnswers().size());
 
         this.question = question;
     }
@@ -22,12 +20,18 @@ public class SelectAnswerBox extends Menu {
     public void selectElement() {
         question.answer(getPointedElementId());
         setChanged();
-        notifyObservers(new CloseMenu());
+        notifyObservers(question.getAnswerActionIFP());
+        display(false);
     }
 
     @Override
     public String getElementString(int index) {
         return question.getPossibleAnswers().get(index);
+    }
+
+    @Override
+    public void close() {
+        return;
     }
 
 }

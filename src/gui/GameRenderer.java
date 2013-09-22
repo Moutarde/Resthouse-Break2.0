@@ -121,13 +121,13 @@ public class GameRenderer implements Renderer {
         }
 
         // Render the bottom message
-        if (model.isMessageDisplayed()) {
+        if (model.isMessageBoxDisplayed()) {
             Coord messagePosition = new Coord(0, GamePanel.SIZE.height - GamePanel.TEXT_ZONE_HEIGHT);
             Dimension messageSize = new Dimension(GamePanel.SIZE.width, GamePanel.TEXT_ZONE_HEIGHT);
             drawFramedRect(g, messagePosition, messageSize, 2);
 
             Coord offset = new Coord(10, 10);
-            drawText(g, messagePosition, model.getCurrentMessage().getString(), offset, messageSize);
+            drawText(g, messagePosition, model.getMessageBox().getContent(), offset, messageSize);
 
             String pressEnter = UserInterface.getLang().getString("pressEnter");
             g.drawString(pressEnter, GamePanel.SIZE.width - (offset.getX() + g.getFontMetrics().stringWidth(pressEnter)), GamePanel.SIZE.height - offset.getY());

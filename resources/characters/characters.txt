@@ -41,7 +41,7 @@ startCoord=1,1
 startPosture=LOOK_DOWN
 moveScript=NONE
 speech=OPENSTORE:speechStore1;speechStore2
-bag=(O_WHEEL_CHAIR,1,O_TOOTH,10);(O_PACEMAKER,2,O_TOOTH,5)
+bag=(O_WHEEL_CHAIR,1,O_TOOTH,3);(O_PACEMAKER,2,O_TOOTH,1)
 spriteCoord=0,1
 END
 

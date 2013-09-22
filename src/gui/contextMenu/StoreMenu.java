@@ -1,11 +1,10 @@
 package gui.contextMenu;
 
 import gui.UserInterface;
-import model.GameModel;
 import model.items.Item;
 import model.items.Price;
 import model.player.Player;
-import controller.actions.CloseMenu;
+import controller.actions.ContinueSpeech;
 import controller.actions.ShowTransactionMenu;
 
 /**
@@ -17,8 +16,8 @@ public class StoreMenu extends BagMenu {
     private Player seller;
     private Player buyer;
 
-    public StoreMenu(GameModel model, Player seller, Player buyer) {
-        super(model, seller.getBag());
+    public StoreMenu(Player seller, Player buyer) {
+        super(seller.getBag());
 
         this.seller = seller;
         this.buyer = buyer;
@@ -49,8 +48,7 @@ public class StoreMenu extends BagMenu {
     public void selectElement() {
         Item pointedItem = getPointedItem();
         if (pointedItem == null) {
-            setChanged();
-            notifyObservers(new CloseMenu());
+            close();
         }
         else {
             Price price = seller.getPrice(pointedItem);
@@ -59,6 +57,12 @@ public class StoreMenu extends BagMenu {
                 notifyObservers(new ShowTransactionMenu(pointedItem, seller, buyer));
             }
         }
+    }
+
+    @Override
+    public void close() {
+        setChanged();
+        notifyObservers(new ContinueSpeech());
     }
 
 }

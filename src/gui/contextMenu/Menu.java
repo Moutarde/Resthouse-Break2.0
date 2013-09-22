@@ -2,7 +2,6 @@ package gui.contextMenu;
 
 import gui.Displayable;
 import gui.UserInterface;
-import model.GameModel;
 
 /**
  * @author Nicolas Kniebihler
@@ -11,14 +10,12 @@ import model.GameModel;
 public abstract class Menu extends Displayable {
     private String name;
     private int nbElements;
-    private GameModel model;
 
     private int pointedElementId = 0;
 
-    public Menu(String name, int nbElements, GameModel model) {
+    public Menu(String name, int nbElements) {
         this.name = name;
         this.nbElements = nbElements;
-        this.model = model;
     }
 
     public int getNbElements() {
@@ -31,10 +28,6 @@ public abstract class Menu extends Displayable {
 
     public int getPointedElementId() {
         return pointedElementId;
-    }
-
-    public GameModel getModel() {
-        return model;
     }
 
     public void changePointedElement(int i) {
@@ -66,6 +59,10 @@ public abstract class Menu extends Displayable {
         }
 
         return content;
+    }
+
+    public void close() {
+        display(false);
     }
 
     public abstract void selectElement();

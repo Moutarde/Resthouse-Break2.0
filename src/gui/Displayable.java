@@ -11,6 +11,7 @@ public class Displayable extends Observable {
     private boolean isDisplayed = false;
 
     public void display(boolean value) {
+        assert isDisplayed != value : "display value allready at " + isDisplayed;
         isDisplayed = value;
     }
 

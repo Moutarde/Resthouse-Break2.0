@@ -9,7 +9,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.items.Item;
-import model.messages.Message;
 import model.npc.NPC;
 import model.player.Player;
 import model.rooms.Room;
@@ -21,17 +20,19 @@ import model.rooms.Room;
 public class GameModel extends Observable {
 
     private Player player;
-    private Message currentMessage = new Message("");
-    private ContextMenu menu;
+
+    private Menu messageBox;
+    private Menu menu;
     private Menu subMenu;
     private Menu inspectItemBox;
     private Menu selectAnswerBox;
     private Menu storeMenu;
     private Menu transactionMenu;
+
     private boolean gameIsPaused = false;
 
     public GameModel() {
-        this.menu = new ContextMenu(this);
+        this.menu = new ContextMenu();
     }
 
     public void init() {
@@ -51,13 +52,19 @@ public class GameModel extends Observable {
     }
 
     public Menu getPrioritaryDisplayedMenu() {
-        if (isStoreMenuDisplayed()) {
+        if (isSelectAnswerBoxDisplayed()) {
+            return selectAnswerBox;
+        }
+        else if (isStoreMenuDisplayed()) {
             if (isTransactionMenuDisplayed()) {
                 return transactionMenu;
             }
             else {
                 return storeMenu;
             }
+        }
+        else if (isMessageBoxDisplayed()) {
+            return messageBox;
         }
         else if (isMenuDisplayed()) {
             if (isInspectItemBoxDisplayed()) {
@@ -75,37 +82,27 @@ public class GameModel extends Observable {
         }
     }
 
-    // MESSAGE
+    // MESSAGE BOX
 
-    public Message getCurrentMessage() {
-        return currentMessage;
+    public Menu getMessageBox() {
+        return messageBox;
     }
 
-    public void setNewMessage(Message message) {
-        assert message != null && !message.getString().equals("") : "Trying to set an empty message";
-        currentMessage = message;
+    public void setMessageBox(Menu menu) {
+        this.messageBox = menu;
     }
 
-    public void setNewMessage(String str) {
-        assert str != null && !str.equals("") : "Trying to set an empty message";
-        setNewMessage(new Message(str));
-    }
-
-    public void hideMessage() {
-        currentMessage = null;
-    }
-
-    public boolean isMessageDisplayed() {
-        return currentMessage != null && !currentMessage.isEmpty();
+    public boolean isMessageBoxDisplayed() {
+        return messageBox != null && messageBox.isDisplayed();
     }
 
     // MENU
 
-    public ContextMenu getMenu() {
+    public Menu getMenu() {
         return menu;
     }
 
-    public void setMenu(ContextMenu menu) {
+    public void setMenu(Menu menu) {
         this.menu = menu;
     }
 

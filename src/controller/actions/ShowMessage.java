@@ -1,9 +1,10 @@
 package controller.actions;
 
 import gui.contextMenu.Menu;
-import model.GameModel;
 import model.messages.Message;
+import model.messages.OpenStore;
 import model.messages.Question;
+import controller.ConversationHandler;
 import controller.MenuHandler;
 
 /**
@@ -20,21 +21,14 @@ public class ShowMessage implements IMenuAction {
 
     @Override
     public void execute(Menu menu, MenuHandler handler) {
-        GameModel model = menu.getModel();
+        handler.showMessage(message);
 
-        if (message == null) {
-            model.hideMessage();
-            if (!model.isMenuDisplayed()) {
-                model.setGamePaused(false);
-            }
+        if (message instanceof Question) {
+            handler.showSelectAnswerBox((Question)message);
         }
-        else {
-            model.setNewMessage(message);
-            model.setGamePaused(true);
-
-            if (message instanceof Question) {
-                handler.showSelectAnswerBox((Question)message);
-            }
+        else if (message instanceof OpenStore) {
+            assert handler instanceof ConversationHandler : "message is an OpenStore but handler is not a ConversationHandler";
+            ((ConversationHandler)handler).showStore();
         }
     }
 

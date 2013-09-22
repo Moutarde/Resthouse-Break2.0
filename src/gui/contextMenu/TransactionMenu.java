@@ -3,7 +3,7 @@ package gui.contextMenu;
 import model.items.Item;
 import model.items.Price;
 import model.player.Player;
-import controller.actions.CloseMenu;
+import controller.actions.MakeTransaction;
 
 /**
  * @author Nicolas Kniebihler
@@ -20,7 +20,7 @@ public class TransactionMenu extends Menu {
     private int selectedNb = 1;
 
     public TransactionMenu(Item item, Player seller, Player buyer) {
-        super("", 1, null);
+        super("", 1);
 
         this.item = item;
         this.seller = seller;
@@ -40,6 +40,22 @@ public class TransactionMenu extends Menu {
 
     public int getSelectedNb() {
         return selectedNb;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public Price getPrice() {
+        return price;
+    }
+
+    public Player getSeller() {
+        return seller;
+    }
+
+    public Player getBuyer() {
+        return buyer;
     }
 
     public void incrementSelectedNb() {
@@ -72,16 +88,8 @@ public class TransactionMenu extends Menu {
 
     @Override
     public void selectElement() {
-        seller.getBag().removeItemIFP(item, selectedNb);
-        if (seller.getPriceMap().containsKey(price.getItem())) {
-            seller.getBag().addItem(price.getItem(), selectedNb * price.getAmount());
-        }
-
-        buyer.getBag().addItem(item, selectedNb);
-        buyer.getBag().removeItemIFP(price.getItem(), selectedNb * price.getAmount());
-
         setChanged();
-        notifyObservers(new CloseMenu());
+        notifyObservers(new MakeTransaction());
     }
 
     @Override

@@ -1,10 +1,10 @@
 package controller.actions;
 
 import gui.UserInterface;
-import gui.contextMenu.BagMenu;
 import gui.contextMenu.Menu;
-import model.GameModel;
 import model.items.Item;
+import model.messages.Message;
+import model.player.Bag;
 import controller.MenuHandler;
 
 /**
@@ -14,25 +14,21 @@ import controller.MenuHandler;
 public class ThrowItem implements IMenuAction {
 
     private Item item;
+    private Bag bag;
 
-    public ThrowItem(Item item) {
+    public ThrowItem(Item item, Bag bag) {
         this.item = item;
+        this.bag = bag;
     }
 
     @Override
     public void execute(Menu menu, MenuHandler handler) {
-        GameModel model = menu.getModel();
-        Menu subMenu = model.getSubMenu();
-        if (subMenu != null && subMenu instanceof BagMenu) {
-            assert model.isSubMenuDisplayed() : "Trying to throw item while subMenu isn't displayed";
-            assert item.isThrowable() : "Trying to throw a non-throwable item";
+        assert item.isThrowable() : "Trying to throw a non-throwable item";
 
-            model.getPlayer().getBag().removeItemIFP(item);
-            model.setNewMessage(UserInterface.getLang().getString("thrown") + item.getName());
-
-            ((BagMenu)subMenu).setNbElements(model.getPlayer().getBag().getSize() + 1);
-            menu.display(false);
-        }
+        bag.removeItemIFP(item);
+        handler.showMessage(new Message(UserInterface.getLang().getString("thrown") + item.getName()));
+        handler.updateBag();
+        handler.hideInspectItemBox();
     }
 
 }

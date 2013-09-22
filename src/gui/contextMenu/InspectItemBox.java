@@ -4,14 +4,12 @@ import gui.UserInterface;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import model.GameModel;
 import model.items.Item;
 import model.messages.Message;
 import model.messages.Question;
-import controller.actions.CloseMenu;
+import model.player.Bag;
 import controller.actions.IMenuAction;
 import controller.actions.ShowMessage;
 import controller.actions.ThrowItem;
@@ -21,7 +19,7 @@ import controller.actions.UseItem;
  * @author Nicolas Kniebihler
  *
  */
-public class InspectItemBox extends Menu implements Observer {
+public class InspectItemBox extends Menu {
 
     private static enum Choice {
         USE, INSPECT, THROW, RETURN;
@@ -43,11 +41,15 @@ public class InspectItemBox extends Menu implements Observer {
     }
 
     private Item item;
+    private Bag bag;
+    private GameModel model;
 
-    public InspectItemBox(GameModel model, Item item) {
-        super("", Choice.values().length, model);
+    public InspectItemBox(Item item, Bag bag, GameModel model) {
+        super("", Choice.values().length);
 
         this.item = item;
+        this.bag = bag;
+        this.model = model;
     }
 
     @Override
@@ -55,12 +57,11 @@ public class InspectItemBox extends Menu implements Observer {
         Choice pointedChoice = Choice.values()[getPointedElementId()];
         switch (pointedChoice) {
         case RETURN:
-            setChanged();
-            notifyObservers(new CloseMenu());
+            close();
             break;
         case USE:
             setChanged();
-            notifyObservers(new UseItem(item));
+            notifyObservers(new UseItem(item, model));
             break;
         case INSPECT:
             setChanged();
@@ -73,10 +74,9 @@ public class InspectItemBox extends Menu implements Observer {
                 possibleAnswers.add(UserInterface.getLang().getString("yes"));
                 possibleAnswers.add(UserInterface.getLang().getString("no"));
                 List<IMenuAction> actions = new ArrayList<IMenuAction>();
-                actions.add(new ThrowItem(item));
+                actions.add(new ThrowItem(item, bag));
                 actions.add(new ShowMessage(null));
                 Question q = new Question(UserInterface.getLang().getString("confirmThrow"), possibleAnswers, actions);
-                q.addObserver(this);
 
                 notifyObservers(new ShowMessage(q));
             }
@@ -92,14 +92,6 @@ public class InspectItemBox extends Menu implements Observer {
     @Override
     public String getElementString(int index) {
         return Choice.values()[index].toString();
-    }
-
-    @Override
-    public void update(Observable obs, Object arg) {
-        assert obs instanceof Question : "Observable is not a Question";
-
-        setChanged();
-        notifyObservers(((Question)obs).getAnswerActionIFP());
     }
 
 }

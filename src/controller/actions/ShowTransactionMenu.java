@@ -2,7 +2,6 @@ package controller.actions;
 
 import gui.contextMenu.Menu;
 import gui.contextMenu.StoreMenu;
-import model.GameModel;
 import model.items.Item;
 import model.player.Player;
 import controller.ConversationHandler;
@@ -25,9 +24,7 @@ public class ShowTransactionMenu implements IMenuAction {
 
     @Override
     public void execute(Menu menu, MenuHandler handler) {
-        GameModel model = menu.getModel();
-        assert !model.isTransactionMenuDisplayed() : "Trying to show item inspection box while it is already displayed";
-        if (model.isStoreMenuDisplayed() && menu instanceof StoreMenu && handler instanceof ConversationHandler) {
+        if (menu instanceof StoreMenu && handler instanceof ConversationHandler) {
             ((ConversationHandler)handler).showTransactionMenu(item, seller, buyer);
         }
         else {

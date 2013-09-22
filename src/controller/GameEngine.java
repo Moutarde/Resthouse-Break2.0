@@ -69,7 +69,7 @@ public class GameEngine {
         }
 
         // UP
-        if (keyboard.isPressedOnce(KeyEvent.VK_UP) && (model.isMenuDisplayed() || model.isSelectAnswerBoxDisplayed() || model.isStoreMenuDisplayed())) {
+        if (keyboard.isPressedOnce(KeyEvent.VK_UP) && model.isGamePaused()) {
             controller.onMoveMenuSelection(Direction.UP);
         }
         else if (keyboard.isPressed(KeyEvent.VK_UP)) {
@@ -80,7 +80,7 @@ public class GameEngine {
         }
 
         // DOWN
-        if (keyboard.isPressedOnce(KeyEvent.VK_DOWN) && (model.isMenuDisplayed() || model.isSelectAnswerBoxDisplayed() || model.isStoreMenuDisplayed())) {
+        if (keyboard.isPressedOnce(KeyEvent.VK_DOWN) && model.isGamePaused()) {
             controller.onMoveMenuSelection(Direction.DOWN);
         }
         else if (keyboard.isPressed(KeyEvent.VK_DOWN)) {

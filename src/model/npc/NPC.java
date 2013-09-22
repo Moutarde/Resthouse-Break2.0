@@ -23,6 +23,7 @@ import model.player.Bag;
 import model.player.Player;
 import model.rooms.Room;
 import controller.Direction;
+import controller.actions.ContinueSpeech;
 import controller.actions.IMenuAction;
 import controller.actions.ShowMessage;
 
@@ -215,14 +216,14 @@ public class NPC extends Player {
                         for (String answer : answersTokens) {
                             String[] answerTokens = answer.split(":");
                             possibleAnswers.add(UserInterface.getLang().getString(answerTokens[0]));
-                            actions.add(new ShowMessage(new Message(currentNPCName + " : " + UserInterface.getLang().getString(answerTokens[1]))));
+                            actions.add(new ShowMessage(new Message(currentNPCName + " : " + UserInterface.getLang().getString(answerTokens[1]), new ContinueSpeech())));
                         }
 
                         Question q = new Question(currentNPCName + " : " + UserInterface.getLang().getString(question), possibleAnswers, actions);
                         currentNPCSpeech.add(q);
                     }
                     else {
-                        currentNPCSpeech.add(new Message(currentNPCName + " : " + UserInterface.getLang().getString(str)));
+                        currentNPCSpeech.add(new Message(currentNPCName + " : " + UserInterface.getLang().getString(str), new ContinueSpeech()));
                     }
                 }
             }

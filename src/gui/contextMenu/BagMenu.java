@@ -1,10 +1,8 @@
 package gui.contextMenu;
 
 import gui.UserInterface;
-import model.GameModel;
 import model.items.Item;
 import model.player.Bag;
-import controller.actions.CloseMenu;
 import controller.actions.ShowInspectItemBox;
 
 /**
@@ -14,9 +12,13 @@ import controller.actions.ShowInspectItemBox;
 public class BagMenu extends Menu {
     protected Bag bag;
 
-    public BagMenu(GameModel model, Bag bag) {
-        super("bag", bag.getSize() + 1, model);
+    public BagMenu(Bag bag) {
+        super("bag", bag.getSize() + 1);
         this.bag = bag;
+    }
+
+    public Bag getBag() {
+        return bag;
     }
 
     protected Item getPointedItem() {
@@ -38,8 +40,7 @@ public class BagMenu extends Menu {
     public void selectElement() {
         Item pointedItem = getPointedItem();
         if (pointedItem == null) {
-            setChanged();
-            notifyObservers(new CloseMenu());
+            close();
         }
         else {
             setChanged();

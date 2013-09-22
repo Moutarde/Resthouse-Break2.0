@@ -1,9 +1,7 @@
 package gui.contextMenu;
 
-import controller.actions.CloseMenu;
-import controller.actions.ShowSubmenu;
 import gui.UserInterface;
-import model.GameModel;
+import controller.actions.ShowSubmenu;
 
 /**
  * @author Nicolas Kniebihler
@@ -28,8 +26,8 @@ public class ContextMenu extends Menu {
         }
     }
 
-    public ContextMenu(GameModel model) {
-        super("menu", MenuCategory.values().length, model);
+    public ContextMenu() {
+        super("menu", MenuCategory.values().length);
     }
 
     @Override
@@ -44,8 +42,7 @@ public class ContextMenu extends Menu {
             UserInterface.quit();
             break;
         case RETURN:
-            setChanged();
-            notifyObservers(new CloseMenu());
+            close();
             break;
         default:
             break;
@@ -60,7 +57,6 @@ public class ContextMenu extends Menu {
     @Override
     public void display(boolean value) {
         super.display(value);
-        getModel().setGamePaused(value);
     }
 
 }
