@@ -7,7 +7,7 @@ import model.GameModel;
 import model.items.Item;
 import model.npc.NPC;
 import model.player.Player;
-import controller.actions.ShowMessage;
+import controller.actions.menu.ShowMessage;
 
 /**
  * @author Nicolas Kniebihler
@@ -65,11 +65,6 @@ public class ConversationHandler extends MenuHandler {
         storeMenu.addObserver(this);
         storeMenu.display(true);
         model.setStoreMenu(storeMenu);
-    }
-
-    public void updateStore() {
-        assert model.getStoreMenu() instanceof StoreMenu : "store menu is not a StoreMenu";
-        ((StoreMenu)model.getStoreMenu()).updateContent();
     }
 
     // TRANSACTION MENU

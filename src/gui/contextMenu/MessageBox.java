@@ -38,8 +38,12 @@ public class MessageBox extends Menu {
 
     @Override
     public void close() {
-        setChanged();
-        notifyObservers(message.getAction());
+        super.close();
+
+        if (message.getAction() != null) {
+            setChanged();
+            notifyObservers(message.getAction());
+        }
     }
 
 }

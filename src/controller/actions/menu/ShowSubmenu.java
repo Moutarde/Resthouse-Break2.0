@@ -1,4 +1,4 @@
-package controller.actions;
+package controller.actions.menu;
 
 import gui.contextMenu.ContextMenu;
 import gui.contextMenu.Menu;
@@ -8,7 +8,7 @@ import controller.MenuHandler;
  * @author Nicolas
  *
  */
-public class ShowSubmenu implements IMenuAction {
+public class ShowSubmenu extends MenuAction {
 
     @Override
     public void execute(Menu menu, MenuHandler handler) {

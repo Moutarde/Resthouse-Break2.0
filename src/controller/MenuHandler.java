@@ -6,6 +6,7 @@ import gui.contextMenu.Menu;
 import gui.contextMenu.MessageBox;
 import gui.contextMenu.SelectAnswerBox;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -13,7 +14,7 @@ import model.GameModel;
 import model.items.Item;
 import model.messages.Message;
 import model.messages.Question;
-import controller.actions.IMenuAction;
+import controller.actions.IAction;
 
 /**
  * @author Nicolas Kniebihler
@@ -36,6 +37,10 @@ public class MenuHandler implements Observer {
         model.setMessageBox(messageBox);
     }
 
+    public void hideMessage() {
+        model.getMessageBox().display(false);
+    }
+
     // SUB MENU
 
     public void showBag() {
@@ -43,11 +48,6 @@ public class MenuHandler implements Observer {
         subMenu.addObserver(this);
         subMenu.display(true);
         model.setSubMenu(subMenu);
-    }
-
-    public void updateBag() {
-        assert model.getSubMenu() instanceof BagMenu : "submenu is not a BagMenu";
-        ((BagMenu)model.getSubMenu()).updateContent();
     }
 
     // INSPECT ITEM BOX
@@ -75,9 +75,19 @@ public class MenuHandler implements Observer {
     @Override
     public void update(Observable obs, Object action) {
         assert obs instanceof Menu : "Trying to update MenuHandler with an obs which is not a Menu";
-        assert action instanceof IMenuAction : "Trying to update MenuHandler with an action which is not a MenuAction";
 
-        ((IMenuAction)action).execute((Menu)obs, this);
+        if (action instanceof List) {
+            for (Object o : (List<?>)action) {
+                assert o instanceof IAction : "Trying to update MenuHandler with an action which is not a IAction";
+
+                ((IAction)o).execute((Menu)obs, this);
+            }
+        }
+        else {
+            assert action instanceof IAction : "Trying to update MenuHandler with an action which is not a IAction";
+
+            ((IAction)action).execute((Menu)obs, this);
+        }
     }
 
     public void validate() {

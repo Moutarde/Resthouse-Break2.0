@@ -1,9 +1,14 @@
 package gui.contextMenu;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import model.items.Item;
 import model.items.Price;
 import model.player.Player;
+import controller.actions.IAction;
 import controller.actions.MakeTransaction;
+import controller.actions.menu.CloseMenu;
 
 /**
  * @author Nicolas Kniebihler
@@ -38,26 +43,6 @@ public class TransactionMenu extends Menu {
         return nbAlreadyOwned;
     }
 
-    public int getSelectedNb() {
-        return selectedNb;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public Price getPrice() {
-        return price;
-    }
-
-    public Player getSeller() {
-        return seller;
-    }
-
-    public Player getBuyer() {
-        return buyer;
-    }
-
     public void incrementSelectedNb() {
         if (selectedNb < maxNb) ++selectedNb;
     }
@@ -88,8 +73,12 @@ public class TransactionMenu extends Menu {
 
     @Override
     public void selectElement() {
+        List<IAction> actions = new ArrayList<IAction>();
+        actions.add(new MakeTransaction(item, price, seller, buyer, selectedNb));
+        actions.add(new CloseMenu());
+
         setChanged();
-        notifyObservers(new MakeTransaction());
+        notifyObservers(actions);
     }
 
     @Override

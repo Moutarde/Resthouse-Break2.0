@@ -1,7 +1,7 @@
 package gui.contextMenu;
 
 import gui.UserInterface;
-import controller.actions.ShowSubmenu;
+import controller.actions.menu.ShowSubmenu;
 
 /**
  * @author Nicolas Kniebihler

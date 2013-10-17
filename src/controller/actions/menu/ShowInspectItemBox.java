@@ -1,4 +1,4 @@
-package controller.actions;
+package controller.actions.menu;
 
 import gui.contextMenu.BagMenu;
 import gui.contextMenu.Menu;
@@ -9,7 +9,7 @@ import controller.MenuHandler;
  * @author Nicolas Kniebihler
  *
  */
-public class ShowInspectItemBox implements IMenuAction {
+public class ShowInspectItemBox extends MenuAction {
 
     private Item item;
 

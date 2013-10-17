@@ -3,7 +3,7 @@ package model.messages;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.actions.IMenuAction;
+import controller.actions.IAction;
 
 /**
  * @author Nicolas Kniebihler
@@ -12,14 +12,14 @@ import controller.actions.IMenuAction;
 public class Question extends Message {
 
     private List<String> possibleAnswers = new ArrayList<String>();
-    private List<IMenuAction> actions = new ArrayList<IMenuAction>();
+    private List<List<IAction>> actionLists = new ArrayList<List<IAction>>();
     private int answerId = -1;
 
-    public Question(String str, List<String> possibleAnswers, List<IMenuAction> actions) {
+    public Question(String str, List<String> possibleAnswers, List<List<IAction>> actionLists) {
         super(str);
-        assert possibleAnswers.size() == actions.size() : "Amount of answers and actions are not equal";
+        assert possibleAnswers.size() == actionLists.size() : "Amount of answers and actions are not equal";
         this.possibleAnswers.addAll(possibleAnswers);
-        this.actions.addAll(actions);
+        this.actionLists.addAll(actionLists);
     }
 
     public List<String> getPossibleAnswers() {
@@ -32,9 +32,9 @@ public class Question extends Message {
         notifyObservers(getAnswerActionIFP());
     }
 
-    public IMenuAction getAnswerActionIFP() {
-        if (answerId != -1 && answerId < actions.size()) {
-            return actions.get(answerId);
+    public List<IAction> getAnswerActionIFP() {
+        if (answerId != -1 && answerId < actionLists.size()) {
+            return actionLists.get(answerId);
         }
         else {
             return null;

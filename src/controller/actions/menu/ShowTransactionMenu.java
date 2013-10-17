@@ -1,4 +1,4 @@
-package controller.actions;
+package controller.actions.menu;
 
 import gui.contextMenu.Menu;
 import gui.contextMenu.StoreMenu;
@@ -11,7 +11,7 @@ import controller.MenuHandler;
  * @author Nicolas Kniebihler
  *
  */
-public class ShowTransactionMenu implements IMenuAction {
+public class ShowTransactionMenu extends MenuAction {
 
     private Item item;
     private Player seller, buyer;

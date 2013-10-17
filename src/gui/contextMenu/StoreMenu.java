@@ -4,8 +4,8 @@ import gui.UserInterface;
 import model.items.Item;
 import model.items.Price;
 import model.player.Player;
-import controller.actions.ContinueSpeech;
-import controller.actions.ShowTransactionMenu;
+import controller.actions.menu.ContinueSpeech;
+import controller.actions.menu.ShowTransactionMenu;
 
 /**
  * @author Nicolas
@@ -61,6 +61,7 @@ public class StoreMenu extends BagMenu {
 
     @Override
     public void close() {
+        super.close();
         setChanged();
         notifyObservers(new ContinueSpeech());
     }

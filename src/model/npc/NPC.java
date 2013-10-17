@@ -23,9 +23,9 @@ import model.player.Bag;
 import model.player.Player;
 import model.rooms.Room;
 import controller.Direction;
-import controller.actions.ContinueSpeech;
-import controller.actions.IMenuAction;
-import controller.actions.ShowMessage;
+import controller.actions.IAction;
+import controller.actions.menu.ContinueSpeech;
+import controller.actions.menu.ShowMessage;
 
 /**
  * @author Nicolas Kniebihler
@@ -212,14 +212,19 @@ public class NPC extends Player {
                         String[] answersTokens = questionTokens[1].substring(0, questionTokens[1].length() - 1).split(",");
 
                         List<String> possibleAnswers = new ArrayList<String>();
-                        List<IMenuAction> actions = new ArrayList<IMenuAction>();
+                        List<List<IAction>> actionLists = new ArrayList<List<IAction>>();
+
                         for (String answer : answersTokens) {
                             String[] answerTokens = answer.split(":");
                             possibleAnswers.add(UserInterface.getLang().getString(answerTokens[0]));
+
+                            List<IAction> actions = new ArrayList<IAction>();
                             actions.add(new ShowMessage(new Message(currentNPCName + " : " + UserInterface.getLang().getString(answerTokens[1]), new ContinueSpeech())));
+
+                            actionLists.add(actions);
                         }
 
-                        Question q = new Question(currentNPCName + " : " + UserInterface.getLang().getString(question), possibleAnswers, actions);
+                        Question q = new Question(currentNPCName + " : " + UserInterface.getLang().getString(question), possibleAnswers, actionLists);
                         currentNPCSpeech.add(q);
                     }
                     else {

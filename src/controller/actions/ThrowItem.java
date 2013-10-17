@@ -1,17 +1,13 @@
 package controller.actions;
 
-import gui.UserInterface;
-import gui.contextMenu.Menu;
 import model.items.Item;
-import model.messages.Message;
 import model.player.Bag;
-import controller.MenuHandler;
 
 /**
  * @author Nicolas Kniebihler
  *
  */
-public class ThrowItem implements IMenuAction {
+public class ThrowItem implements IAction {
 
     private Item item;
     private Bag bag;
@@ -22,13 +18,10 @@ public class ThrowItem implements IMenuAction {
     }
 
     @Override
-    public void execute(Menu menu, MenuHandler handler) {
+    public void execute(Object origin, Object handler) {
         assert item.isThrowable() : "Trying to throw a non-throwable item";
 
         bag.removeItemIFP(item);
-        handler.showMessage(new Message(UserInterface.getLang().getString("thrown") + item.getName()));
-        handler.updateBag();
-        handler.hideInspectItemBox();
     }
 
 }
