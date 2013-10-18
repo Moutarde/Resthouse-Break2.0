@@ -5,6 +5,7 @@ import model.GameModel;
 import model.items.Item;
 import model.items.Key;
 import model.messages.Message;
+import controller.handlers.EventHandler;
 import controller.handlers.MenuHandler;
 
 /**
@@ -14,8 +15,11 @@ import controller.handlers.MenuHandler;
 public class GameController {
     private GameModel model;
     private MoveHandler moveHandler;
+
     private MenuHandler menuHandler;
     private ConversationHandler conversationHandler;
+
+    private EventHandler eventHandler;
 
     public GameController(GameModel model) {
         this.model = model;
@@ -26,6 +30,9 @@ public class GameController {
         model.getMenu().addObserver(menuHandler);
 
         this.conversationHandler = new ConversationHandler(model);
+
+        this.eventHandler = new EventHandler(model);
+        model.setEventHandler(eventHandler);
 
         menuHandler.showMessage(new Message(UserInterface.getLang().getString("firstMessage")));
         this.model.setGamePaused(true);

@@ -5,13 +5,20 @@ import gui.contextMenu.Menu;
 import gui.sprite.Posture;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import model.events.EnterRoomEvent;
+import model.events.Event;
 import model.items.Item;
+import model.messages.Message;
 import model.npc.NPC;
 import model.player.Player;
 import model.rooms.Room;
+import controller.actions.ShowMessage;
+import controller.handlers.EventHandler;
 
 /**
  * @author Nicolas Kniebihler
@@ -29,6 +36,8 @@ public class GameModel extends Observable {
     private Menu storeMenu;
     private Menu transactionMenu;
 
+    private List<Event> events = new ArrayList<Event>();
+
     private boolean gameIsPaused = false;
 
     public GameModel() {
@@ -38,10 +47,17 @@ public class GameModel extends Observable {
     public void init() {
         try {
             Item.createItems();
+
             Room startRoom = Room.createRooms();
             startRoom.loadImg();
-            player = new Player(Player.controllablePlayerId, startRoom, new Coord(3,3), Posture.LOOK_DOWN);
+
             NPC.createNPC();
+
+            this.player = new Player(Player.controllablePlayerId, startRoom, new Coord(3,3), Posture.LOOK_DOWN);
+
+            Event e = new EnterRoomEvent(Room.getRoom("R_PARK"), player);
+            e.addAction(new ShowMessage(new Message("enterRoom")));
+            events.add(e);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -188,6 +204,14 @@ public class GameModel extends Observable {
 
     public boolean isGamePaused() {
         return gameIsPaused;
+    }
+
+    // EVENTS
+
+    public void setEventHandler(EventHandler handler) {
+        for (Event e : events) {
+            e.addObserver(handler);
+        }
     }
 
     @Override

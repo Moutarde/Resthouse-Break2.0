@@ -4,6 +4,7 @@ import gui.sprite.Posture;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 
 import model.Coord;
 import model.Move;
@@ -21,7 +22,7 @@ import controller.Direction;
  * @author Nicolas
  *
  */
-public class Player {
+public class Player extends Observable {
     public static int controllablePlayerId = 100;
 
     private int id;
@@ -31,6 +32,8 @@ public class Player {
     private Move move = new Move(Direction.NONE);
     private Bag bag = new Bag();
     private Map<Item, Price> priceMap = new HashMap<Item, Price>();
+
+    private boolean hasChangedRoom = false;
 
     public Player(int id, Room room, Coord coord, Posture posture) {
         this.id = id;
@@ -47,10 +50,6 @@ public class Player {
 
     public Room getRoom() {
         return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
     }
 
     public Coord getCoord() {
@@ -208,6 +207,9 @@ public class Player {
                 room.loadImg();
 
             setCoord(newCoord);
+
+            setChangedRoom();
+            notifyObservers();
         }
     }
 
@@ -273,5 +275,23 @@ public class Player {
         }
 
         return null;
+    }
+
+    // OBSERVABLE
+
+    public void setChangedRoom() {
+        hasChangedRoom = true;
+        setChanged();
+    }
+
+    public boolean hasChangedRoom() {
+        return hasChangedRoom;
+    }
+
+    @Override
+    public void notifyObservers() {
+        super.notifyObservers();
+
+        hasChangedRoom = false;
     }
 }
