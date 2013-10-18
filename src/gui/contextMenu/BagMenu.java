@@ -1,6 +1,10 @@
 package gui.contextMenu;
 
 import gui.UserInterface;
+
+import java.util.Observable;
+import java.util.Observer;
+
 import model.items.Item;
 import model.player.Bag;
 import controller.actions.ShowInspectItemBox;
@@ -9,12 +13,13 @@ import controller.actions.ShowInspectItemBox;
  * @author Nicolas Kniebihler
  *
  */
-public class BagMenu extends Menu {
+public class BagMenu extends Menu implements Observer {
     protected Bag bag;
 
     public BagMenu(Bag bag) {
         super("bag", bag.getSize() + 1);
         this.bag = bag;
+        this.bag.addObserver(this);
     }
 
     public Bag getBag() {
@@ -30,10 +35,6 @@ public class BagMenu extends Menu {
             assert id < bag.getSize() : "Bag size and BagMenu size are not equal";
             return bag.getItem(id);
         }
-    }
-
-    public void updateContent() {
-        this.setNbElements(bag.getSize() + 1);
     }
 
     @Override
@@ -56,6 +57,13 @@ public class BagMenu extends Menu {
 
         Item item = bag.getItem(index);
         return "" + bag.getAmountOf(item) + "x " + item.getName();
+    }
+
+    @Override
+    public void update(Observable obs, Object obj) {
+        assert obs instanceof Bag : "BagMenu observes an Object that is not a Bag...";
+
+        this.setNbElements(bag.getSize() + 1);
     }
 
 }

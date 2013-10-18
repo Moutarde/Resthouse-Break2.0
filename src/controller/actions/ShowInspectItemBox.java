@@ -1,15 +1,13 @@
 package controller.actions;
 
-import gui.contextMenu.BagMenu;
-import gui.contextMenu.Menu;
 import model.items.Item;
-import controller.MenuHandler;
+import controller.handlers.MenuHandler;
 
 /**
  * @author Nicolas Kniebihler
  *
  */
-public class ShowInspectItemBox implements IMenuAction {
+public class ShowInspectItemBox implements IAction {
 
     private Item item;
 
@@ -18,13 +16,10 @@ public class ShowInspectItemBox implements IMenuAction {
     }
 
     @Override
-    public void execute(Menu menu, MenuHandler handler) {
-        if (menu instanceof BagMenu) {
-            handler.showInspectItemBox(item);
-        }
-        else {
-            assert false : "Trying to show a choice box that doesn't exist";
-        }
+    public void execute(Object origin, Object handler) {
+        assert handler instanceof MenuHandler : "handler is not a MenuHandler";
+
+        ((MenuHandler)handler).showInspectItemBox(item);
     }
 
 }

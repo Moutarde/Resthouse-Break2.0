@@ -1,5 +1,5 @@
 # special speeches :
-#  - OPENSTORE
+#  - OPENSTORE:speech
 #  - ?questionText(answer1:answerSpeech1,answer2:answerSpeech2)
 #
 # bag=(O_ITEM1,nb_item1,O_MONEY,nb_money);(O_ITEM2,nb_item2,O_MONEY,nb_money)

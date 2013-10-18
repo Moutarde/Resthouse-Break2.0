@@ -1,4 +1,4 @@
-package controller;
+package controller.handlers;
 
 import gui.contextMenu.BagMenu;
 import gui.contextMenu.InspectItemBox;
@@ -7,19 +7,17 @@ import gui.contextMenu.MessageBox;
 import gui.contextMenu.SelectAnswerBox;
 
 import java.util.Observable;
-import java.util.Observer;
 
 import model.GameModel;
 import model.items.Item;
 import model.messages.Message;
 import model.messages.Question;
-import controller.actions.IMenuAction;
 
 /**
  * @author Nicolas Kniebihler
  *
  */
-public class MenuHandler implements Observer {
+public class MenuHandler extends Handler {
 
     protected GameModel model;
 
@@ -36,6 +34,10 @@ public class MenuHandler implements Observer {
         model.setMessageBox(messageBox);
     }
 
+    public void hideMessage() {
+        model.getMessageBox().display(false);
+    }
+
     // SUB MENU
 
     public void showBag() {
@@ -43,11 +45,6 @@ public class MenuHandler implements Observer {
         subMenu.addObserver(this);
         subMenu.display(true);
         model.setSubMenu(subMenu);
-    }
-
-    public void updateBag() {
-        assert model.getSubMenu() instanceof BagMenu : "submenu is not a BagMenu";
-        ((BagMenu)model.getSubMenu()).updateContent();
     }
 
     // INSPECT ITEM BOX
@@ -75,9 +72,8 @@ public class MenuHandler implements Observer {
     @Override
     public void update(Observable obs, Object action) {
         assert obs instanceof Menu : "Trying to update MenuHandler with an obs which is not a Menu";
-        assert action instanceof IMenuAction : "Trying to update MenuHandler with an action which is not a MenuAction";
 
-        ((IMenuAction)action).execute((Menu)obs, this);
+        super.update(obs, action);
     }
 
     public void validate() {

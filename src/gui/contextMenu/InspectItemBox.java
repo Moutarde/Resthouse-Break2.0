@@ -10,7 +10,8 @@ import model.items.Item;
 import model.messages.Message;
 import model.messages.Question;
 import model.player.Bag;
-import controller.actions.IMenuAction;
+import controller.actions.CloseMenu;
+import controller.actions.IAction;
 import controller.actions.ShowMessage;
 import controller.actions.ThrowItem;
 import controller.actions.UseItem;
@@ -73,10 +74,21 @@ public class InspectItemBox extends Menu {
                 List<String> possibleAnswers = new ArrayList<String>();
                 possibleAnswers.add(UserInterface.getLang().getString("yes"));
                 possibleAnswers.add(UserInterface.getLang().getString("no"));
-                List<IMenuAction> actions = new ArrayList<IMenuAction>();
-                actions.add(new ThrowItem(item, bag));
-                actions.add(new ShowMessage(null));
-                Question q = new Question(UserInterface.getLang().getString("confirmThrow"), possibleAnswers, actions);
+
+                List<List<IAction>> actionLists = new ArrayList<List<IAction>>();
+
+                List<IAction> throwActionList = new ArrayList<IAction>();
+                throwActionList.add(new ThrowItem(item, bag));
+                throwActionList.add(new ShowMessage(new Message(UserInterface.getLang().getString("thrown") + item.getName())));
+                throwActionList.add(new CloseMenu(this));
+
+                List<IAction> cancelActionList = new ArrayList<IAction>();
+                cancelActionList.add(new ShowMessage(null));
+
+                actionLists.add(throwActionList);
+                actionLists.add(cancelActionList);
+
+                Question q = new Question(UserInterface.getLang().getString("confirmThrow"), possibleAnswers, actionLists);
 
                 notifyObservers(new ShowMessage(q));
             }

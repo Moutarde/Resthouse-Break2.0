@@ -1,6 +1,7 @@
 package model.player;
 
 import java.util.HashMap;
+import java.util.Observable;
 import java.util.Set;
 
 import model.items.Item;
@@ -9,7 +10,7 @@ import model.items.Item;
  * @author Nicolas Kniebihler
  *
  */
-public class Bag {
+public class Bag extends Observable {
     private HashMap<Item, Integer> items = new HashMap<Item, Integer>();
 
     public Bag() {
@@ -49,6 +50,9 @@ public class Bag {
         else {
             items.put(i, nb);
         }
+
+        setChanged();
+        notifyObservers();
     }
 
     public void removeItemIFP(Item i) {
@@ -67,6 +71,9 @@ public class Bag {
         else {
             items.put(i, currentAmount - nb);
         }
+
+        setChanged();
+        notifyObservers();
     }
 
     public Item getItem(int index) {

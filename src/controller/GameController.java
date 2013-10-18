@@ -5,6 +5,7 @@ import model.GameModel;
 import model.items.Item;
 import model.items.Key;
 import model.messages.Message;
+import controller.handlers.MenuHandler;
 
 /**
  * @author Nicolas Kniebihler
@@ -28,10 +29,6 @@ public class GameController {
 
         menuHandler.showMessage(new Message(UserInterface.getLang().getString("firstMessage")));
         this.model.setGamePaused(true);
-    }
-
-    public MenuHandler getMenuHandler() {
-        return menuHandler;
     }
 
     public void update(float delta) {

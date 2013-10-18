@@ -61,6 +61,7 @@ public class StoreMenu extends BagMenu {
 
     @Override
     public void close() {
+        super.close();
         setChanged();
         notifyObservers(new ContinueSpeech());
     }

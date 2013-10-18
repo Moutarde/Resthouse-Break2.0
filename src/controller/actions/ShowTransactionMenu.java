@@ -1,17 +1,15 @@
 package controller.actions;
 
-import gui.contextMenu.Menu;
 import gui.contextMenu.StoreMenu;
 import model.items.Item;
 import model.player.Player;
 import controller.ConversationHandler;
-import controller.MenuHandler;
 
 /**
  * @author Nicolas Kniebihler
  *
  */
-public class ShowTransactionMenu implements IMenuAction {
+public class ShowTransactionMenu implements IAction {
 
     private Item item;
     private Player seller, buyer;
@@ -23,13 +21,11 @@ public class ShowTransactionMenu implements IMenuAction {
     }
 
     @Override
-    public void execute(Menu menu, MenuHandler handler) {
-        if (menu instanceof StoreMenu && handler instanceof ConversationHandler) {
-            ((ConversationHandler)handler).showTransactionMenu(item, seller, buyer);
-        }
-        else {
-            assert false : "Trying to show a choice box that doesn't exist";
-        }
+    public void execute(Object origin, Object handler) {
+        assert origin instanceof StoreMenu : "origin is not a StoreMenu";
+        assert handler instanceof ConversationHandler : "handler is not a ConversationHandler";
+
+        ((ConversationHandler)handler).showTransactionMenu(item, seller, buyer);
     }
 
 }

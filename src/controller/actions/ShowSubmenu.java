@@ -1,21 +1,22 @@
 package controller.actions;
 
 import gui.contextMenu.ContextMenu;
-import gui.contextMenu.Menu;
-import controller.MenuHandler;
+import controller.handlers.MenuHandler;
 
 /**
- * @author Nicolas
+ * @author Nicolas Kniebihler
  *
  */
-public class ShowSubmenu implements IMenuAction {
+public class ShowSubmenu implements IAction {
 
     @Override
-    public void execute(Menu menu, MenuHandler handler) {
-        assert menu instanceof ContextMenu : "menu is not a ContextMenu";
-        ContextMenu.MenuCategory pointedCategory = ContextMenu.MenuCategory.values()[menu.getPointedElementId()];
+    public void execute(Object origin, Object handler) {
+        assert origin instanceof ContextMenu : "menu is not a ContextMenu";
+        assert handler instanceof MenuHandler : "handler is not a MenuHandler";
+
+        ContextMenu.MenuCategory pointedCategory = ContextMenu.MenuCategory.values()[((ContextMenu)origin).getPointedElementId()];
         if (pointedCategory == ContextMenu.MenuCategory.BAG) {
-            handler.showBag();
+            ((MenuHandler)handler).showBag();
         }
         else {
             assert false : "Trying to show a subMenu that doesn't exist : " + pointedCategory;

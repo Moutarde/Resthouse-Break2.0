@@ -1,18 +1,31 @@
 package controller.actions;
 
 import gui.contextMenu.Menu;
-import controller.MenuHandler;
 
 /**
  * @author Nicolas Kniebihler
  *
  */
-public class CloseMenu implements IMenuAction {
+public class CloseMenu implements IAction {
+
+    private Menu menuToClose;
+
+    public CloseMenu() {
+    }
+
+    public CloseMenu(Menu menuToClose) {
+        this.menuToClose = menuToClose;
+    }
 
     @Override
-    public void execute(Menu menu, MenuHandler handler) {
-        assert menu.isDisplayed() : "Trying to hide menu while it is not displayed";
-        menu.display(false);
+    public void execute(Object origin, Object handler) {
+        if (menuToClose != null) {
+            menuToClose.close();
+        }
+        else {
+            assert origin instanceof Menu : "origin is not a Menu";
+            ((Menu)origin).close();
+        }
     }
 
 }

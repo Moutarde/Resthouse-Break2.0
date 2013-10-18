@@ -2,8 +2,7 @@ package model.messages;
 
 import java.util.Observable;
 
-import controller.actions.CloseMenu;
-import controller.actions.IMenuAction;
+import controller.actions.IAction;
 
 
 /**
@@ -12,14 +11,13 @@ import controller.actions.IMenuAction;
  */
 public class Message extends Observable {
     String currentString = "";
-    IMenuAction action;
+    IAction action;
 
     public Message(String str) {
         currentString = str;
-        action = new CloseMenu();
     }
 
-    public Message(String str, IMenuAction action) {
+    public Message(String str, IAction action) {
         currentString = str;
         this.action = action;
     }
@@ -36,7 +34,7 @@ public class Message extends Observable {
         return currentString.isEmpty();
     }
 
-    public IMenuAction getAction() {
+    public IAction getAction() {
         return action;
     }
 }
