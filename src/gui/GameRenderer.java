@@ -13,6 +13,7 @@ import java.util.Map;
 
 import model.Coord;
 import model.GameModel;
+import model.GameModel.MenuID;
 import model.Move;
 import model.Resource;
 import model.npc.NPC;
@@ -121,84 +122,88 @@ public class GameRenderer implements Renderer {
         }
 
         // Render the bottom message
-        if (model.isMessageBoxDisplayed()) {
+        if (model.isMenuDisplayed(MenuID.messageBox)) {
             Coord messagePosition = new Coord(0, GamePanel.SIZE.height - GamePanel.TEXT_ZONE_HEIGHT);
             Dimension messageSize = new Dimension(GamePanel.SIZE.width, GamePanel.TEXT_ZONE_HEIGHT);
             drawFramedRect(g, messagePosition, messageSize, 2);
 
             Coord offset = new Coord(10, 10);
-            drawText(g, messagePosition, model.getMessageBox().getContent(), offset, messageSize);
+            drawText(g, messagePosition, model.getMenu(MenuID.messageBox).getContent(), offset, messageSize);
 
             String pressEnter = UserInterface.getLang().getString("pressEnter");
             g.drawString(pressEnter, GamePanel.SIZE.width - (offset.getX() + g.getFontMetrics().stringWidth(pressEnter)), GamePanel.SIZE.height - offset.getY());
         }
 
         // Render the menu
-        if (model.isMenuDisplayed()) {
+        if (model.isMenuDisplayed(MenuID.menu)) {
             Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.MENU_SIZE.width, 0);
             drawFramedRect(g, menuPosition, GamePanel.MENU_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getMenu().getContent(), offset, GamePanel.MENU_SIZE);
+            drawText(g, menuPosition, model.getMenu(MenuID.menu).getContent(), offset, GamePanel.MENU_SIZE);
         }
 
         // Render the sub menu
-        if (model.isSubMenuDisplayed()) {
+        if (model.isMenuDisplayed(MenuID.subMenu)) {
             Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.SUBMENU_SIZE.width, 0);
             drawFramedRect(g, menuPosition, GamePanel.SUBMENU_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getSubMenu().getContent(), offset, GamePanel.SUBMENU_SIZE);
+            drawText(g, menuPosition, model.getMenu(MenuID.subMenu).getContent(), offset, GamePanel.SUBMENU_SIZE);
         }
 
         // Render the inspect item box
-        if (model.isInspectItemBoxDisplayed()) {
+        if (model.isMenuDisplayed(MenuID.inspectItemBox)) {
             Coord menuPosition = new Coord(GamePanel.SIZE.width / 3, GamePanel.SIZE.height / 3);
             drawFramedRect(g, menuPosition, GamePanel.INSPECT_ITEM_BOX_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getInspectItemBox().getContent(), offset, GamePanel.INSPECT_ITEM_BOX_SIZE);
+            drawText(g, menuPosition, model.getMenu(MenuID.inspectItemBox).getContent(), offset, GamePanel.INSPECT_ITEM_BOX_SIZE);
         }
 
         // Render the store menu
-        if (model.isStoreMenuDisplayed()) {
+        if (model.isMenuDisplayed(MenuID.storeMenu)) {
+            assert model.getMenu(MenuID.storeMenu) instanceof StoreMenu : "Store menu is not an instance of StoreMenu";
+            StoreMenu storeMenu = (StoreMenu) model.getMenu(MenuID.storeMenu);
+
             // STORE
             Coord menuPosition = new Coord(0, GamePanel.SIZE.height - (GamePanel.TEXT_ZONE_HEIGHT + GamePanel.STORE_MENU_SIZE.height));
             drawFramedRect(g, menuPosition, GamePanel.STORE_MENU_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getStoreMenu().getContent(), offset, GamePanel.STORE_MENU_SIZE);
+            drawText(g, menuPosition, storeMenu.getContent(), offset, GamePanel.STORE_MENU_SIZE);
 
             // DETAILS
             Coord detailsPosition = new Coord(menuPosition.getX() + GamePanel.STORE_MENU_SIZE.width, menuPosition.getY());
             drawFramedRect(g, detailsPosition, GamePanel.STORE_MENU_DETAILS_SIZE, 2);
-            assert model.getStoreMenu() instanceof StoreMenu : "Store menu is not an instance of StoreMenu";
-            drawText(g, detailsPosition, ((StoreMenu)model.getStoreMenu()).getPointedElementDescr(), offset, GamePanel.STORE_MENU_DETAILS_SIZE);
+            drawText(g, detailsPosition, storeMenu.getPointedElementDescr(), offset, GamePanel.STORE_MENU_DETAILS_SIZE);
 
             // PRICE
             Coord pricePosition = new Coord(detailsPosition.getX(), detailsPosition.getY() + GamePanel.STORE_MENU_DETAILS_SIZE.height);
             drawFramedRect(g, pricePosition, GamePanel.PRICE_MENU_SIZE, 2);
-            drawText(g, pricePosition, ((StoreMenu)model.getStoreMenu()).getPointedElementPrice(), offset, GamePanel.PRICE_MENU_SIZE);
+            drawText(g, pricePosition, storeMenu.getPointedElementPrice(), offset, GamePanel.PRICE_MENU_SIZE);
         }
 
         // Render the transaction menu
-        if (model.isTransactionMenuDisplayed()) {
+        if (model.isMenuDisplayed(MenuID.transactionMenu)) {
+            assert model.getMenu(MenuID.transactionMenu) instanceof TransactionMenu : "Transaction menu is not an instance of TransactionMenu";
+            TransactionMenu transactionMenu = (TransactionMenu) model.getMenu(MenuID.transactionMenu);
+
             // NB ITEMS TO BUY
             Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.TRANSACTION_MENU_SIZE.width, 0);
             drawFramedRect(g, menuPosition, GamePanel.TRANSACTION_MENU_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getTransactionMenu().getContent(), offset, GamePanel.TRANSACTION_MENU_SIZE);
+            drawText(g, menuPosition, transactionMenu.getContent(), offset, GamePanel.TRANSACTION_MENU_SIZE);
 
             // NB ITEMS OWNED
             Coord itemsOwnedPosition = new Coord(0, 0);
             drawFramedRect(g, itemsOwnedPosition, GamePanel.ITEMS_OWNED_MENU_SIZE, 2);
-            assert model.getTransactionMenu() instanceof TransactionMenu : "Transaction menu is not an instance of TransactionMenu";
-            String itemsOwnedText = ((TransactionMenu)model.getTransactionMenu()).getNbAlreadyOwned() + " " + UserInterface.getLang().getString("owned");
+            String itemsOwnedText = transactionMenu.getNbAlreadyOwned() + " " + UserInterface.getLang().getString("owned");
             drawText(g, itemsOwnedPosition, itemsOwnedText, offset, GamePanel.ITEMS_OWNED_MENU_SIZE);
         }
 
         // Render the select answer box
-        if (model.isSelectAnswerBoxDisplayed()) {
+        if (model.isMenuDisplayed(MenuID.selectAnswerBox)) {
             Coord menuPosition = new Coord(GamePanel.SIZE.width - GamePanel.SELECT_ANSWER_BOX_SIZE.width, GamePanel.SIZE.height - (GamePanel.TEXT_ZONE_HEIGHT + GamePanel.SELECT_ANSWER_BOX_SIZE.height));
             drawFramedRect(g, menuPosition, GamePanel.SELECT_ANSWER_BOX_SIZE, 2);
             Coord offset = new Coord(10, 10);
-            drawText(g, menuPosition, model.getSelectAnswerBox().getContent(), offset, GamePanel.SELECT_ANSWER_BOX_SIZE);
+            drawText(g, menuPosition, model.getMenu(MenuID.selectAnswerBox).getContent(), offset, GamePanel.SELECT_ANSWER_BOX_SIZE);
         }
     }
 

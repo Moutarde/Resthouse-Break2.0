@@ -1,7 +1,9 @@
 package controller.actions;
 
+import gui.contextMenu.InspectItemBox;
+import model.GameModel;
 import model.items.Item;
-import controller.handlers.MenuHandler;
+import controller.handlers.Handler;
 
 /**
  * @author Nicolas Kniebihler
@@ -16,10 +18,10 @@ public class ShowInspectItemBox implements IAction {
     }
 
     @Override
-    public void execute(Object origin, Object handler) {
-        assert handler instanceof MenuHandler : "handler is not a MenuHandler";
-
-        ((MenuHandler)handler).showInspectItemBox(item);
+    public void execute(Object origin, Handler handler) {
+        GameModel model = handler.getModel();
+        ((InspectItemBox)model.getMenu(GameModel.MenuID.inspectItemBox)).init(item, model.getPlayer().getBag());
+        model.showMenu(GameModel.MenuID.inspectItemBox);
     }
 
 }

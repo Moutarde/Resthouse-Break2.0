@@ -1,10 +1,14 @@
 package controller.actions;
 
+import gui.contextMenu.MessageBox;
+import gui.contextMenu.SelectAnswerBox;
+import gui.contextMenu.StoreMenu;
+import model.GameModel;
+import model.GameModel.MenuID;
 import model.messages.Message;
 import model.messages.OpenStore;
 import model.messages.Question;
-import controller.ConversationHandler;
-import controller.handlers.MenuHandler;
+import controller.handlers.Handler;
 
 /**
  * @author Nicolas Kniebihler
@@ -19,22 +23,21 @@ public class ShowMessage implements IAction {
     }
 
     @Override
-    public void execute(Object origin, Object handler) {
-        assert handler instanceof MenuHandler : "handler is not a MenuHandler";
+    public void execute(Object origin, Handler handler) {
+        GameModel model = handler.getModel();
 
-        if (message == null) {
-            ((MenuHandler)handler).hideMessage();
+        ((MessageBox)model.getMenu(MenuID.messageBox)).init(message);
+        if (!model.isMenuDisplayed(MenuID.messageBox)) {
+            model.showMenu(MenuID.messageBox);
         }
-        else {
-            ((MenuHandler)handler).showMessage(message);
 
-            if (message instanceof Question) {
-                ((MenuHandler)handler).showSelectAnswerBox((Question)message);
-            }
-            else if (message instanceof OpenStore) {
-                assert handler instanceof ConversationHandler : "message is an OpenStore but handler is not a ConversationHandler";
-                ((ConversationHandler)handler).showStore();
-            }
+        if (message instanceof Question) {
+            ((SelectAnswerBox)model.getMenu(MenuID.selectAnswerBox)).init((Question)message);
+            model.showMenu(MenuID.selectAnswerBox);
+        }
+        else if (message instanceof OpenStore) {
+            ((StoreMenu)model.getMenu(MenuID.storeMenu)).init(model.getConversation().getSpeaker(), model.getPlayer());
+            model.showMenu(MenuID.storeMenu);
         }
     }
 

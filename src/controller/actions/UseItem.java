@@ -1,10 +1,11 @@
 package controller.actions;
 
 import gui.UserInterface;
+import gui.contextMenu.MessageBox;
 import model.GameModel;
 import model.items.Item;
 import model.messages.Message;
-import controller.handlers.MenuHandler;
+import controller.handlers.Handler;
 
 /**
  * @author Nicolas Kniebihler
@@ -13,16 +14,14 @@ import controller.handlers.MenuHandler;
 public class UseItem implements IAction {
 
     private Item item;
-    private GameModel model;
 
-    public UseItem(Item item, GameModel model) {
+    public UseItem(Item item) {
         this.item = item;
-        this.model = model;
     }
 
     @Override
-    public void execute(Object origin, Object handler) {
-        assert handler instanceof MenuHandler : "handler is not a MenuHandler";
+    public void execute(Object origin, Handler handler) {
+        GameModel model = handler.getModel();
 
         Message message;
         if (item.isUsable(model)) {
@@ -32,7 +31,8 @@ public class UseItem implements IAction {
         else {
             message = new Message(UserInterface.getLang().getString("notUsable"));
         }
-        ((MenuHandler)handler).showMessage(message);
+        ((MessageBox)model.getMenu(GameModel.MenuID.messageBox)).init(message);
+        model.showMenu(GameModel.MenuID.messageBox);
     }
 
 }

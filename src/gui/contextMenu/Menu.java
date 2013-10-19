@@ -13,9 +13,21 @@ public abstract class Menu extends Displayable {
 
     private int pointedElementId = 0;
 
+    protected boolean isInitialized = false;
+
     public Menu(String name, int nbElements) {
         this.name = name;
         this.nbElements = nbElements;
+    }
+
+    public void init() {
+        assert !isInitialized : "Menu is already initialized";
+        isInitialized = true;
+    }
+
+    public void clean() {
+        assert isInitialized : "Menu not initialized";
+        isInitialized = false;
     }
 
     public int getNbElements() {
@@ -27,10 +39,14 @@ public abstract class Menu extends Displayable {
     }
 
     public int getPointedElementId() {
+        assert isInitialized : "Menu not initialized";
+
         return pointedElementId;
     }
 
     public void changePointedElement(int i) {
+        assert isInitialized : "You can't modify a non-init Menu";
+
         int index = pointedElementId + i;
         if (index < 0) {
             index = nbElements - 1;
@@ -44,11 +60,15 @@ public abstract class Menu extends Displayable {
 
     @Override
     public void display(boolean value) {
+        assert isInitialized : "You can't display a non-init Menu";
+
         super.display(value);
         pointedElementId = 0;
     }
 
     public String getContent() {
+        assert isInitialized : "Menu not initialized";
+
         String content = name.isEmpty() ? "" : UserInterface.getLang().getString(name) + " :\n";
         for (int i = 0 ; i < nbElements ; ++i) {
             content += "  ";
@@ -62,7 +82,10 @@ public abstract class Menu extends Displayable {
     }
 
     public void close() {
+        assert isInitialized : "You can't close a non-init Menu";
+
         display(false);
+        clean();
     }
 
     public abstract void selectElement();

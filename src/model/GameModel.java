@@ -1,22 +1,33 @@
 package model;
 
+import gui.UserInterface;
+import gui.contextMenu.BagMenu;
 import gui.contextMenu.ContextMenu;
+import gui.contextMenu.InspectItemBox;
 import gui.contextMenu.Menu;
+import gui.contextMenu.MessageBox;
+import gui.contextMenu.SelectAnswerBox;
+import gui.contextMenu.StoreMenu;
+import gui.contextMenu.TransactionMenu;
 import gui.sprite.Posture;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
 import model.events.EnterRoomEvent;
 import model.events.Event;
 import model.items.Item;
+import model.messages.Conversation;
 import model.messages.Message;
 import model.npc.NPC;
 import model.player.Player;
 import model.rooms.Room;
+import controller.actions.Pause;
 import controller.actions.ShowMessage;
 import controller.handlers.EventHandler;
 
@@ -26,22 +37,34 @@ import controller.handlers.EventHandler;
  */
 public class GameModel extends Observable {
 
+    public static enum MenuID {
+        messageBox,
+        menu,
+        subMenu,
+        inspectItemBox,
+        selectAnswerBox,
+        storeMenu,
+        transactionMenu;
+    }
+
     private Player player;
 
-    private Menu messageBox;
-    private Menu menu;
-    private Menu subMenu;
-    private Menu inspectItemBox;
-    private Menu selectAnswerBox;
-    private Menu storeMenu;
-    private Menu transactionMenu;
+    private Map<MenuID, Menu> menus = new HashMap<MenuID, Menu>(MenuID.values().length);
+
+    private Conversation conversation = new Conversation();
 
     private List<Event> events = new ArrayList<Event>();
 
     private boolean gameIsPaused = false;
 
     public GameModel() {
-        this.menu = new ContextMenu();
+        setMenu(MenuID.messageBox, new MessageBox());
+        setMenu(MenuID.menu, new ContextMenu());
+        setMenu(MenuID.subMenu, new BagMenu());
+        setMenu(MenuID.inspectItemBox, new InspectItemBox());
+        setMenu(MenuID.selectAnswerBox, new SelectAnswerBox());
+        setMenu(MenuID.storeMenu, new StoreMenu());
+        setMenu(MenuID.transactionMenu, new TransactionMenu());
     }
 
     public void init() {
@@ -56,7 +79,8 @@ public class GameModel extends Observable {
             this.player = new Player(Player.controllablePlayerId, startRoom, new Coord(3,3), Posture.LOOK_DOWN);
 
             Event e = new EnterRoomEvent(Room.getRoom("R_PARK"), player);
-            e.addAction(new ShowMessage(new Message("enterRoom")));
+            e.addAction(new Pause());
+            e.addAction(new ShowMessage(new Message(UserInterface.getLang().getString("enterRoom"))));
             events.add(e);
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,29 +92,29 @@ public class GameModel extends Observable {
     }
 
     public Menu getPrioritaryDisplayedMenu() {
-        if (isSelectAnswerBoxDisplayed()) {
-            return selectAnswerBox;
+        if (isMenuDisplayed(MenuID.selectAnswerBox)) {
+            return getMenu(MenuID.selectAnswerBox);
         }
-        else if (isStoreMenuDisplayed()) {
-            if (isTransactionMenuDisplayed()) {
-                return transactionMenu;
+        else if (isMenuDisplayed(MenuID.storeMenu)) {
+            if (isMenuDisplayed(MenuID.transactionMenu)) {
+                return getMenu(MenuID.transactionMenu);
             }
             else {
-                return storeMenu;
+                return getMenu(MenuID.storeMenu);
             }
         }
-        else if (isMessageBoxDisplayed()) {
-            return messageBox;
+        else if (isMenuDisplayed(MenuID.messageBox)) {
+            return getMenu(MenuID.messageBox);
         }
-        else if (isMenuDisplayed()) {
-            if (isInspectItemBoxDisplayed()) {
-                return inspectItemBox;
+        else if (isMenuDisplayed(MenuID.menu)) {
+            if (isMenuDisplayed(MenuID.inspectItemBox)) {
+                return getMenu(MenuID.inspectItemBox);
             }
-            else if (isSubMenuDisplayed()) {
-                return subMenu;
+            else if (isMenuDisplayed(MenuID.subMenu)) {
+                return getMenu(MenuID.subMenu);
             }
             else {
-                return menu;
+                return getMenu(MenuID.menu);
             }
         }
         else {
@@ -98,102 +122,36 @@ public class GameModel extends Observable {
         }
     }
 
-    // MESSAGE BOX
+    // MENUS
 
-    public Menu getMessageBox() {
-        return messageBox;
+    public void setMenu(MenuID id, Menu menu) {
+        menus.put(id, menu);
     }
 
-    public void setMessageBox(Menu menu) {
-        this.messageBox = menu;
+    public Menu getMenu(MenuID id) {
+        return menus.get(id);
     }
 
-    public boolean isMessageBoxDisplayed() {
-        return messageBox != null && messageBox.isDisplayed();
+    public boolean isMenuDisplayed(MenuID id) {
+        return getMenu(id) != null && getMenu(id).isDisplayed();
     }
 
-    // MENU
-
-    public Menu getMenu() {
-        return menu;
+    public void showMenu(MenuID id) {
+        getMenu(id).display(true);
     }
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    public void hideMenu(MenuID id) {
+        getMenu(id).close();
     }
 
-    public boolean isMenuDisplayed() {
-        return menu != null && menu.isDisplayed();
+    // CONVERSATION
+
+    public Conversation getConversation() {
+        return conversation;
     }
 
-    // SUB MENU
-
-    public Menu getSubMenu() {
-        return subMenu;
-    }
-
-    public void setSubMenu(Menu menu) {
-        subMenu = menu;
-    }
-
-    public boolean isSubMenuDisplayed() {
-        return subMenu != null && subMenu.isDisplayed();
-    }
-
-    // INSPECT ITEM BOX
-
-    public Menu getInspectItemBox() {
-        return inspectItemBox;
-    }
-
-    public void setInspectItemBox(Menu menu) {
-        inspectItemBox = menu;
-    }
-
-    public boolean isInspectItemBoxDisplayed() {
-        return inspectItemBox != null && inspectItemBox.isDisplayed();
-    }
-
-    // SELECT ANSWER BOX
-
-    public Menu getSelectAnswerBox() {
-        return selectAnswerBox;
-    }
-
-    public void setSelectAnswerBox(Menu menu) {
-        selectAnswerBox = menu;
-    }
-
-    public boolean isSelectAnswerBoxDisplayed() {
-        return selectAnswerBox != null && selectAnswerBox.isDisplayed();
-    }
-
-    // STORE MENU
-
-    public Menu getStoreMenu() {
-        return storeMenu;
-    }
-
-    public void setStoreMenu(Menu menu) {
-        storeMenu = menu;
-    }
-
-    public boolean isStoreMenuDisplayed() {
-        return storeMenu != null && storeMenu.isDisplayed();
-    }
-
-    // TRANSACTION MENU
-
-    public Menu getTransactionMenu() {
-        return transactionMenu;
-    }
-
-    public void setTransactionMenu(Menu menu) {
-        transactionMenu = menu;
-    }
-
-    public boolean isTransactionMenuDisplayed() {
-        return transactionMenu != null && transactionMenu.isDisplayed();
+    public void startConversation() {
+        conversation.start(player.getFrontNPC());
     }
 
     // PAUSE
@@ -213,6 +171,8 @@ public class GameModel extends Observable {
             e.addObserver(handler);
         }
     }
+
+    // OBSERVABLE
 
     @Override
     public synchronized void addObserver(Observer o) {

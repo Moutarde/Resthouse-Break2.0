@@ -3,6 +3,7 @@ package controller.actions;
 import model.items.Item;
 import model.items.Price;
 import model.player.Player;
+import controller.handlers.Handler;
 
 /**
  * @author Nicolas Kniebihler
@@ -24,7 +25,7 @@ public class MakeTransaction implements IAction {
     }
 
     @Override
-    public void execute(Object origin, Object handler) {
+    public void execute(Object origin, Handler handler) {
         seller.getBag().removeItemIFP(item, amount);
         if (seller.getPriceMap().containsKey(price.getItem())) {
             seller.getBag().addItem(price.getItem(), amount * price.getAmount());

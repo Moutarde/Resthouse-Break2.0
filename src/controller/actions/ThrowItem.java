@@ -1,5 +1,6 @@
 package controller.actions;
 
+import controller.handlers.Handler;
 import model.items.Item;
 import model.player.Bag;
 
@@ -18,7 +19,7 @@ public class ThrowItem implements IAction {
     }
 
     @Override
-    public void execute(Object origin, Object handler) {
+    public void execute(Object origin, Handler handler) {
         assert item.isThrowable() : "Trying to throw a non-throwable item";
 
         bag.removeItemIFP(item);

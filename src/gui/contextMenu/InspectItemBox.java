@@ -5,7 +5,7 @@ import gui.UserInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.GameModel;
+import model.GameModel.MenuID;
 import model.items.Item;
 import model.messages.Message;
 import model.messages.Question;
@@ -43,18 +43,30 @@ public class InspectItemBox extends Menu {
 
     private Item item;
     private Bag bag;
-    private GameModel model;
 
-    public InspectItemBox(Item item, Bag bag, GameModel model) {
+    public InspectItemBox() {
         super("", Choice.values().length);
+    }
 
+    public void init(Item item, Bag bag) {
         this.item = item;
         this.bag = bag;
-        this.model = model;
+
+        super.init();
+    }
+
+    @Override
+    public void clean() {
+        this.item = null;
+        this.bag = null;
+
+        super.clean();
     }
 
     @Override
     public void selectElement() {
+        assert isInitialized : "Menu not initialized";
+
         Choice pointedChoice = Choice.values()[getPointedElementId()];
         switch (pointedChoice) {
         case RETURN:
@@ -62,7 +74,7 @@ public class InspectItemBox extends Menu {
             break;
         case USE:
             setChanged();
-            notifyObservers(new UseItem(item, model));
+            notifyObservers(new UseItem(item));
             break;
         case INSPECT:
             setChanged();
@@ -83,7 +95,7 @@ public class InspectItemBox extends Menu {
                 throwActionList.add(new CloseMenu(this));
 
                 List<IAction> cancelActionList = new ArrayList<IAction>();
-                cancelActionList.add(new ShowMessage(null));
+                cancelActionList.add(new CloseMenu(MenuID.messageBox));
 
                 actionLists.add(throwActionList);
                 actionLists.add(cancelActionList);
@@ -103,6 +115,8 @@ public class InspectItemBox extends Menu {
 
     @Override
     public String getElementString(int index) {
+        assert isInitialized : "Menu not initialized";
+
         return Choice.values()[index].toString();
     }
 

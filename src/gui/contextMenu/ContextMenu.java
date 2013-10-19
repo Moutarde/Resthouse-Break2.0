@@ -32,6 +32,8 @@ public class ContextMenu extends Menu {
 
     @Override
     public void selectElement() {
+        assert isInitialized : "Menu not initialized";
+
         MenuCategory pointedCategory = MenuCategory.values()[getPointedElementId()];
         switch (pointedCategory) {
         case BAG:
@@ -51,12 +53,9 @@ public class ContextMenu extends Menu {
 
     @Override
     public String getElementString(int index) {
-        return MenuCategory.values()[index].toString();
-    }
+        assert isInitialized : "Menu not initialized";
 
-    @Override
-    public void display(boolean value) {
-        super.display(value);
+        return MenuCategory.values()[index].toString();
     }
 
 }

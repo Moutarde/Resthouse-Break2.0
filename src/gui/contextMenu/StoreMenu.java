@@ -16,14 +16,24 @@ public class StoreMenu extends BagMenu {
     private Player seller;
     private Player buyer;
 
-    public StoreMenu(Player seller, Player buyer) {
-        super(seller.getBag());
+    public void init(Player seller, Player buyer) {
+        super.init(seller.getBag());
 
         this.seller = seller;
         this.buyer = buyer;
     }
 
+    @Override
+    public void clean() {
+        super.clean();
+
+        this.seller = null;
+        this.buyer = null;
+    }
+
     public String getPointedElementDescr() {
+        assert isInitialized : "Menu not initialized";
+
         Item pointedItem = getPointedItem();
         if (pointedItem == null) {
             return "";
@@ -34,6 +44,8 @@ public class StoreMenu extends BagMenu {
     }
 
     public String getPointedElementPrice() {
+        assert isInitialized : "Menu not initialized";
+
         Item pointedItem = getPointedItem();
         if (pointedItem == null) {
             return "";
@@ -46,6 +58,8 @@ public class StoreMenu extends BagMenu {
 
     @Override
     public void selectElement() {
+        assert isInitialized : "Menu not initialized";
+
         Item pointedItem = getPointedItem();
         if (pointedItem == null) {
             close();

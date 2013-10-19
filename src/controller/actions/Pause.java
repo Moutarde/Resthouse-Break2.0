@@ -6,11 +6,11 @@ import controller.handlers.Handler;
  * @author Nicolas Kniebihler
  *
  */
-public class ContinueSpeech implements IAction {
+public class Pause implements IAction {
 
     @Override
     public void execute(Object origin, Handler handler) {
-        handler.getModel().getConversation().continueSpeech();
+        handler.getModel().setGamePaused(true);
     }
 
 }

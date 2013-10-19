@@ -1,6 +1,7 @@
 package controller;
 
 import gui.UserInterface;
+import gui.contextMenu.MessageBox;
 import model.GameModel;
 import model.items.Item;
 import model.items.Key;
@@ -17,7 +18,6 @@ public class GameController {
     private MoveHandler moveHandler;
 
     private MenuHandler menuHandler;
-    private ConversationHandler conversationHandler;
 
     private EventHandler eventHandler;
 
@@ -27,14 +27,13 @@ public class GameController {
         this.moveHandler = new MoveHandler(model);
 
         this.menuHandler = new MenuHandler(model);
-        model.getMenu().addObserver(menuHandler);
-
-        this.conversationHandler = new ConversationHandler(model);
 
         this.eventHandler = new EventHandler(model);
         model.setEventHandler(eventHandler);
 
-        menuHandler.showMessage(new Message(UserInterface.getLang().getString("firstMessage")));
+        ((MessageBox)model.getMenu(GameModel.MenuID.messageBox)).init(new Message(UserInterface.getLang().getString("firstMessage")));
+        model.showMenu(GameModel.MenuID.messageBox);
+
         this.model.setGamePaused(true);
     }
 
@@ -57,12 +56,7 @@ public class GameController {
 
     public void onValidate() {
         if (model.isGamePaused()) {
-            if (conversationHandler.isSpeaking()) {
-                conversationHandler.validate();
-            }
-            else {
-                menuHandler.validate();
-            }
+            menuHandler.validate();
 
             if (model.getPrioritaryDisplayedMenu() == null) {
                 model.setGamePaused(false);
@@ -78,11 +72,13 @@ public class GameController {
                 else {
                     message = new Message(UserInterface.getLang().getString("nothingHere"));
                 }
-                menuHandler.showMessage(message);
+                ((MessageBox)model.getMenu(GameModel.MenuID.messageBox)).init(message);
+                model.showMenu(GameModel.MenuID.messageBox);
                 model.setGamePaused(true);
             }
             else if (model.getPlayer().isInFrontOfACharacter()) {
-                conversationHandler.start();
+                model.startConversation();
+                model.setGamePaused(true);
             }
             else if (model.getPlayer().isInFrontOfALockedDoor()) {
                 Key key = model.getPlayer().getKeyForFrontDoorIFP();
@@ -94,19 +90,15 @@ public class GameController {
                 else {
                     message = new Message(UserInterface.getLang().getString("doorLocked"));
                 }
-                menuHandler.showMessage(message);
+                ((MessageBox)model.getMenu(GameModel.MenuID.messageBox)).init(message);
+                model.showMenu(GameModel.MenuID.messageBox);
                 model.setGamePaused(true);
             }
         }
     }
 
     public void onOpenMenu() {
-        if (conversationHandler.isSpeaking()) {
-            conversationHandler.openOrClose();
-        }
-        else {
-            menuHandler.openOrClose();
-        }
+        menuHandler.openOrClose();
 
         if (model.getPrioritaryDisplayedMenu() == null) {
             model.setGamePaused(false);
@@ -114,11 +106,6 @@ public class GameController {
     }
 
     public void onMoveMenuSelection(Direction d) {
-        if (conversationHandler.isSpeaking()) {
-            conversationHandler.moveSelection(d == Direction.DOWN ? 1 : -1);
-        }
-        else {
-            menuHandler.moveSelection(d == Direction.DOWN ? 1 : -1);
-        }
+        menuHandler.moveSelection(d == Direction.DOWN ? 1 : -1);
     }
 }

@@ -1,9 +1,11 @@
 package controller.actions;
 
 import gui.contextMenu.StoreMenu;
+import gui.contextMenu.TransactionMenu;
+import model.GameModel;
 import model.items.Item;
 import model.player.Player;
-import controller.ConversationHandler;
+import controller.handlers.Handler;
 
 /**
  * @author Nicolas Kniebihler
@@ -21,11 +23,12 @@ public class ShowTransactionMenu implements IAction {
     }
 
     @Override
-    public void execute(Object origin, Object handler) {
+    public void execute(Object origin, Handler handler) {
         assert origin instanceof StoreMenu : "origin is not a StoreMenu";
-        assert handler instanceof ConversationHandler : "handler is not a ConversationHandler";
 
-        ((ConversationHandler)handler).showTransactionMenu(item, seller, buyer);
+        GameModel model = handler.getModel();
+        ((TransactionMenu)model.getMenu(GameModel.MenuID.transactionMenu)).init(item, seller, buyer);
+        model.showMenu(GameModel.MenuID.transactionMenu);
     }
 
 }

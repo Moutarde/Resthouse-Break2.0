@@ -1,7 +1,9 @@
 package controller.actions;
 
+import gui.contextMenu.BagMenu;
 import gui.contextMenu.ContextMenu;
-import controller.handlers.MenuHandler;
+import model.GameModel;
+import controller.handlers.Handler;
 
 /**
  * @author Nicolas Kniebihler
@@ -10,13 +12,14 @@ import controller.handlers.MenuHandler;
 public class ShowSubmenu implements IAction {
 
     @Override
-    public void execute(Object origin, Object handler) {
+    public void execute(Object origin, Handler handler) {
         assert origin instanceof ContextMenu : "menu is not a ContextMenu";
-        assert handler instanceof MenuHandler : "handler is not a MenuHandler";
 
         ContextMenu.MenuCategory pointedCategory = ContextMenu.MenuCategory.values()[((ContextMenu)origin).getPointedElementId()];
         if (pointedCategory == ContextMenu.MenuCategory.BAG) {
-            ((MenuHandler)handler).showBag();
+            GameModel model = handler.getModel();
+            ((BagMenu)model.getMenu(GameModel.MenuID.subMenu)).init(model.getPlayer().getBag());
+            model.showMenu(GameModel.MenuID.subMenu);
         }
         else {
             assert false : "Trying to show a subMenu that doesn't exist : " + pointedCategory;

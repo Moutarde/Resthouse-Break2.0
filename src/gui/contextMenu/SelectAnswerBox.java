@@ -10,28 +10,48 @@ public class SelectAnswerBox extends Menu {
 
     private Question question;
 
-    public SelectAnswerBox(Question question) {
-        super("", question.getPossibleAnswers().size());
+    public SelectAnswerBox() {
+        super("", 0);
+    }
+
+    public void init(Question question) {
+        setNbElements(question.getPossibleAnswers().size());
 
         this.question = question;
+
+        super.init();
+    }
+
+    @Override
+    public void clean() {
+        this.question = null;
+
+        super.clean();
     }
 
     @Override
     public void selectElement() {
+        assert isInitialized : "Menu not initialized";
+
         question.answer(getPointedElementId());
         setChanged();
         notifyObservers(question.getAnswerActionIFP());
-        display(false);
+
+        close();
     }
 
     @Override
     public String getElementString(int index) {
+        assert isInitialized : "Menu not initialized";
+
         return question.getPossibleAnswers().get(index);
     }
 
     @Override
     public void close() {
-        return;
+        assert isInitialized : "Menu not initialized";
+
+        super.close();
     }
 
 }

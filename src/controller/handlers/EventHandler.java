@@ -7,10 +7,8 @@ import model.events.Event;
 
 public class EventHandler extends Handler {
 
-    private GameModel model;
-
     public EventHandler(GameModel model) {
-        this.model = model;
+        super(model);
     }
 
     @Override
