@@ -1,0 +1,3 @@
+GameStarted:Pause,ShowMessage(firstMessage)
+
+EnterRoom(R_PARK):Pause,ShowMessage(enterRoom)
