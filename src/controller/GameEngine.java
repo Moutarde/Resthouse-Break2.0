@@ -31,6 +31,8 @@ public class GameEngine {
         controller = new GameController(model);
 
         keyboard = new Keyboard();
+
+        model.start();
     }
 
     /** the update method with the deltaTime in seconds **/

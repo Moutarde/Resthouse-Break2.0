@@ -25,16 +25,8 @@ public class GameController {
         this.model = model;
 
         this.moveHandler = new MoveHandler(model);
-
         this.menuHandler = new MenuHandler(model);
-
         this.eventHandler = new EventHandler(model);
-        model.setEventHandler(eventHandler);
-
-        ((MessageBox)model.getMenu(GameModel.MenuID.messageBox)).init(new Message(UserInterface.getLang().getString("firstMessage")));
-        model.showMenu(GameModel.MenuID.messageBox);
-
-        this.model.setGamePaused(true);
     }
 
     public void update(float delta) {

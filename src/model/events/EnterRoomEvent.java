@@ -11,6 +11,7 @@ import controller.actions.IAction;
 /**
  * @author Nicolas Kniebihler
  *
+ * This Event has to observe a Player.
  */
 public class EnterRoomEvent extends Event implements Observer {
 

@@ -1,6 +1,5 @@
 package model;
 
-import gui.UserInterface;
 import gui.contextMenu.BagMenu;
 import gui.contextMenu.ContextMenu;
 import gui.contextMenu.InspectItemBox;
@@ -12,24 +11,17 @@ import gui.contextMenu.TransactionMenu;
 import gui.sprite.Posture;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import model.events.EnterRoomEvent;
 import model.events.Event;
 import model.items.Item;
 import model.messages.Conversation;
-import model.messages.Message;
 import model.npc.NPC;
 import model.player.Player;
 import model.rooms.Room;
-import controller.actions.Pause;
-import controller.actions.ShowMessage;
-import controller.handlers.EventHandler;
 
 /**
  * @author Nicolas Kniebihler
@@ -53,8 +45,7 @@ public class GameModel extends Observable {
 
     private Conversation conversation = new Conversation();
 
-    private List<Event> events = new ArrayList<Event>();
-
+    private boolean gameHasStarted = false;
     private boolean gameIsPaused = false;
 
     public GameModel() {
@@ -78,13 +69,20 @@ public class GameModel extends Observable {
 
             this.player = new Player(Player.controllablePlayerId, startRoom, new Coord(3,3), Posture.LOOK_DOWN);
 
-            Event e = new EnterRoomEvent(Room.getRoom("R_PARK"), player);
-            e.addAction(new Pause());
-            e.addAction(new ShowMessage(new Message(UserInterface.getLang().getString("enterRoom"))));
-            events.add(e);
+            Event.createEvents(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void start() {
+        gameHasStarted = true;
+        setChanged();
+        notifyObservers();
+    }
+
+    public boolean isGameStarted() {
+        return gameHasStarted;
     }
 
     public Player getPlayer() {
@@ -162,14 +160,6 @@ public class GameModel extends Observable {
 
     public boolean isGamePaused() {
         return gameIsPaused;
-    }
-
-    // EVENTS
-
-    public void setEventHandler(EventHandler handler) {
-        for (Event e : events) {
-            e.addObserver(handler);
-        }
     }
 
     // OBSERVABLE

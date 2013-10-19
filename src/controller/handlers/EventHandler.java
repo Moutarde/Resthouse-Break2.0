@@ -9,6 +9,10 @@ public class EventHandler extends Handler {
 
     public EventHandler(GameModel model) {
         super(model);
+
+        for (Event e : Event.getEventList()) {
+            e.addObserver(this);
+        }
     }
 
     @Override
